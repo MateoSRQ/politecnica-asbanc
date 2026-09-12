@@ -1,0 +1,22 @@
+[Unit]
+Description=Politecnica ASBANC FTR Gateway Service
+After=network.target mssql-server.service
+
+[Service]
+Type=simple
+User=mateo
+WorkingDirectory=/home/mateo/projects/politecnica-asbanc
+ExecStart=/usr/bin/node /home/mateo/projects/politecnica-asbanc/dist/index.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+EnvironmentFile=/home/mateo/projects/politecnica-asbanc/.env
+
+# Restricciones de seguridad del proceso Linux
+LimitNOFILE=65535
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=politecnica-asbanc
+
+[Install]
+WantedBy=multi-user.target

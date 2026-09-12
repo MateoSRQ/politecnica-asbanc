@@ -1,0 +1,242 @@
+### ====================================================================
+### POLITÉCNICA ASBANC - SUITE DE PETICIONES HTTP (WEBSTORM / INTELLIJ)
+### Pasarela Transaccional ASBANC FTR / YAPAGO & Módulo de Auditoría
+### ====================================================================
+
+@baseUrl = http://localhost:7300
+@authToken = Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgxMjEyMDMsImlzcyI6Imlz
+@companyCode = 998
+@productCode = 001
+@clientId = asbanc_ftr
+@clientSecret = asbanc_ftr_secret_2026
+
+### ====================================================================
+### 0. AUTENTICACIÓN OAUTH 2.0 / JWT (PÁGINA 8 GUÍA V47)
+### ====================================================================
+
+### 0.1 Obtener Token de Autenticación JWT (/api/Auth/token)
+# Emite un token JWT con vigencia de 24 horas y lo guarda en variable global
+POST {{baseUrl}}/api/Auth/token
+Content-Type: application/json
+
+{
+  "grant_type": "client_credentials",
+  "client_id": "{{clientId}}",
+  "client_secret": "{{clientSecret}}"
+}
+
+> {%
+  client.test("Token JWT generado exitosamente", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(response.body.access_token !== undefined, "No devolvió access_token");
+    client.assert(response.body.token_type === "Bearer", "Token type no es Bearer");
+    client.global.set("dynamicJwt", response.body.access_token);
+    client.global.set("authToken", "Bearer " + response.body.access_token);
+  });
+%}
+
+
+### ====================================================================
+### 1. HEALTHCHECK Y OBSERVABILIDAD
+### ====================================================================
+
+### 1.1 Estado de Salud del Servicio (/health)
+# Comprueba estado UP, uptime y conectividad con MSSQL
+GET {{baseUrl}}/health
+Accept: application/json
+
+> {%
+  client.test("Servicio está UP", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(response.body.status === "UP", "El servicio no está en estado UP");
+    client.assert(response.body.services.mssql === "connected", "MSSQL no está conectado");
+  });
+%}
+
+### 1.2 Telemetría y Métricas Prometheus (/metrics)
+# Expone contadores transaccionales, histogramas de latencia y violaciones de SLA
+GET {{baseUrl}}/metrics
+Accept: text/plain
+
+### 1.3 Healthcheck con Métrica de Tiempo de Respuesta (?metrics=true)
+# Retorna elemento metrics { responseTimeMs, unit } y cabecera X-Response-Time-Ms
+GET {{baseUrl}}/health?metrics=true
+Accept: application/json
+
+> {%
+  client.test("Retorna métricas de tiempo de respuesta", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(typeof response.body.responseTimeMs === "number", "No incluye responseTimeMs");
+    client.assert(typeof response.body.metrics.responseTimeMs === "number", "No incluye metrics.responseTimeMs");
+  });
+%}
+
+
+### ====================================================================
+### 2. TRANSACCIONES BANCARIAS ON-HOST (ESPECIFICACIÓN ASBANC FTR V47)
+### ====================================================================
+
+### 2.1 Validar Cliente - DNI Existente (OK 00)
+# Valida la existencia de un alumno o cliente por DNI
+POST {{baseUrl}}/api/Transactional/ValidateCustomer
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "1",
+  "idConsulta": "10000001",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}"
+}
+
+> {%
+  client.test("Cliente validado exitosamente", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "Código respuesta no es 00");
+    client.assert(response.body.nombreCliente !== undefined, "No devolvió nombre de cliente");
+  });
+%}
+
+### 2.2 Validar Cliente - Cliente Inexistente (Error 16)
+POST {{baseUrl}}/api/Transactional/ValidateCustomer
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "1",
+  "idConsulta": "99999999",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}"
+}
+
+> {%
+  client.test("Responde código 16 para cliente no existente", function() {
+    client.assert(response.body.codigoRespuesta === "16", "Esperaba código 16");
+  });
+%}
+
+### 2.3 Listar Deudas - Consulta por DNI (BCP Ventanilla)
+# Consulta recibos y pensiones pendientes (Banco BCP 1020, Canal Ventanilla 10)
+POST {{baseUrl}}/api/Transactional/ListDebts
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "1",
+  "idConsulta": "10000001",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "1020",
+  "canalPago": "10"
+}
+
+> {%
+  client.test("Lista de deudas retornada con éxito", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00" || response.body.codigoRespuesta === "22");
+  });
+%}
+
+### 2.4 Listar Deudas - Consulta por RUC (Interbank Internet Banking)
+# Consulta recibos por RUC (Banco Interbank 1022, Canal Web 60)
+POST {{baseUrl}}/api/Transactional/ListDebts
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "2",
+  "idConsulta": "20100055441",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "1022",
+  "canalPago": "60"
+}
+
+### 2.5 Pagar Deuda - Confirmación de Pago Bancario
+# Registra un pago atómico en el Core/ERP con control de idempotencia
+POST {{baseUrl}}/api/Transactional/PayDebt
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fechaTxn": "11092026",
+  "horaTxn": "193000",
+  "canalPago": "10",
+  "codigoBanco": "1020",
+  "numOperacionBanco": "OP-MANUAL-01",
+  "formaPago": "01",
+  "tipoConsulta": "1",
+  "idConsulta": "10000001",
+  "codigoProducto": "{{productCode}}",
+  "numDocumento": "REC-000001-1",
+  "importePagado": 750.00,
+  "monedaDoc": "1",
+  "codigoEmpresa": "{{companyCode}}"
+}
+
+### 2.6 Extornar Pago - Anulación / Reversa de Pago
+# Procesa el extorno bancario de una operación previa
+POST {{baseUrl}}/api/Transactional/ReversePay
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fechaTxn": "11092026",
+  "horaTxn": "193500",
+  "codigoBanco": "1020",
+  "numOperacionBanco": "OP-MANUAL-01",
+  "formaPago": "01",
+  "tipoConsulta": "1",
+  "idConsulta": "10000001",
+  "codigoProducto": "{{productCode}}",
+  "numDocumento": "REC-000001-1",
+  "importePagado": 750.00,
+  "monedaDoc": "1",
+  "codigoEmpresa": "{{companyCode}}"
+}
+
+
+### ====================================================================
+### 3. CONSULTA Y DESCARGA DE AUDITORÍA FORENSE
+### ====================================================================
+
+### 3.1 Listar Últimas Auditorías (Paginación por defecto)
+# Retorna registros con metadata, payload de entrada, salida y tiempo de ejecución
+GET {{baseUrl}}/api/Audit?page=1&limit=10
+Authorization: {{authToken}}
+Accept: application/json
+
+> {%
+  client.test("Auditorías listadas con éxito", function() {
+    client.assert(response.status === 200, "Status no es 200");
+    client.assert(response.body.data.length > 0, "No devolvió registros");
+    client.global.set("sampleAuditId", response.body.data[0].id);
+  });
+%}
+
+### 3.2 Filtrar Auditorías por Banco y Método
+# Filtra únicamente transacciones de PayDebt originadas por Scotiabank (1024)
+GET {{baseUrl}}/api/Audit?codigoBanco=1024&metodo=PayDebt&limit=5
+Authorization: {{authToken}}
+Accept: application/json
+
+### 3.3 Filtrar Auditorías por DNI / Código de Alumno
+GET {{baseUrl}}/api/Audit?idConsulta=10000001&limit=10
+Authorization: {{authToken}}
+Accept: application/json
+
+### 3.4 Obtener Registro de Auditoría Individual por ID
+# Retorna el detalle completo de un registro por su Id
+GET {{baseUrl}}/api/Audit/20158
+Authorization: {{authToken}}
+Accept: application/json
+
+### 3.5 Descargar Auditorías en Formato CSV (Exportación)
+# Retorna cabecera Content-Disposition: attachment; filename="auditoria_asbanc_....csv"
+GET {{baseUrl}}/api/Audit/export?format=csv&limit=100
+Authorization: {{authToken}}
+
+### 3.6 Descargar Auditorías en Formato JSON (Exportación)
+# Retorna un arreglo JSON estructurado descargable
+GET {{baseUrl}}/api/Audit/export?format=json&limit=50
+Authorization: {{authToken}}

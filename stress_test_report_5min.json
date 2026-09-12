@@ -1,0 +1,45 @@
+{
+  "testDurationSeconds": 300.376,
+  "totalTransactions": 20153,
+  "throughputRps": 67.09,
+  "slaAnalysis": {
+    "slaThresholdMs": 3000,
+    "slaViolationsCount": 0,
+    "slaCompliancePercentage": 100,
+    "slaWarningsCount": 0
+  },
+  "latencyMetricsMs": {
+    "min": 5,
+    "average": 76.5,
+    "p50": 62,
+    "p90": 142,
+    "p95": 183,
+    "p99": 291,
+    "max": 892
+  },
+  "requestsByMethod": {
+    "ValidateCustomer": 6763,
+    "ListDebts": 6763,
+    "PayDebt": 5330,
+    "ReversePay": 771,
+    "PayDebt_Idempotent": 526
+  },
+  "responsesByCode": {
+    "16": 1248,
+    "20": 674,
+    "22": 805,
+    "68": 152,
+    "99": 552,
+    "00": 16722
+  },
+  "transactionsByBank": {
+    "1020": 5071,
+    "1022": 5042,
+    "1023": 4981,
+    "1024": 5059
+  },
+  "databaseVerification": {
+    "transaccionesBancariasEnDB": 4231,
+    "registrosAuditoriaEnDB": 20159
+  }
+}

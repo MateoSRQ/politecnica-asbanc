@@ -1,0 +1,47 @@
+{
+  "name": "politecnica-asbanc",
+  "version": "0.1.0",
+  "description": "Pasarela transaccional de recaudación bancaria ASBANC FTR / YAPAGO para Politécnica",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "db:init": "tsx scripts/init-db.ts",
+    "simulate": "tsx scripts/mock-bank-simulator.ts",
+    "stress:5min": "tsx scripts/stress-test-5min.ts",
+    "audit": "tsx scripts/view-audit.ts",
+    "metrics": "tsx scripts/view-metrics.ts",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "asbanc",
+    "ftr",
+    "yapago",
+    "fastify",
+    "mssql",
+    "typescript",
+    "banking"
+  ],
+  "author": "Politécnica",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/rate-limit": "^9.1.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "mssql": "^10.0.4",
+    "pino": "^9.2.0",
+    "pino-pretty": "^11.2.1",
+    "prom-client": "^15.1.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/mssql": "^9.0.6",
+    "@types/node": "^20.14.9",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vitest": "^1.6.0"
+  }
+}
