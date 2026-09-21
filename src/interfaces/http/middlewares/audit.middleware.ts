@@ -155,13 +155,26 @@ async function saveAuditLogAsync(
       .input('RequestPayload', sql.NVarChar(sql.MAX), JSON.stringify(body))
       .input('ResponsePayload', sql.NVarChar(sql.MAX), JSON.stringify(responsePayload))
       .query(`
-        INSERT INTO dbo.AuditoriaLogs (
-          TraceId, Metodo, Endpoint, ClientIp, CodigoBanco, IdConsulta,
-          NumOperacionBanco, CodigoRespuesta, ExecutionTimeMs, RequestPayload, ResponsePayload
-        ) VALUES (
-          @TraceId, @Metodo, @Endpoint, @ClientIp, @CodigoBanco, @IdConsulta,
-          @NumOperacionBanco, @CodigoRespuesta, @ExecutionTimeMs, @RequestPayload, @ResponsePayload
-        )
+        IF OBJECT_ID('dbo.AuditoriaLogs', 'U') IS NOT NULL
+        BEGIN
+          INSERT INTO dbo.AuditoriaLogs (
+            TraceId, Metodo, Endpoint, ClientIp, CodigoBanco, IdConsulta,
+            NumOperacionBanco, CodigoRespuesta, ExecutionTimeMs, RequestPayload, ResponsePayload
+          ) VALUES (
+            @TraceId, @Metodo, @Endpoint, @ClientIp, @CodigoBanco, @IdConsulta,
+            @NumOperacionBanco, @CodigoRespuesta, @ExecutionTimeMs, @RequestPayload, @ResponsePayload
+          );
+        END
+        ELSE
+        BEGIN
+          INSERT INTO politecnica_asbanc.dbo.AuditoriaLogs (
+            TraceId, Metodo, Endpoint, ClientIp, CodigoBanco, IdConsulta,
+            NumOperacionBanco, CodigoRespuesta, ExecutionTimeMs, RequestPayload, ResponsePayload
+          ) VALUES (
+            @TraceId, @Metodo, @Endpoint, @ClientIp, @CodigoBanco, @IdConsulta,
+            @NumOperacionBanco, @CodigoRespuesta, @ExecutionTimeMs, @RequestPayload, @ResponsePayload
+          );
+        END
       `);
   } catch (error: any) {
     logger.warn({ err: error.message }, 'No se pudo persistir el registro de auditoría en MSSQL (ignorado)');

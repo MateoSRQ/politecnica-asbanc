@@ -1,0 +1,439 @@
+### ====================================================================
+### POLITÉCNICA ASBANC - GUÍA PASO A PASO DE PRUEBAS TRANSACCIONALES
+### Protocolo: ASBANC FTR / YAPAGO V47 & BDACADEMICO6
+### Archivo: TESTAPI.http
+### ====================================================================
+###
+### INSTRUCCIONES DE EJECUCIÓN:
+### 1. Inicia el servidor Fastify: `npm run dev` (puerto 7300 por defecto).
+### 2. Ejecuta cada petición en orden secuencial (Paso 0 al Paso 5).
+### 3. Las respuestas exitosas guardan automáticamente variables globales
+###    (token JWT, numDocumento, importeDeuda, etc.) para el siguiente paso.
+### ====================================================================
+
+@baseUrl = http://localhost:7300
+@clientId = asbanc_ftr
+@clientSecret = asbanc_ftr_secret_2026
+@companyCode = 998
+@productCode = 001
+
+# Datos de prueba reales (Estudiante con deuda en BDACADEMICO6)
+@codAlumno = 26023353010012
+@dniAlumno = 74202604
+
+# Parámetros de canal bancario (1020: BCP, 10: Ventanilla, 01: Efectivo)
+@codigoBanco = 1020
+@canalPago = 10
+@formaPago = 01
+
+# Identificador único de operación bancaria para la prueba
+@numOperacionBanco = OPTEST-99001
+
+# Valores reales de la cuota en BDACADEMICO6 para el estudiante 26023353010012 (MARTHA ORTEGA)
+# (El Paso 2 ListDebts los actualiza automáticamente en memoria, pero si ejecutas directo el Paso 3 se usan estos)
+@numDocumento = 10726
+@importeDeuda = 833.33
+
+
+### ====================================================================
+### PASO 0: AUTENTICACIÓN M2M OAUTH 2.0 (PRE-REQUISITO DE INFRAESTRUCTURA)
+### ====================================================================
+### NOTA: No es un proceso iniciado por el alumno. Es el handshake técnico
+### de seguridad que FTR ejecuta cada 24 horas para obtener su Bearer Token.
+### Sin este token, cualquier llamada posterior responderá 401 Unauthorized.
+
+# @name authStep
+POST {{baseUrl}}/api/Auth/token
+Content-Type: application/json
+
+{
+  "grant_type": "client_credentials",
+  "client_id": "{{clientId}}",
+  "client_secret": "{{clientSecret}}"
+}
+
+> {%
+  client.test("Paso 0: Token JWT generado correctamente", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.access_token !== undefined, "No se devolvió access_token");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+
+    // Guarda el token en la variable authToken para todas las peticiones siguientes
+    client.global.set("authToken", "Bearer " + response.body.access_token);
+    client.log(">>> Token JWT obtenido con éxito y guardado en {{authToken}}");
+  });
+%}
+
+
+### ====================================================================
+### PASO 0.1: VERIFICACIÓN PREVIA DE SALUD Y CONECTIVIDAD
+### ====================================================================
+
+### 0.1.1 Comprobar Conectividad con la Base de Datos MSSQL
+GET {{baseUrl}}/health
+Accept: application/json
+
+> {%
+  client.test("Gateway y MSSQL conectados", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.status === "UP", "El servicio no está UP");
+    client.assert(response.body.services.mssql === "connected", "BD MSSQL no está conectada");
+  });
+%}
+
+### 0.1.2 Comprobar Métricas Prometheus
+GET {{baseUrl}}/metrics
+Accept: text/plain
+
+
+### ====================================================================
+### PASO 1: VALIDACIÓN DE IDENTIDAD DEL CLIENTE / ALUMNO (ValidateCustomer)
+### ====================================================================
+### Inicia cuando el alumno se acerca a ventanilla, cajero o app bancaria
+### e introduce su número de DNI o código institucional.
+
+### 1.1 Validar por DNI (tipoConsulta = 1)
+POST {{baseUrl}}/api/Transactional/ValidateCustomer
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "1",
+  "idConsulta": "{{dniAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}"
+}
+
+> {%
+  client.test("Paso 1.1: Cliente validado por DNI (Código 00)", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "Esperaba código 00");
+    client.assert(response.body.nombreCliente !== undefined, "Falta nombre del cliente");
+    client.log(">>> Alumno identificado: " + response.body.nombreCliente);
+  });
+%}
+
+### 1.2 Validar por Código de Alumno (tipoConsulta = 0)
+POST {{baseUrl}}/api/Transactional/ValidateCustomer
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}"
+}
+
+> {%
+  client.test("Paso 1.2: Cliente validado por Código de Alumno", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "Esperaba código 00");
+  });
+%}
+
+### 1.3 Validar Cliente Inexistente (Debe responder código 16)
+POST {{baseUrl}}/api/Transactional/ValidateCustomer
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "1",
+  "idConsulta": "00000000",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}"
+}
+
+> {%
+  client.test("Paso 1.3: Retorna código 16 si el cliente no existe", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "16", "Esperaba código 16 CLIENTE NO EXISTE");
+  });
+%}
+
+
+### ====================================================================
+### PASO 2: CONSULTA DE RECIBOS Y DEUDAS PENDIENTES (ListDebts)
+### ====================================================================
+### El banco solicita las cuotas pendientes. El sistema retorna la deuda
+### MÁS ANTIGUA cronológica para cumplir las reglas de prelación financiera.
+
+# @name listDebtsStep
+POST {{baseUrl}}/api/Transactional/ListDebts
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "canalPago": "{{canalPago}}"
+}
+
+> {%
+  client.test("Paso 2: Retorna la deuda más antigua no pagada", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+    client.assert(response.body.deudasPendientes.length > 0, "No se recibieron deudas pendientes");
+
+    var deuda = response.body.deudasPendientes[0];
+    client.log(">>> Deuda más antigua encontrada:");
+    client.log("    Documento: " + deuda.numDocumento);
+    client.log("    Concepto:  " + deuda.descDocumento);
+    client.log("    Importe:   S/ " + deuda.deuda);
+    client.log("    Vence:     " + deuda.fechaVencimiento);
+
+    // Guardar dinámicamente el documento y el importe para el Paso 3 (PayDebt)
+    client.global.set("numDocumento", deuda.numDocumento);
+    client.global.set("importeDeuda", deuda.deuda);
+  });
+%}
+
+### 2.1 Consulta de Deudas con Diagnóstico de Latencia (?metrics=true)
+POST {{baseUrl}}/api/Transactional/ListDebts?metrics=true
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "canalPago": "{{canalPago}}"
+}
+
+> {%
+  client.test("Paso 2.1: Telemetría de latencia adjunta", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(typeof response.body.responseTimeMs === "number", "No retornó responseTimeMs");
+    client.log(">>> Tiempo de ejecución BD: " + response.body.responseTimeMs + " ms");
+  });
+%}
+
+
+### ====================================================================
+### PASO 3: PAGO TRANSACCIONAL Y CONFIRMACIÓN ACID (PayDebt)
+### ====================================================================
+### El banco confirma que el dinero fue recibido en ventanilla/app.
+### El sistema marca la cuota como pagada (estado 16), genera el comprobante
+### en Alumno_Pago_Detalle, emite numOperacionERP y dispara el Webhook interno.
+
+# @name payDebtStep
+POST {{baseUrl}}/api/Transactional/PayDebt
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fechaTxn": "21092026",
+  "horaTxn": "113000",
+  "canalPago": "{{canalPago}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "formaPago": "{{formaPago}}",
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoProducto": "{{productCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "importePagado": {{importeDeuda}},
+  "monedaDoc": "1",
+  "codigoEmpresa": "{{companyCode}}"
+}
+
+> {%
+  client.test("Paso 3: Pago procesado exitosamente en BD (Código 00)", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+    client.assert(response.body.numOperacionERP !== undefined, "Falta numOperacionERP");
+
+    client.global.set("numOperacionERP", response.body.numOperacionERP);
+    client.log(">>> Pago registrado con Éxito!");
+    client.log("    Operación Banco: " + response.body.numOperacionBanco);
+    client.log("    Operación ERP:   " + response.body.numOperacionERP);
+  });
+%}
+
+
+### ====================================================================
+### PASO 3.1: PRUEBA DE IDEMPOTENCIA Y ANTI-REPETICIÓN (Reintento de Cobro)
+### ====================================================================
+### Si el banco sufre un corte de red y reintenta el mismo PayDebt con el
+### mismo numOperacionBanco, el sistema DEBE responder 00 IDEMPOTENTE
+### sin duplicar el cobro ni alterar los saldos de la base de datos.
+
+POST {{baseUrl}}/api/Transactional/PayDebt
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fechaTxn": "21092026",
+  "horaTxn": "113000",
+  "canalPago": "{{canalPago}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "formaPago": "{{formaPago}}",
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoProducto": "{{productCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "importePagado": {{importeDeuda}},
+  "monedaDoc": "1",
+  "codigoEmpresa": "{{companyCode}}"
+}
+
+> {%
+  client.test("Paso 3.1: Control de idempotencia activo (No duplica cobro)", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+    client.assert(response.body.descripcionResp.indexOf("IDEMPOTENTE") >= 0, "No reportó mensaje IDEMPOTENTE");
+    client.log(">>> Idempotencia garantizada: " + response.body.descripcionResp);
+  });
+%}
+
+
+### ====================================================================
+### PASO 3.2: VERIFICACIÓN POST-PAGO DE LA COLA DE DEUDAS
+### ====================================================================
+### Al consultar nuevamente ListDebts, la cuota pagada ya NO debe aparecer.
+### En su lugar aparecerá la siguiente deuda pendiente o código 22 (Sin deudas).
+
+POST {{baseUrl}}/api/Transactional/ListDebts
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "canalPago": "{{canalPago}}"
+}
+
+> {%
+  client.test("Paso 3.2: La deuda pagada ya no se encuentra en el listado", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    if (response.body.codigoRespuesta === "00") {
+      var nuevaDeuda = response.body.deudasPendientes[0];
+      client.assert(nuevaDeuda.numDocumento !== client.global.get("numDocumento"), "Aparece la misma deuda ya pagada!");
+      client.log(">>> Siguiente deuda pendiente en cola: " + nuevaDeuda.numDocumento + " (" + nuevaDeuda.descDocumento + ")");
+    } else {
+      client.assert(response.body.codigoRespuesta === "22", "Esperaba código 22 SIN DEUDAS");
+      client.log(">>> Alumno quedó al día (código 22: CLIENTE SIN DEUDAS PENDIENTES)");
+    }
+  });
+%}
+
+
+### ====================================================================
+### PASO 4: REVERSA / EXTARNO DE PAGO TRANSACCIONAL (ReversePay)
+### ====================================================================
+### Ocurre si el cajero del banco digitó mal el monto o anula la operación
+### dentro del mismo día de cierre.
+### La pasarela revierte el estado a pendiente (25) y elimina el comprobante
+### en Alumno_Pago_Detalle, restaurando la base de datos al estado intacto original.
+
+# @name reversePayStep
+POST {{baseUrl}}/api/Transactional/ReversePay
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fechaTxn": "21092026",
+  "horaTxn": "113500",
+  "codigoBanco": "{{codigoBanco}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "formaPago": "{{formaPago}}",
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoProducto": "{{productCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "importePagado": {{importeDeuda}},
+  "monedaDoc": "1",
+  "codigoEmpresa": "{{companyCode}}"
+}
+
+> {%
+  client.test("Paso 4: Extorno ejecutado y cuota restaurada (Código 00)", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+    client.log(">>> Extorno confirmado para operación: " + client.global.get("numOperacionBanco"));
+  });
+%}
+
+
+### ====================================================================
+### PASO 4.1: VERIFICACIÓN POST-REVERSA (Comprobar Restauración en BD)
+### ====================================================================
+### Comprueba que tras el extorno, la cuota original vuelve a figurar como
+### la deuda más antigua no pagada en el core institucional.
+
+POST {{baseUrl}}/api/Transactional/ListDebts
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "tipoConsulta": "0",
+  "idConsulta": "{{codAlumno}}",
+  "codigoEmpresa": "{{companyCode}}",
+  "codigoProducto": "{{productCode}}",
+  "codigoBanco": "{{codigoBanco}}",
+  "canalPago": "{{canalPago}}"
+}
+
+> {%
+  client.test("Paso 4.1: La cuota original vuelve a figurar como pendiente", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.codigoRespuesta === "00", "codigoRespuesta no es 00");
+    var deudaRestaurada = response.body.deudasPendientes[0];
+    client.assert(deudaRestaurada.numDocumento === client.global.get("numDocumento"), "No se restauró la cuota original");
+    client.log(">>> Base de datos restaurada intacta. Cuota pendiente: " + deudaRestaurada.numDocumento);
+  });
+%}
+
+
+### ====================================================================
+### PASO 5: AUDITORÍA FORENSE Y TRAZABILIDAD (Módulo de Auditoría)
+### ====================================================================
+### Permite verificar que cada petición del ciclo quedó grabada
+### inmutablemente con su Request, Response, Latencia y TraceId.
+
+### 5.1 Buscar la Transacción por su Número de Operación Bancaria
+GET {{baseUrl}}/api/Audit?numOperacionBanco={{numOperacionBanco}}
+Authorization: {{authToken}}
+Accept: application/json
+
+> {%
+  client.test("Paso 5.1: Se localiza el registro forense en AuditoriaLogs", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.data.length > 0, "No se encontró el registro de auditoría");
+    client.global.set("auditId", response.body.data[0].id);
+    client.log(">>> ID de auditoría registrado: " + response.body.data[0].id);
+    client.log("    TraceId: " + response.body.data[0].traceId);
+    client.log("    Latencia: " + response.body.data[0].durationMs + " ms");
+  });
+%}
+
+### 5.2 Inspeccionar Detalle Completo de una Auditoría (Payloads Deserializados)
+GET {{baseUrl}}/api/Audit/{{auditId}}
+Authorization: {{authToken}}
+Accept: application/json
+
+> {%
+  client.test("Paso 5.2: Detalle deserializado correcto", function() {
+    client.assert(response.status === 200, "HTTP Status no es 200");
+    client.assert(response.body.requestPayload !== undefined, "Falta requestPayload");
+    client.assert(response.body.responsePayload !== undefined, "Falta responsePayload");
+  });
+%}
+
+### 5.3 Exportar los Registros de Auditoría a CSV
+GET {{baseUrl}}/api/Audit/export?format=csv&limit=20
+Authorization: {{authToken}}
+
+### 5.4 Exportar los Registros de Auditoría a JSON
+GET {{baseUrl}}/api/Audit/export?format=json&limit=20
+Authorization: {{authToken}}
+Accept: application/json

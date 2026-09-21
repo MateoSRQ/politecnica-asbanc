@@ -81,10 +81,12 @@ export class AuditController {
 
       const whereClause = whereConditions.join(' AND ');
 
+      const auditTable = await this.getAuditTableName(pool);
+
       // Total count
       const countResult = await req.query(`
         SELECT COUNT(*) AS Total
-        FROM dbo.AuditoriaLogs
+        FROM ${auditTable}
         WHERE ${whereClause};
       `);
       const total = countResult.recordset[0].Total;
@@ -108,7 +110,7 @@ export class AuditController {
           RequestPayload,
           ResponsePayload,
           CreatedAt
-        FROM dbo.AuditoriaLogs
+        FROM ${auditTable}
         WHERE ${whereClause}
         ORDER BY Id DESC
         OFFSET @Offset ROWS
@@ -166,11 +168,12 @@ export class AuditController {
       }
 
       const pool = await getMssqlPool();
+      const auditTable = await this.getAuditTableName(pool);
       const result = await pool.request()
         .input('Id', sql.BigInt, id)
         .query(`
           SELECT TOP 1 *
-          FROM dbo.AuditoriaLogs
+          FROM ${auditTable}
           WHERE Id = @Id;
         `);
 
@@ -229,6 +232,7 @@ export class AuditController {
 
       const maxLimit = Math.min(10000, Math.max(1, parseInt(limit, 10) || 1000));
       const pool = await getMssqlPool();
+      const auditTable = await this.getAuditTableName(pool);
       const req = pool.request();
 
       let whereConditions: string[] = ['1=1'];
@@ -283,7 +287,7 @@ export class AuditController {
           ExecutionTimeMs,
           ISNULL(RequestPayload, '') AS RequestPayload,
           ISNULL(ResponsePayload, '') AS ResponsePayload
-        FROM dbo.AuditoriaLogs
+        FROM ${auditTable}
         WHERE ${whereConditions.join(' AND ')}
         ORDER BY Id DESC;
       `);
@@ -370,6 +374,18 @@ export class AuditController {
       return JSON.parse(value);
     } catch {
       return value;
+    }
+  }
+
+  private async getAuditTableName(pool: any): Promise<string> {
+    try {
+      const check = await pool.request().query("SELECT OBJECT_ID('dbo.AuditoriaLogs', 'U') AS tblId;");
+      if (check.recordset[0]?.tblId) {
+        return 'dbo.AuditoriaLogs';
+      }
+      return 'politecnica_asbanc.dbo.AuditoriaLogs';
+    } catch {
+      return 'politecnica_asbanc.dbo.AuditoriaLogs';
     }
   }
 }

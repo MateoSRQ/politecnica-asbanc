@@ -1,6 +1,6 @@
 {
   "name": "politecnica-asbanc",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Pasarela transaccional de recaudación bancaria ASBANC FTR / YAPAGO para Politécnica",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,12 @@
     "stress:5min": "tsx scripts/stress-test-5min.ts",
     "audit": "tsx scripts/view-audit.ts",
     "metrics": "tsx scripts/view-metrics.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:batch-5": "vitest run tests/batch-5-transactions.test.ts",
+    "test:batch-10": "tsx scripts/test-batch-10-students.ts",
+    "benchmark:scale": "tsx scripts/benchmark-scale.ts",
+    "db:indexes": "tsx scripts/apply-phase1-indexes.ts",
+    "git:release-v1": "./scripts/create-v1-commit-and-branch.sh"
   },
   "keywords": [
     "asbanc",
