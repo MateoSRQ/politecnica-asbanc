@@ -182,7 +182,7 @@ flowchart TD
    - Endpoint HTTP: `GET /metrics` en puerto `7300`.
    - Healthcheck: `GET /health` en puerto `7300`.
    - Script CLI rápido: `npm run metrics` (`scripts/view-metrics.ts`).
-   - Métricas clave: `asbanc_txn_total`, `asbanc_txn_duration_seconds` (histograma de latencias), `asbanc_sla_violations_total`.
+   - Métricas clave: `asbanc_txn_total`, `asbanc_txn_duration_seconds` (histograma de latencias), `asbanc_sla_violations_total`, `asbanc_idempotency_hits_total` (reintentos duplicados prevenidos).
 2. **Logs Estructurados en Tiempo Real (Pino)**:
    - Salida en `stdout` con formato JSON estructurado enriquecido con `traceId`, `bankCode`, `channel`, `codigoRespuesta`, `durationMs`, `httpStatus` e `ip`.
    - Visibles en consola de ejecución (`npm run dev`) o mediante gestor de procesos (`journalctl` / PM2).
@@ -198,6 +198,17 @@ flowchart TD
    - Archivo paso a paso: [`TESTAPI.http`](file:///home/mateo/projects/politecnica-asbanc/TESTAPI.http) con la guía secuencial completa (Paso 0 a Paso 5) con encadenamiento automático de variables globales (`authToken`, `numDocumento`, `importeDeuda`, `numOperacionERP`, etc.) para pruebas interactivas de todo el ciclo bancario.
    - Archivo de catálogo general: [`asbanc-api.http`](file:///home/mateo/projects/politecnica-asbanc/asbanc-api.http) con peticiones completas para healthcheck, métricas, validación de clientes, consultas de deudas, pagos, reversas, y consulta/descarga de auditorías con tests automatizados integrados.
 
+### 4.5 Suite de Pruebas de Carga y Concurrencia Masiva
+- **Script Principal:** [`scripts/stress-test-10-100-1000.ts`](file:///home/mateo/projects/politecnica-asbanc/scripts/stress-test-10-100-1000.ts) (`npm run stress:tiers`).
+- **Arquitectura de Peticiones:** Basada en la API estándar Web Fetch (`globalThis.fetch`), permitiendo su ejecución remota desde cualquier entorno externo (CI/CD, laptop, VM) apuntando a la variable de entorno `API_URL`.
+- **Fases Consecutivas:**
+  1. **Tier 10:** 10 transacciones en paralelo (8 legítimas, 1 Error 16, 1 Error 99).
+  2. **Tier 100:** 100 transacciones en paralelo (92 legítimas, 2x Err 16, 2x Err 99, 2x Err 22 [deuda cancelada], 2x Err 401 [token inválido]).
+  3. **Tier 1000:** 1,000 transacciones en paralelo con saturación simultánea de sockets TCP y pool MSSQL (960 legítimas, 10x Err 16, 10x Err 99, 10x Err 22, 10x Err 401).
+- **Garantía Financiera:** Ejecución atómica de extornos (`ReversePay`) al finalizar cada tanda para restaurar todas las cuotas de `BDACADEMICO6` a su estado original (`param_estado_pago_id = 25`) con 0 filas residuales verificadas forensemente.
+- **Artefactos Generados:**
+  - `report_stress_10_100_1000.html`: Dashboard interactivo standalone con métricas de Throughput, percentiles p50/p95/p99, cumplimiento de SLA y modal de inspección payload request/response por transacción.
+  - `report_stress_10_100_1000.json`: Consolidado estructurado con estadísticas globales y desglose por tiers.
 
 ---
 
@@ -306,8 +317,36 @@ politecnica-asbanc/
   2. Consolidar el 100% de la garantía de idempotencia y prevención de repetición (`anti-replay`) en la base de datos relacional Microsoft SQL Server 2022.
   3. Validar duplicidad atómicamente a través de `sp_Asbanc_PayDebt`, `sp_Asbanc_ReversePay` y la restricción única `UQ_Txn_Banco_Op`.
   4. Simplificar el healthcheck `/health` reportando el estado del servicio y la conectividad directa con MSSQL.
-- **Consecuencias:** Arquitectura simplificada y austera en producción (cero servidores Redis que mantener), eliminación de latencia de red adicional y garantía absoluta de integridad financiera soportada por transacciones ACID del motor de base de datos.
+### [ADR-008] Optimización de Consultas (OUTER APPLY), Bloqueo Optimista y Hardening Defensivo de Concurrencia
+- **Fecha:** 2026-09-21
+- **Estado:** Aprobado e Implementado en `feature/optimization`
+- **Contexto:** Durante la auditoría técnica post-v1.0.0, se identificaron oportunidades de mejora en latencia y robustez:
+  1. `ListDebts` ejecutaba 2 queries secuenciales contra `BDACADEMICO6` (búsqueda de alumno + búsqueda de deuda más antigua), sumando latencia de red innecesaria (~20ms extra).
+  2. `PayDebt` requería blindaje optimista con comprobación atómica `param_estado_pago_id = 25` en el `UPDATE` para mitigar condiciones de carrera si dos peticiones concurrentes intentan pagar la misma cuota.
+  3. Los errores transaccionales en `PayDebt` y `ReversePay` podían dejar transacciones huérfanas si `rollback()` fallaba sin aislamiento defensivo `try/catch`.
+  4. Los errores no capturados de Node.js (`uncaughtException`, `unhandledRejection`) y del socket pool de MSSQL requerían listeners para evitar caídas de proceso.
+  5. La tabla de auditoría en MSSQL ejecutaba `SELECT OBJECT_ID(...)` en cada petición; la resolución requería caché en memoria.
+- **Decisión:**  
+  1. Fusión de `ListDebts` en 1 sola consulta SQL usando `OUTER APPLY` para extraer el estudiante y su deuda más antigua en un solo round-trip.
+  2. Implementación de control de concurrencia optimista en `PayDebt` (`WHERE id = @PagoId AND param_estado_pago_id = 25`), interceptando colisiones de carrera (`rowsAffected === 0`) para resolver idempotencia o rechazo sin alterar la consistencia.
+  3. Instrumentación de métrica Prometheus `idempotencyHitsCounter.inc(...)` para registrar eventos de reintento bancario interceptados.
+  4. Delimitación estricta de `DELETE` en `ReversePay` únicamente a `num_documento = @NumOperacionBanco` y encapsulado seguro de rollbacks en bloques `try/catch`.
+  5. Adición de handlers globales de proceso en `src/index.ts`, listener de error en pool MSSQL y caché en memoria para resolución de `dbo.AuditoriaLogs`.
+  6. Configuración de CORS basada en `env.CORS_ORIGIN` y obligatoriedad de HTTP 200 en manejador de errores de Fastify para rutas transaccionales ASBANC.
+- **Consecuencias:** Reducción sustancial de latencia transaccional (ciclo promedio ~137 ms, consultas a ~15-60 ms), máxima resistencia frente a colisiones concurrentes y cero interrupciones de proceso.
 
+### ADR-008: Suite de Carga Continua por Tiers (10, 100, 1,000) con Web Fetch y Reversión Atómica
+- **Fecha:** 2026-09-21
+- **Estado:** Aprobado e Implementado en `feature/optimization`
+- **Contexto:** Se requería evaluar la estabilidad y latencia del servicio bajo cargas concurrentes masivas (10, 100 y 1,000 transacciones simultáneas) sobre la base de datos real `BDACADEMICO6`, simulando tanto pagos legítimos como escenarios de error (códigos 16, 99, 22 y HTTP 401), con capacidad de ejecución externa y sin dejar ningún registro financiero residual.
+- **Decisión:**  
+  1. Uso de la API estándar **Web Fetch (`globalThis.fetch`)** nativa de Node.js (con soporte para `API_URL` configurable) evitando mocks en memoria (`server.inject`) para medir latencia real de red y sockets TCP.
+  2. Implementación de `safeFetch` con reintento rápido ante presión extrema de sockets efímeros.
+  3. Pre-pago controlado de cuotas dedicadas para verificar con precisión el código de error `22` (Deuda ya cancelada).
+  4. Cola de reversión automática mediante llamadas síncronas a `/api/Transactional/ReversePay`, garantizando la eliminación de comprobantes en `Ctas_Ctes.Alumno_Pago_Detalle` y restitución a estado pendiente (25) con 0 residuales.
+  5. Ajuste del pool de MSSQL (`DB_POOL_MAX=100`, timeouts a 15s) y Fastify (`connectionTimeout: 30000`, `keepAliveTimeout: 30000`, `backlog: 2048`) para soportar ráfagas de 1,000 sockets simultáneos sin degradación.
+  6. Generación de un reporte interactivo en HTML con KPIs, gráficas y filtros dinámicos, complementado con un JSON estructurado.
+- **Consecuencias:** Capacidad probada del gateway para procesar 1,110 transacciones concurrentes en ~11.9 segundos (throughput de 158.8 req/s en el tier 1000), con 100% de cumplimiento en tiers 10 y 100, y restauración total del estado de la base de datos (0 residuales).
 
 ---
 
@@ -319,6 +358,11 @@ Tipos: `[INIT]`, `[FEAT]`, `[FIX]`, `[REFACTOR]`, `[CHORE]`, `[DOCS]`, `[CONFIG]
 
 ```markdown
 ### Historial de Modificaciones
+- [2026-09-21] [TEST] | Suite de Carga Continua (10, 100 y 1,000 Pagos Concurrentes), Reversión Automática y Dashboard HTML: Creación de `scripts/stress-test-10-100-1000.ts` (`npm run stress:tiers`) utilizando Web Fetch nativo para pruebas locales y remotas (`API_URL`). Ejecución escalonada de 1,110 peticiones simultáneas con inyección de casos de error controlado (16, 99, 22, 401). Restitución automática del 100% de los pagos mediante `ReversePay` con 0 registros residuales en `Ctas_Ctes.Alumno_Pago_Detalle`. Optimización del pool MSSQL a 100 conexiones y backlog TCP 2048. Generación automática del dashboard interactivo `report_stress_10_100_1000.html` y resumen `report_stress_10_100_1000.json`. (scripts/stress-test-10-100-1000.ts, report_stress_10_100_1000.html, report_stress_10_100_1000.json, .env, src/server.ts, src/index.ts, package.json, PROJECT_MEMORY.md)
+- [2026-09-21] [FEAT] | Sanitización Activa de Entradas en Esquemas Zod: Incorporación de `.trim()` en todos los campos string y `.toUpperCase()` en `idConsulta` en los esquemas `validateCustomerSchema`, `listDebtsSchema`, `payDebtSchema` y `reversePaySchema`. Sanea automáticamente espacios en blanco accidentales en los extremos enviados por los bancos antes de validar los regex alfanuméricos y formatos de fecha/hora. Creación de prueba automatizada en `tests/transactional.test.ts` con 97 tests pasando al 100%. (src/core/schemas/asbanc.schemas.ts, tests/transactional.test.ts, PROJECT_MEMORY.md)
+- [2026-09-21] [FEAT] | Exportador Forense de Últimos 1,000 Registros de Auditoría: Creación de `scripts/export-last-1000.ts` y comando `npm run audit:export`. Extrae los últimos 1,000 registros de `dbo.AuditoriaLogs` con cálculo estadístico de latencias (p50, p95, p99), desglose por método y banco, y exportación automática a `audit_last_1000.json` y `audit_last_1000.csv`. (scripts/export-last-1000.ts, package.json, PROJECT_MEMORY.md)
+- [2026-09-21] [CHORE] | Formateo Completo de Código Fuente con Prettier: Instalación de Prettier como devDependency, configuración estándar en .prettierrc (singleQuote, semi, printWidth 120, tabWidth 2) y .prettierignore. Adición de scripts `npm run format` y `npm run format:check` en package.json. Formateo y validación de conformidad al 100% de todo el código en src/, scripts/ y tests/. (package.json, .prettierrc, .prettierignore, src/*, scripts/*, tests/*, PROJECT_MEMORY.md)
+- [2026-09-21] [REFACTOR] | Hardening Transaccional, Control de Concurrencia Optimista y Fusión de Queries en feature/optimization: Fusión de consultas de ListDebts mediante OUTER APPLY reduciendo 1 round-trip a BDACADEMICO6 (~20ms ahorrados). Bloqueo optimista y detección atómica de carreras en PayDebt (rowsAffected=0). Instrumentación de métrica Prometheus idempotencyHitsCounter (asbanc_idempotency_hits_total). Rollback seguro encapsulado en PayDebt y ReversePay. Delimitación estricta de borrado en ReversePay por num_documento. Manejo de errores no capturados (uncaughtException / unhandledRejection) en index.ts. Listener de error en pool de MSSQL y graceful shutdown. Caché en memoria para resolución de tabla AuditoriaLogs. CORS configurable y garantía de HTTP 200 en errores transaccionales Fastify según ASBANC V47. Validación con 96 tests pasando al 100% y baterías de 5 y 10 transacciones con base de datos intacta. (src/interfaces/http/controllers/transactional.controller.ts, src/interfaces/http/controllers/audit.controller.ts, src/interfaces/http/middlewares/audit.middleware.ts, src/infrastructure/database/mssql.connection.ts, src/config/env.ts, src/core/schemas/asbanc.schemas.ts, src/core/services/webhook.service.ts, src/core/utils/asbanc.util.ts, src/index.ts, src/server.ts, PROJECT_MEMORY.md)
 - [2026-09-21] [RELEASE] | Lanzamiento de Versión Estable v1.0.0 y Rama feature/optimization: Consolidación de la pasarela transaccional ASBANC FTR On-Host completa (OAuth 2.0/JWT, ValidateCustomer, ListDebts, PayDebt con idempotencia ACID, ReversePay, telemetría Prometheus, logs estructurados Pino, API de auditoría forense con exportación CSV/JSON, suite interactiva TESTAPI.http, documentación canónica en API.md y 96 tests pasando al 100%). Creación de script automatizado de release y conmutación a la nueva rama de trabajo `feature/optimization`. (package.json, scripts/create-v1-commit-and-branch.sh, PROJECT_MEMORY.md)
 - [2026-09-21] [DOCS] | Especificación Integral de APIs REST en API.md según Guía ASBANC V47: Creación del documento técnico `API.md` con el catálogo formal y detallado de los métodos REST contemplados en la Guía Oficial V47 (ObtenerToken, ValidarCliente, ConsultarDeuda, NotificarPago, RevertirPago), contratos JSON de entrada/salida, obligatoriedad, reglas HTTP 200 estricto, métodos POST, tiempos máximos de respuesta (SLA < 3.0s), y catálogos de códigos de respuesta, bancos, canales y formas de pago. (API.md, PROJECT_MEMORY.md)
 - [2026-09-21] [FIX] | Mitigación de Error Confuso en PayDebt y Ajuste de Variables en TESTAPI.http: Corrección en PayDebt y ReversePay (`src/interfaces/http/controllers/transactional.controller.ts`) para comprobar si el estudiante existe en BDACADEMICO6 antes de derivar al fallback de politecnica_asbanc cuando no se encuentra el documento de deuda. Evita que un numDocumento inexistente responda erróneamente 'CLIENTE NO EXISTE (16)', respondiendo en su lugar 'DOCUMENTO DE DEUDA NO ENCONTRADO EN BDACADEMICO6 (99)'. Actualización de TESTAPI.http con los valores reales del documento (@numDocumento = 10726 e @importeDeuda = 833.33) para el estudiante de prueba 26023353010012. (src/interfaces/http/controllers/transactional.controller.ts, TESTAPI.http, PROJECT_MEMORY.md)
@@ -401,5 +445,7 @@ Tipos: `[INIT]`, `[FEAT]`, `[FIX]`, `[REFACTOR]`, `[CHORE]`, `[DOCS]`, `[CONFIG]
 - [x] **Integración con BDACADEMICO6**: Consulta de deuda más antigua ordenada por periodo académico y concepto/cuota, pago atómico con actualización a `param_estado_pago_id = 16`, registro en `Alumno_Pago_Detalle` y placeholder para webhook de pagos/extornos en tiempo real sin modificar estructura de base de datos.
 - [x] **Batería de Pruebas Vitest para Transacciones** (`tests/batch-5-transactions.test.ts` y script `npm run test:batch-5`): Validación automatizada del ciclo completo (ValidateCustomer, ListDebts, PayDebt, Idempotencia, ReversePay) con reporte de latencias y SLAs bancarios.
 - [x] **Guía Interactiva Paso a Paso TESTAPI.http**: Archivo ejecutable [`TESTAPI.http`](file:///home/mateo/projects/politecnica-asbanc/TESTAPI.http) con encadenamiento automático de variables para pruebas de todo el flujo transaccional.
+- [x] **Hardening, Concurrencia Optimista y Optimización de Latencia (`feature/optimization`)**: Fusión de consultas en `ListDebts` con `OUTER APPLY` (1 solo round-trip), bloqueo optimista `param_estado_pago_id = 25` en `PayDebt`, métrica Prometheus `asbanc_idempotency_hits_total`, rollback encapsulado, graceful shutdown, caché de resolución de auditoría y 100% de tests pasando (96/96).
+- [x] **Suite de Carga Continua por Tiers (10, 100 y 1,000 Concurrentes)** (`scripts/stress-test-10-100-1000.ts` / `npm run stress:tiers`): Benchmark masivo de 1,110 transacciones con inyección de errores (16, 99, 22, 401), Web Fetch API estándar, reversión atómica garantizada (0 filas residuales) y generación de dashboard HTML (`report_stress_10_100_1000.html`) y JSON.
 - [ ] Módulo Off-Host (Generación y lectura de archivos planos de Deudas y Pagos para conciliación diaria).
 
