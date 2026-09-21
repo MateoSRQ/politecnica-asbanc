@@ -201,7 +201,7 @@ async function runBenchmarkScale() {
       const cycleDuration = Math.round(performance.now() - cycleStart);
       cycleTimes.push(cycleDuration);
 
-      if ((i + 1) % 10 === 0 || (i + 1) === targetStudents.length) {
+      if ((i + 1) % 10 === 0 || i + 1 === targetStudents.length) {
         process.stdout.write(`   Transacciones procesadas: ${i + 1}/${targetStudents.length}...\r`);
       }
     }
@@ -215,7 +215,8 @@ async function runBenchmarkScale() {
     const reverseStats = calculateStats(reverseTimes);
     const cycleStats = calculateStats(cycleTimes);
     const totalCheckedOps = listTimes.length + payTimes.length;
-    const compliancePct = totalCheckedOps > 0 ? Math.round(((totalCheckedOps - slaViolations) / totalCheckedOps) * 1000) / 10 : 100;
+    const compliancePct =
+      totalCheckedOps > 0 ? Math.round(((totalCheckedOps - slaViolations) / totalCheckedOps) * 1000) / 10 : 100;
 
     summaryResults.push({
       scale,
@@ -232,11 +233,21 @@ async function runBenchmarkScale() {
       slaCompliancePct: compliancePct,
     });
 
-    console.log(`\n   ✅ Escala ${scale} finalizada en ${(batchDurationMs / 1000).toFixed(2)}s (${throughput} ops/seg)`);
-    console.log(`      • ListDebts : Avg ${listStats.avg} ms | Min ${listStats.min} ms | P50 ${listStats.p50} ms | P95 ${listStats.p95} ms | Max ${listStats.max} ms`);
-    console.log(`      • PayDebt   : Avg ${payStats.avg} ms | Min ${payStats.min} ms | P50 ${payStats.p50} ms | P95 ${payStats.p95} ms | Max ${payStats.max} ms`);
-    console.log(`      • Reversas  : Avg ${reverseStats.avg} ms | Min ${reverseStats.min} ms | P50 ${reverseStats.p50} ms | Max ${reverseStats.max} ms`);
-    console.log(`      • Ciclo Txn : Avg ${cycleStats.avg} ms | Min ${cycleStats.min} ms | P50 ${cycleStats.p50} ms | Max ${cycleStats.max} ms\n`);
+    console.log(
+      `\n   ✅ Escala ${scale} finalizada en ${(batchDurationMs / 1000).toFixed(2)}s (${throughput} ops/seg)`,
+    );
+    console.log(
+      `      • ListDebts : Avg ${listStats.avg} ms | Min ${listStats.min} ms | P50 ${listStats.p50} ms | P95 ${listStats.p95} ms | Max ${listStats.max} ms`,
+    );
+    console.log(
+      `      • PayDebt   : Avg ${payStats.avg} ms | Min ${payStats.min} ms | P50 ${payStats.p50} ms | P95 ${payStats.p95} ms | Max ${payStats.max} ms`,
+    );
+    console.log(
+      `      • Reversas  : Avg ${reverseStats.avg} ms | Min ${reverseStats.min} ms | P50 ${reverseStats.p50} ms | Max ${reverseStats.max} ms`,
+    );
+    console.log(
+      `      • Ciclo Txn : Avg ${cycleStats.avg} ms | Min ${cycleStats.min} ms | P50 ${cycleStats.p50} ms | Max ${cycleStats.max} ms\n`,
+    );
   }
 
   // 3. Verificación de integridad final
@@ -275,44 +286,44 @@ async function runBenchmarkScale() {
   console.log('\n🔵 1. TIEMPOS DE CONSULTA / LISTADO DE DEUDA (/api/Transactional/ListDebts):');
   console.table(
     summaryResults.map((r) => ({
-      'Escala': `${r.scale} txns`,
-      'Promedio': `${r.listStats.avg} ms`,
-      'Mínimo': `${r.listStats.min} ms`,
+      Escala: `${r.scale} txns`,
+      Promedio: `${r.listStats.avg} ms`,
+      Mínimo: `${r.listStats.min} ms`,
       'Mediana (P50)': `${r.listStats.p50} ms`,
-      'P90': `${r.listStats.p90} ms`,
-      'P95': `${r.listStats.p95} ms`,
-      'P99': `${r.listStats.p99} ms`,
-      'Máximo': `${r.listStats.max} ms`,
+      P90: `${r.listStats.p90} ms`,
+      P95: `${r.listStats.p95} ms`,
+      P99: `${r.listStats.p99} ms`,
+      Máximo: `${r.listStats.max} ms`,
       'SLA (<3s)': r.listStats.max < 3000 ? '✅ 100% CUMPLE' : '⚠️ ALERTA',
-    }))
+    })),
   );
 
   console.log('\n🟢 2. TIEMPOS DE EJECUCIÓN Y PAGO DE DEUDA (/api/Transactional/PayDebt):');
   console.table(
     summaryResults.map((r) => ({
-      'Escala': `${r.scale} txns`,
-      'Promedio': `${r.payStats.avg} ms`,
-      'Mínimo': `${r.payStats.min} ms`,
+      Escala: `${r.scale} txns`,
+      Promedio: `${r.payStats.avg} ms`,
+      Mínimo: `${r.payStats.min} ms`,
       'Mediana (P50)': `${r.payStats.p50} ms`,
-      'P90': `${r.payStats.p90} ms`,
-      'P95': `${r.payStats.p95} ms`,
-      'P99': `${r.payStats.p99} ms`,
-      'Máximo': `${r.payStats.max} ms`,
+      P90: `${r.payStats.p90} ms`,
+      P95: `${r.payStats.p95} ms`,
+      P99: `${r.payStats.p99} ms`,
+      Máximo: `${r.payStats.max} ms`,
       'SLA (<3s)': r.payStats.max < 3000 ? '✅ 100% CUMPLE' : '⚠️ ALERTA',
-    }))
+    })),
   );
 
   console.log('\n🟡 3. TIEMPOS DE CICLO COMPLETO Y RENDIMIENTO (Throughput):');
   console.table(
     summaryResults.map((r) => ({
-      'Escala': `${r.scale} txns`,
+      Escala: `${r.scale} txns`,
       'Duración Total': `${(r.totalDurationMs / 1000).toFixed(2)} s`,
       'Throughput (ops/s)': `${r.throughputTxnPerSec} req/s`,
       'Ciclo Promedio': `${r.cycleStats.avg} ms`,
       'Ciclo Mediana': `${r.cycleStats.p50} ms`,
       'Ciclo Máx': `${r.cycleStats.max} ms`,
       'Cumplimiento SLA': `${r.slaCompliancePct}%`,
-    }))
+    })),
   );
 
   await app.close();

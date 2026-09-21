@@ -40,7 +40,7 @@ interface Stats {
   byBank: Record<string, number>;
   latencies: number[];
   slaViolations: number; // > 3000ms
-  slaWarnings: number;    // > 2500ms
+  slaWarnings: number; // > 2500ms
   startTime: number;
   endTime: number;
 }
@@ -64,7 +64,7 @@ async function postJson(endpoint: string, body: any): Promise<{ durationMs: numb
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': AUTH_HEADER,
+        Authorization: AUTH_HEADER,
       },
       body: JSON.stringify(body),
     });
@@ -150,7 +150,7 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
       recordResult('PayDebt', bank, payRes.durationMs, payRes.data.codigoRespuesta || '99');
 
       // 4. Prueba de Idempotencia (10% de las veces)
-      if (Math.random() < 0.10) {
+      if (Math.random() < 0.1) {
         const idempRes = await postJson('/api/Transactional/PayDebt', {
           fechaTxn: '11092026',
           horaTxn: '183000',
@@ -186,10 +186,10 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
     } else if (client.id !== '99999999') {
       // Si el cliente se quedó sin deudas, restablecer sus deudas en MSSQL para que el ciclo continúe
       try {
-        await pool.request()
+        await pool
+          .request()
           .input('IdConsulta', sql.VarChar(14), client.id)
-          .input('TipoConsulta', sql.VarChar(1), client.tipo)
-          .query(`
+          .input('TipoConsulta', sql.VarChar(1), client.tipo).query(`
             UPDATE d
             SET d.Estado = 'PENDIENTE', d.FechaPago = NULL, d.NumOperacionERP = NULL
             FROM dbo.Deudas d
@@ -244,7 +244,7 @@ async function main(): Promise<void> {
     const secStr = String(elapsedSec % 60).padStart(2, '0');
 
     console.log(
-      `⏱️ [${minStr}:${secStr} / 05:00] Txns: ${stats.totalRequests.toLocaleString()} | RPS: ${rps} | Media: ${avg}ms | p95: ${p95}ms | Errores 99: ${stats.byStatus['99'] || 0} | SLA Violations (>3s): ${stats.slaViolations}`
+      `⏱️ [${minStr}:${secStr} / 05:00] Txns: ${stats.totalRequests.toLocaleString()} | RPS: ${rps} | Media: ${avg}ms | p95: ${p95}ms | Errores 99: ${stats.byStatus['99'] || 0} | SLA Violations (>3s): ${stats.slaViolations}`,
     );
   }, 30000);
 
@@ -259,7 +259,9 @@ async function main(): Promise<void> {
   // Análisis Final
   const totalSeconds = (stats.endTime - stats.startTime) / 1000;
   const sortedLatencies = [...stats.latencies].sort((a, b) => a - b);
-  const avgLatency = sortedLatencies.length ? (sortedLatencies.reduce((a, b) => a + b, 0) / sortedLatencies.length).toFixed(1) : '0';
+  const avgLatency = sortedLatencies.length
+    ? (sortedLatencies.reduce((a, b) => a + b, 0) / sortedLatencies.length).toFixed(1)
+    : '0';
   const minLatency = sortedLatencies[0] || 0;
   const maxLatency = sortedLatencies[sortedLatencies.length - 1] || 0;
   const p50 = calculatePercentile(sortedLatencies, 50);
@@ -307,7 +309,9 @@ async function main(): Promise<void> {
     slaAnalysis: {
       slaThresholdMs: 3000,
       slaViolationsCount: stats.slaViolations,
-      slaCompliancePercentage: Number((((stats.totalRequests - stats.slaViolations) / stats.totalRequests) * 100).toFixed(2)),
+      slaCompliancePercentage: Number(
+        (((stats.totalRequests - stats.slaViolations) / stats.totalRequests) * 100).toFixed(2),
+      ),
       slaWarningsCount: stats.slaWarnings,
     },
     latencyMetricsMs: {

@@ -19,7 +19,7 @@ describe('Pruebas de Esquemas ASBANC FTR V47 (Zod)', () => {
       expect(result.success).toBe(true);
     });
 
-    it('debe rechazar caracteres especiales o espacios en idConsulta', () => {
+    it('debe rechazar caracteres especiales o espacios intermedios en idConsulta', () => {
       const invalid = {
         tipoConsulta: '1',
         idConsulta: '1000 0001$',
@@ -28,6 +28,23 @@ describe('Pruebas de Esquemas ASBANC FTR V47 (Zod)', () => {
       };
       const result = validateCustomerSchema.safeParse(invalid);
       expect(result.success).toBe(false);
+    });
+
+    it('debe sanitizar automáticamente espacios en los extremos y convertir a mayúsculas', () => {
+      const input = {
+        tipoConsulta: ' 0 ',
+        idConsulta: ' 2602335301a ',
+        codigoEmpresa: ' 998 ',
+        codigoProducto: ' 001 ',
+      };
+      const result = validateCustomerSchema.safeParse(input);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.tipoConsulta).toBe('0');
+        expect(result.data.idConsulta).toBe('2602335301A');
+        expect(result.data.codigoEmpresa).toBe('998');
+        expect(result.data.codigoProducto).toBe('001');
+      }
     });
   });
 
@@ -70,7 +87,7 @@ describe('Pruebas de Esquemas ASBANC FTR V47 (Zod)', () => {
     it('debe rechazar formatos de fecha u hora incorrectos', () => {
       const invalid = {
         fechaTxn: '2026-05-24', // Formato no permitido (debe ser DDMMAAAA)
-        horaTxn: '15:31',       // Debe ser HHMMSS
+        horaTxn: '15:31', // Debe ser HHMMSS
         canalPago: '10',
         codigoBanco: '1020',
         numOperacionBanco: 'A05478452120',

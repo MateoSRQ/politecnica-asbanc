@@ -10,14 +10,18 @@
     "db:init": "tsx scripts/init-db.ts",
     "simulate": "tsx scripts/mock-bank-simulator.ts",
     "stress:5min": "tsx scripts/stress-test-5min.ts",
+    "stress:tiers": "tsx scripts/stress-test-10-100-1000.ts",
     "audit": "tsx scripts/view-audit.ts",
+    "audit:export": "tsx scripts/export-last-1000.ts",
     "metrics": "tsx scripts/view-metrics.ts",
     "test": "vitest run",
     "test:batch-5": "vitest run tests/batch-5-transactions.test.ts",
     "test:batch-10": "tsx scripts/test-batch-10-students.ts",
     "benchmark:scale": "tsx scripts/benchmark-scale.ts",
     "db:indexes": "tsx scripts/apply-phase1-indexes.ts",
-    "git:release-v1": "./scripts/create-v1-commit-and-branch.sh"
+    "git:release-v1": "./scripts/create-v1-commit-and-branch.sh",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\" \"scripts/**/*.{ts,js,json}\" \"tests/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\" \"scripts/**/*.{ts,js,json}\" \"tests/**/*.{ts,js,json}\""
   },
   "keywords": [
     "asbanc",
@@ -45,6 +49,7 @@
   "devDependencies": {
     "@types/mssql": "^9.0.6",
     "@types/node": "^20.14.9",
+    "prettier": "^3.9.8",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "vitest": "^1.6.0"

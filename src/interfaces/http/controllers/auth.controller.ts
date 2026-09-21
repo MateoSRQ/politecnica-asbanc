@@ -14,17 +14,13 @@ interface TokenRequestBody {
 export class AuthController {
   /**
    * POST /api/Auth/token
-   * Emisor oficial de tokens JWT según requerimiento OAuth 2.0 / ASBANC FTR V47 (Pág. 8)
+   * ASBANC FTR V47 (Pág. 8)
    */
-  async generateToken(
-    request: FastifyRequest<{ Body: TokenRequestBody }>,
-    reply: FastifyReply
-  ): Promise<void> {
+  async generateToken(request: FastifyRequest<{ Body: TokenRequestBody }>, reply: FastifyReply): Promise<void> {
     try {
       let clientId = request.body?.client_id || request.body?.username;
       let clientSecret = request.body?.client_secret || request.body?.password;
 
-      // Soporte para credenciales en cabecera Authorization: Basic base64(client_id:client_secret)
       const authHeader = request.headers.authorization;
       if ((!clientId || !clientSecret) && authHeader && authHeader.startsWith('Basic ')) {
         const credentials = Buffer.from(authHeader.slice(6), 'base64').toString('utf8');
@@ -35,29 +31,24 @@ export class AuthController {
         }
       }
 
-      // Validar credenciales con comparación en tiempo constante (timing attack protection)
-      const isValid =
-        Boolean(
-          clientId &&
-          clientSecret &&
-          ((timingSafeStringEqual(clientId, env.ASBANC_CLIENT_ID) &&
-            timingSafeStringEqual(clientSecret, env.ASBANC_CLIENT_SECRET)) ||
-            timingSafeStringEqual(clientSecret, env.ASBANC_AUTH_SECRET))
-        );
+      const isValid = Boolean(
+        clientId &&
+        clientSecret &&
+        ((timingSafeStringEqual(clientId, env.ASBANC_CLIENT_ID) &&
+          timingSafeStringEqual(clientSecret, env.ASBANC_CLIENT_SECRET)) ||
+          timingSafeStringEqual(clientSecret, env.ASBANC_AUTH_SECRET)),
+      );
 
       if (!isValid) {
-        logger.warn(
-          { ip: request.ip, clientId },
-          'Intento de autenticación fallido: Credenciales inválidas'
-        );
-        reply.status(401).send({
+        logger.warn({ ip: request.ip, clientId }, 'Intento de autenticación fallido: Credenciales inválidas');
+        await reply.status(401).send({
           codigoRespuesta: '99',
           descripcionResp: 'CREDENCIALES ASBANC INVALIDAS (CLIENT_ID / CLIENT_SECRET INCORRECTOS)',
         });
         return;
       }
 
-      const expiresIn = env.JWT_EXPIRATION_SECONDS; // 24h (86400s) por defecto según pág. 8
+      const expiresIn = env.JWT_EXPIRATION_SECONDS;
       const token = signJwt(
         {
           sub: clientId || env.ASBANC_CLIENT_ID,
@@ -66,13 +57,10 @@ export class AuthController {
           scope: 'asbanc:transactional',
         },
         env.JWT_SECRET,
-        expiresIn
+        expiresIn,
       );
 
-      logger.info(
-        { ip: request.ip, clientId, expiresIn },
-        'Token JWT emitido exitosamente para concentrador ASBANC'
-      );
+      logger.info({ ip: request.ip, clientId, expiresIn }, 'Token JWT emitido exitosamente para concentrador ASBANC');
 
       reply.send({
         access_token: token,

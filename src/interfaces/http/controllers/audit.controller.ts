@@ -169,9 +169,7 @@ export class AuditController {
 
       const pool = await getMssqlPool();
       const auditTable = await this.getAuditTableName(pool);
-      const result = await pool.request()
-        .input('Id', sql.BigInt, id)
-        .query(`
+      const result = await pool.request().input('Id', sql.BigInt, id).query(`
           SELECT TOP 1 *
           FROM ${auditTable}
           WHERE Id = @Id;
@@ -377,16 +375,23 @@ export class AuditController {
     }
   }
 
+  private cachedAuditTableName: string | null = null;
+
   private async getAuditTableName(pool: any): Promise<string> {
+    if (this.cachedAuditTableName) {
+      return this.cachedAuditTableName;
+    }
     try {
       const check = await pool.request().query("SELECT OBJECT_ID('dbo.AuditoriaLogs', 'U') AS tblId;");
       if (check.recordset[0]?.tblId) {
-        return 'dbo.AuditoriaLogs';
+        this.cachedAuditTableName = 'dbo.AuditoriaLogs';
+      } else {
+        this.cachedAuditTableName = 'politecnica_asbanc.dbo.AuditoriaLogs';
       }
-      return 'politecnica_asbanc.dbo.AuditoriaLogs';
     } catch {
-      return 'politecnica_asbanc.dbo.AuditoriaLogs';
+      this.cachedAuditTableName = 'politecnica_asbanc.dbo.AuditoriaLogs';
     }
+    return this.cachedAuditTableName;
   }
 }
 

@@ -21,11 +21,9 @@ async function viewMetrics(): Promise<void> {
     const rawMetrics = await metricsRes.text();
 
     console.log('\n📡 TELEMETRÍA PROMETHEUS (/metrics) - RESUMEN TRANSACCIONAL:');
-    
+
     // Parsear asbanc_txn_total
-    const txnLines = rawMetrics
-      .split('\n')
-      .filter((l) => l.startsWith('asbanc_txn_total{'));
+    const txnLines = rawMetrics.split('\n').filter((l) => l.startsWith('asbanc_txn_total{'));
 
     const breakdown: any[] = [];
     for (const line of txnLines) {

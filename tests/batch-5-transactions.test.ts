@@ -65,15 +65,19 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
     await closeMssqlPool();
 
     // Imprimir reporte de rendimiento y tiempos por transacción
-    console.log('\n========================================================================================================');
+    console.log(
+      '\n========================================================================================================',
+    );
     console.log('⏱️  REPORTE DE TIEMPOS DE RESPUESTA - BATERÍA DE 5 TRANSACCIONES (BDACADEMICO6)');
-    console.log('========================================================================================================');
+    console.log(
+      '========================================================================================================',
+    );
 
     console.table(
       benchmarks.map((b) => ({
         'Txn #': b.studentIndex,
         'Cód. Alumno': b.codigoAlumno,
-        'Nombre': b.nombre,
+        Nombre: b.nombre,
         'Cuota ID': b.deudaId,
         'Monto (S/)': b.monto.toFixed(2),
         '1. Validar': `${b.timeValidateMs} ms`,
@@ -83,7 +87,7 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         '5. Revertir': `${b.timeReversePayMs} ms`,
         'Total Ciclo': `${b.totalCycleTimeMs} ms`,
         'SLA (<3s)': b.slaCompliant ? '✅ CUMPLE' : '❌ VIOLACIÓN',
-      }))
+      })),
     );
 
     const calcAvg = (key: keyof TransactionBenchmark) =>
@@ -91,11 +95,13 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
 
     // Verificación final de base de datos intacta (cero registros residuales)
     const pool = await getMssqlPool();
-    const residualCheck = await pool.request().query(
-      "SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE created_by = 'ASBANC_FTR'"
-    );
+    const residualCheck = await pool
+      .request()
+      .query("SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE created_by = 'ASBANC_FTR'");
     expect(residualCheck.recordset[0].c).toBe(0);
-    console.log('🔒 Verificación de Integridad: 0 registros residuales en Ctas_Ctes.Alumno_Pago_Detalle (Base de datos 100% intacta).');
+    console.log(
+      '🔒 Verificación de Integridad: 0 registros residuales en Ctas_Ctes.Alumno_Pago_Detalle (Base de datos 100% intacta).',
+    );
 
     console.log('📊 Resumen Estadístico Promedio por Transacción:');
     console.log(`   • 1. Validar Cliente    (ValidateCustomer) : ${calcAvg('timeValidateMs')} ms`);
@@ -104,7 +110,9 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
     console.log(`   • 4. Re-check / Idemp.  (PayDebt dup)      : ${calcAvg('timeCheckIdempotenceMs')} ms`);
     console.log(`   • 5. Reversión / Extorno(ReversePay)       : ${calcAvg('timeReversePayMs')} ms`);
     console.log(`   • Tiempo Total Ciclo Promedio              : ${calcAvg('totalCycleTimeMs')} ms`);
-    console.log('========================================================================================================\n');
+    console.log(
+      '========================================================================================================\n',
+    );
   });
 
   // Ejecutar el ciclo para cada una de las 5 transacciones
@@ -322,7 +330,10 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         expect(verifyRestoreBody.deudasPendientes[0].numDocumento).toBe(benchmark.deudaId);
 
         // Confirmar que el detalle bancario fue eliminado y no quedó huella
-        const checkDetalle = await (await getMssqlPool()).request()
+        const checkDetalle = await (
+          await getMssqlPool()
+        )
+          .request()
           .input('NumOpBanco', benchmark.numOpBanco)
           .query('SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE num_documento = @NumOpBanco');
         expect(checkDetalle.recordset[0].c).toBe(0);

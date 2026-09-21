@@ -17,7 +17,7 @@ export function sanitizeAsbancString(text: string, maxLength = 30): string {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/ñ/g, 'n')
     .replace(/Ñ/g, 'N')
-    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .replace(/[^a-zA-Z0-9\s.-]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
     .toUpperCase()

@@ -16,6 +16,7 @@ import {
 import { formatDateAsbanc, parseAsbancDate, sanitizeAsbancString } from '../../../core/utils/asbanc.util.js';
 import { getMssqlPool, sql } from '../../../infrastructure/database/mssql.connection.js';
 import { logger } from '../../../infrastructure/telemetry/logger.js';
+import { idempotencyHitsCounter } from '../../../infrastructure/telemetry/metrics.js';
 
 export class TransactionalController {
   /**
@@ -41,10 +42,10 @@ export class TransactionalController {
       const pool = await getMssqlPool();
 
       // 1. Búsqueda en BDACADEMICO6 (Academico.Alumno + General.Persona)
-      const academicStudent = await pool.request()
+      const academicStudent = await pool
+        .request()
         .input('TipoConsulta', sql.VarChar(1), tipoConsulta)
-        .input('IdConsulta', sql.VarChar(14), idConsulta)
-        .query(`
+        .input('IdConsulta', sql.VarChar(14), idConsulta).query(`
           SELECT TOP 1 
             alu.id AS alumno_id,
             alu.codigo_alumno,
@@ -71,10 +72,10 @@ export class TransactionalController {
 
       // 2. Fallback de compatibilidad para homologación (politecnica_asbanc.dbo.Clientes)
       try {
-        const fallbackClient = await pool.request()
+        const fallbackClient = await pool
+          .request()
           .input('TipoConsulta', sql.VarChar(1), tipoConsulta)
-          .input('IdConsulta', sql.VarChar(14), idConsulta)
-          .query(`
+          .input('IdConsulta', sql.VarChar(14), idConsulta).query(`
             SELECT TOP 1 NombreCliente
             FROM politecnica_asbanc.dbo.Clientes
             WHERE (TipoConsulta = @TipoConsulta AND IdConsulta = @IdConsulta)
@@ -140,46 +141,36 @@ export class TransactionalController {
     try {
       const pool = await getMssqlPool();
 
-      // 1. Buscar al estudiante en BDACADEMICO6
-      const studentResult = await pool.request()
+      // 1. Buscar al estudiante y su deuda más antigua en BDACADEMICO6 en una sola consulta con OUTER APPLY
+      const academicResult = await pool
+        .request()
         .input('TipoConsulta', sql.VarChar(1), tipoConsulta)
-        .input('IdConsulta', sql.VarChar(14), idConsulta)
-        .query(`
+        .input('IdConsulta', sql.VarChar(14), idConsulta).query(`
           SELECT TOP 1 
             alu.id AS alumno_id,
             alu.codigo_alumno,
             per.nro_documento,
-            LTRIM(RTRIM(per.nombre)) + ' ' + LTRIM(RTRIM(per.apellido_paterno)) + ' ' + ISNULL(LTRIM(RTRIM(per.apellido_materno)), '') AS nombre_completo
+            LTRIM(RTRIM(per.nombre)) + ' ' + LTRIM(RTRIM(per.apellido_paterno)) + ' ' + ISNULL(LTRIM(RTRIM(per.apellido_materno)), '') AS nombre_completo,
+            debt.pago_id,
+            debt.num_cuota,
+            debt.deuda,
+            debt.fecha_vencimiento,
+            debt.fecha_generacion,
+            debt.created_at,
+            debt.concepto,
+            debt.periodo_nombre,
+            debt.periodo_fecha_inicio
           FROM Academico.Alumno alu
           JOIN General.Persona per ON alu.persona_id = per.id
-          WHERE 
-            (@TipoConsulta = '0' AND (alu.codigo_alumno = @IdConsulta OR per.nro_documento = @IdConsulta))
-            OR (@TipoConsulta IN ('1', '2') AND (per.nro_documento = @IdConsulta OR alu.codigo_alumno = @IdConsulta))
-            OR (alu.codigo_alumno = @IdConsulta OR per.nro_documento = @IdConsulta);
-        `);
-
-      if (studentResult.recordset.length > 0) {
-        const student = studentResult.recordset[0];
-
-        // 2. Consultar la deuda MÁS ANTIGUA no pagada (param_estado_pago_id = 25: GENERADO)
-        // Ordenada por Periodo, Concepto/Cuota, Vencimiento e ID
-        const oldestDebtResult = await pool.request()
-          .input('AlumnoId', sql.Int, student.alumno_id)
-          .query(`
+          OUTER APPLY (
             SELECT TOP 1
               ap.id AS pago_id,
-              ap.alumno_id,
               ap.num_cuota,
               ap.monto AS deuda,
               ap.fecha_vencimiento,
               ap.fecha_generacion,
               ap.created_at,
-              ap.param_estado_pago_id,
-              -- Concepto
               ISNULL(ac.descripcion, ISNULL(apc.descripcion, CASE WHEN ap.num_cuota = 0 THEN 'MATRICULA' ELSE 'PENSION CUOTA ' + CAST(ap.num_cuota AS VARCHAR) END)) AS concepto,
-              ac.concepto_pago_id,
-              -- Periodo Académico
-              p.id AS periodo_id,
               p.nombre AS periodo_nombre,
               p.fecha_inicio AS periodo_fecha_inicio
             FROM Ctas_Ctes.Alumno_Pago ap
@@ -188,17 +179,25 @@ export class TransactionalController {
             LEFT JOIN Carga_Academica.Carga_Academica_Sede cas ON ap.carga_academica_sede_id = cas.id
             LEFT JOIN Carga_Academica.Carga_Academica ca ON cas.carga_academica_id = ca.id
             LEFT JOIN General.Periodo p ON ca.periodo_id = p.id
-            WHERE ap.alumno_id = @AlumnoId
+            WHERE ap.alumno_id = alu.id
               AND ap.param_estado_pago_id = 25 -- SOL_EST_GENERADO (pendiente de pago)
             ORDER BY 
               ISNULL(p.fecha_inicio, '1900-01-01') ASC,
               ISNULL(p.id, 0) ASC,
               ap.num_cuota ASC,
               ap.fecha_vencimiento ASC,
-              ap.id ASC;
-          `);
+              ap.id ASC
+          ) debt
+          WHERE 
+            (@TipoConsulta = '0' AND (alu.codigo_alumno = @IdConsulta OR per.nro_documento = @IdConsulta))
+            OR (@TipoConsulta IN ('1', '2') AND (per.nro_documento = @IdConsulta OR alu.codigo_alumno = @IdConsulta))
+            OR (alu.codigo_alumno = @IdConsulta OR per.nro_documento = @IdConsulta);
+        `);
 
-        if (oldestDebtResult.recordset.length === 0) {
+      if (academicResult.recordset.length > 0) {
+        const row = academicResult.recordset[0];
+
+        if (row.pago_id === null || row.pago_id === undefined) {
           // El alumno existe pero no tiene deudas pendientes
           const response: ListDebtsResponse = {
             codigoRespuesta: '22',
@@ -209,20 +208,19 @@ export class TransactionalController {
           return reply.status(200).send(response);
         }
 
-        const debtRow = oldestDebtResult.recordset[0];
-        const conceptoDesc = debtRow.concepto || (debtRow.num_cuota === 0 ? 'MATRICULA' : `PENSION C${debtRow.num_cuota}`);
-        const periodoStr = debtRow.periodo_nombre ? ` ${debtRow.periodo_nombre}` : '';
+        const conceptoDesc = row.concepto || (row.num_cuota === 0 ? 'MATRICULA' : `PENSION C${row.num_cuota}`);
+        const periodoStr = row.periodo_nombre ? ` ${row.periodo_nombre}` : '';
         const descDocumento = sanitizeAsbancString(`${conceptoDesc}${periodoStr}`, 30);
 
         const deudasPendientes: DebtItem[] = [
           {
             codigoProducto: codigoProducto || '001',
-            numDocumento: String(debtRow.pago_id),
+            numDocumento: String(row.pago_id),
             descDocumento,
-            fechaVencimiento: formatDateAsbanc(debtRow.fecha_vencimiento),
-            fechaEmision: formatDateAsbanc(debtRow.fecha_generacion || debtRow.created_at || debtRow.periodo_fecha_inicio),
-            deuda: Number(debtRow.deuda),
-            pagoMinimo: Number(debtRow.deuda),
+            fechaVencimiento: formatDateAsbanc(row.fecha_vencimiento),
+            fechaEmision: formatDateAsbanc(row.fecha_generacion || row.created_at || row.periodo_fecha_inicio),
+            deuda: Number(row.deuda),
+            pagoMinimo: Number(row.deuda),
             monedaDoc: '1',
           },
         ];
@@ -238,10 +236,10 @@ export class TransactionalController {
 
       // 3. Fallback de compatibilidad con politecnica_asbanc (para tests/homologación bancaria)
       try {
-        const fallbackDebts = await pool.request()
+        const fallbackDebts = await pool
+          .request()
           .input('TipoConsulta', sql.VarChar(1), tipoConsulta)
-          .input('IdConsulta', sql.VarChar(14), idConsulta)
-          .query(`
+          .input('IdConsulta', sql.VarChar(14), idConsulta).query(`
             SELECT TOP 1
               d.CodigoProducto,
               d.NumDocumento,
@@ -331,9 +329,7 @@ export class TransactionalController {
 
       // 1. Si numDocumento es numérico, verificar en Ctas_Ctes.Alumno_Pago de BDACADEMICO6
       if (!isNaN(pagoId)) {
-        const debtCheck = await pool.request()
-          .input('PagoId', sql.Int, pagoId)
-          .query(`
+        const debtCheck = await pool.request().input('PagoId', sql.Int, pagoId).query(`
             SELECT 
               ap.id AS pago_id,
               ap.alumno_id,
@@ -365,16 +361,17 @@ export class TransactionalController {
           // Control de idempotencia: ¿Ya estaba pagada con la misma operación bancaria?
           if (debt.param_estado_pago_id === 16) {
             // Verificar si el detalle bancario ya existe
-            const dupCheck = await pool.request()
+            const dupCheck = await pool
+              .request()
               .input('PagoId', sql.Int, pagoId)
-              .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco)
-              .query(`
+              .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco).query(`
                 SELECT TOP 1 id 
                 FROM Ctas_Ctes.Alumno_Pago_Detalle 
                 WHERE alumno_pago_id = @PagoId AND num_documento = @NumOperacionBanco;
               `);
 
             if (dupCheck.recordset.length > 0) {
+              idempotencyHitsCounter.inc({ bank_code: data.codigoBanco });
               const response: PayDebtResponse = {
                 codigoRespuesta: '00',
                 nombreCliente: nombreClienteSaneado,
@@ -402,13 +399,12 @@ export class TransactionalController {
           await txn.begin();
 
           try {
-            // 1. Actualizar Ctas_Ctes.Alumno_Pago
-            await new sql.Request(txn)
+            // 1. Actualizar Ctas_Ctes.Alumno_Pago con bloqueo optimista (verificando param_estado_pago_id = 25)
+            const updateResult = await new sql.Request(txn)
               .input('PagoId', sql.Int, pagoId)
               .input('ImportePagado', sql.Decimal(12, 2), data.importePagado)
               .input('FechaPago', sql.DateTime, fechaPagoDate)
-              .input('CanalPago', sql.VarChar(20), 'BANCOS')
-              .query(`
+              .input('CanalPago', sql.VarChar(20), 'BANCOS').query(`
                 UPDATE Ctas_Ctes.Alumno_Pago
                 SET 
                   param_estado_pago_id = 16, -- SOL_EST_PAGADO
@@ -418,8 +414,47 @@ export class TransactionalController {
                   lugar_pago = @CanalPago,
                   modified_at = GETDATE(),
                   modified_by = 'ASBANC_FTR'
-                WHERE id = @PagoId;
+                WHERE id = @PagoId AND param_estado_pago_id = 25;
               `);
+
+            if (updateResult.rowsAffected[0] === 0) {
+              // Condición de carrera concurrente detectada
+              try {
+                await txn.rollback();
+              } catch (rbErr: any) {
+                logger.warn({ error: rbErr.message }, 'Rollback warning en carrera de PayDebt');
+              }
+
+              const dupCheck = await pool
+                .request()
+                .input('PagoId', sql.Int, pagoId)
+                .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco).query(`
+                  SELECT TOP 1 id 
+                  FROM Ctas_Ctes.Alumno_Pago_Detalle 
+                  WHERE alumno_pago_id = @PagoId AND num_documento = @NumOperacionBanco;
+                `);
+
+              if (dupCheck.recordset.length > 0) {
+                idempotencyHitsCounter.inc({ bank_code: data.codigoBanco });
+                const response: PayDebtResponse = {
+                  codigoRespuesta: '00',
+                  nombreCliente: nombreClienteSaneado,
+                  numOperacionERP,
+                  descripcionResp: 'PAGO PREVIAMENTE REGISTRADO (IDEMPOTENTE)',
+                };
+                (reply as any).payloadData = response;
+                return reply.status(200).send(response);
+              } else {
+                const response: PayDebtResponse = {
+                  codigoRespuesta: '22',
+                  nombreCliente: nombreClienteSaneado,
+                  numOperacionERP,
+                  descripcionResp: 'DEUDA YA SE ENCUENTRA CANCELADA',
+                };
+                (reply as any).payloadData = response;
+                return reply.status(200).send(response);
+              }
+            }
 
             // 2. Insertar en Ctas_Ctes.Alumno_Pago_Detalle
             await new sql.Request(txn)
@@ -428,8 +463,7 @@ export class TransactionalController {
               .input('CanalPago', sql.VarChar(20), 'BANCOS')
               .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco)
               .input('ImportePagado', sql.Decimal(12, 2), data.importePagado)
-              .input('NumCuota', sql.Int, debt.num_cuota)
-              .query(`
+              .input('NumCuota', sql.Int, debt.num_cuota).query(`
                 INSERT INTO Ctas_Ctes.Alumno_Pago_Detalle (
                   alumno_pago_id, fecha_pago, lugar_pago, param_estado_pago_id,
                   tipo_pago, serie, num_documento, monto, estado_auditoria,
@@ -443,33 +477,39 @@ export class TransactionalController {
 
             await txn.commit();
           } catch (txErr) {
-            await txn.rollback();
+            try {
+              await txn.rollback();
+            } catch (rbErr: any) {
+              logger.warn({ error: rbErr.message }, 'Error al ejecutar rollback en PayDebt');
+            }
             throw txErr;
           }
 
           // 3. PLACEHOLDER DE WEBHOOK: Notificar asíncronamente el evento de pago
-          webhookService.dispatchPaymentWebhook({
-            event: 'debt.payment.confirmed',
-            timestamp: new Date().toISOString(),
-            pagoId: debt.pago_id,
-            alumnoId: debt.alumno_id,
-            codigoAlumno: debt.codigo_alumno,
-            numeroDocumento: debt.nro_documento,
-            nombreCliente: nombreClienteSaneado,
-            concepto: debt.concepto,
-            periodoNombre: debt.periodo_nombre,
-            numCuota: debt.num_cuota,
-            importePagado: data.importePagado,
-            codigoBanco: data.codigoBanco,
-            numOperacionBanco: data.numOperacionBanco,
-            numOperacionERP,
-            fechaTxn: data.fechaTxn,
-            horaTxn: data.horaTxn,
-            canalPago: data.canalPago,
-            formaPago: data.formaPago,
-          }).catch((whErr) => {
-            logger.error({ error: whErr.message }, 'Error capturado en despacho de webhook');
-          });
+          webhookService
+            .dispatchPaymentWebhook({
+              event: 'debt.payment.confirmed',
+              timestamp: new Date().toISOString(),
+              pagoId: debt.pago_id,
+              alumnoId: debt.alumno_id,
+              codigoAlumno: debt.codigo_alumno,
+              numeroDocumento: debt.nro_documento,
+              nombreCliente: nombreClienteSaneado,
+              concepto: debt.concepto,
+              periodoNombre: debt.periodo_nombre,
+              numCuota: debt.num_cuota,
+              importePagado: data.importePagado,
+              codigoBanco: data.codigoBanco,
+              numOperacionBanco: data.numOperacionBanco,
+              numOperacionERP,
+              fechaTxn: data.fechaTxn,
+              horaTxn: data.horaTxn,
+              canalPago: data.canalPago,
+              formaPago: data.formaPago,
+            })
+            .catch((whErr) => {
+              logger.error({ error: whErr.message }, 'Error capturado en despacho de webhook');
+            });
 
           const response: PayDebtResponse = {
             codigoRespuesta: '00',
@@ -481,9 +521,7 @@ export class TransactionalController {
           return reply.status(200).send(response);
         } else {
           // El pagoId no existe en BDACADEMICO6. Verificar si el alumno existe en BDACADEMICO6
-          const checkStudent = await pool.request()
-            .input('IdConsulta', sql.VarChar(50), data.idConsulta)
-            .query(`
+          const checkStudent = await pool.request().input('IdConsulta', sql.VarChar(50), data.idConsulta).query(`
               SELECT TOP 1 
                 alu.id,
                 LTRIM(RTRIM(per.nombre)) + ' ' + LTRIM(RTRIM(per.apellido_paterno)) AS nombre_completo
@@ -508,7 +546,8 @@ export class TransactionalController {
 
       // 2. Fallback de compatibilidad para ambiente de pruebas / certificación (politecnica_asbanc)
       try {
-        const fallbackResult = await pool.request()
+        const fallbackResult = await pool
+          .request()
           .input('FechaTxn', sql.VarChar(8), data.fechaTxn)
           .input('HoraTxn', sql.VarChar(6), data.horaTxn)
           .input('CanalPago', sql.VarChar(2), data.canalPago)
@@ -584,9 +623,7 @@ export class TransactionalController {
       const pagoId = parseInt(data.numDocumento, 10);
 
       if (!isNaN(pagoId)) {
-        const debtCheck = await pool.request()
-          .input('PagoId', sql.Int, pagoId)
-          .query(`
+        const debtCheck = await pool.request().input('PagoId', sql.Int, pagoId).query(`
             SELECT 
               ap.id AS pago_id,
               ap.param_estado_pago_id,
@@ -611,9 +648,7 @@ export class TransactionalController {
 
             try {
               // 1. Restaurar cabecera de cuota a pendiente
-              await new sql.Request(revTxn)
-                .input('PagoId', sql.Int, pagoId)
-                .query(`
+              await new sql.Request(revTxn).input('PagoId', sql.Int, pagoId).query(`
                   UPDATE Ctas_Ctes.Alumno_Pago
                   SET 
                     param_estado_pago_id = 25, -- SOL_EST_GENERADO
@@ -628,38 +663,43 @@ export class TransactionalController {
               // 2. Eliminar comprobante bancario en Ctas_Ctes.Alumno_Pago_Detalle
               await new sql.Request(revTxn)
                 .input('PagoId', sql.Int, pagoId)
-                .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco)
-                .query(`
+                .input('NumOperacionBanco', sql.VarChar(20), data.numOperacionBanco).query(`
                   DELETE FROM Ctas_Ctes.Alumno_Pago_Detalle
                   WHERE alumno_pago_id = @PagoId 
-                    AND (num_documento = @NumOperacionBanco OR created_by = 'ASBANC_FTR');
+                    AND num_documento = @NumOperacionBanco;
                 `);
 
               await revTxn.commit();
             } catch (revErr) {
-              await revTxn.rollback();
+              try {
+                await revTxn.rollback();
+              } catch (rbErr: any) {
+                logger.warn({ error: rbErr.message }, 'Error al ejecutar rollback en ReversePay');
+              }
               throw revErr;
             }
 
             // Notificar webhook de extorno
-            webhookService.dispatchPaymentWebhook({
-              event: 'debt.payment.reversed',
-              timestamp: new Date().toISOString(),
-              pagoId: debt.pago_id,
-              alumnoId: 0,
-              codigoAlumno: debt.codigo_alumno,
-              numeroDocumento: debt.nro_documento,
-              nombreCliente: nombreClienteSaneado,
-              concepto: 'EXTORNO DE PAGO',
-              numCuota: 0,
-              importePagado: 0,
-              codigoBanco: data.codigoBanco,
-              numOperacionBanco: data.numOperacionBanco,
-              numOperacionERP,
-              fechaTxn: data.fechaTxn,
-              horaTxn: data.horaTxn,
-              canalPago: '',
-            }).catch(() => {});
+            webhookService
+              .dispatchPaymentWebhook({
+                event: 'debt.payment.reversed',
+                timestamp: new Date().toISOString(),
+                pagoId: debt.pago_id,
+                alumnoId: 0,
+                codigoAlumno: debt.codigo_alumno,
+                numeroDocumento: debt.nro_documento,
+                nombreCliente: nombreClienteSaneado,
+                concepto: 'EXTORNO DE PAGO',
+                numCuota: 0,
+                importePagado: 0,
+                codigoBanco: data.codigoBanco,
+                numOperacionBanco: data.numOperacionBanco,
+                numOperacionERP,
+                fechaTxn: data.fechaTxn,
+                horaTxn: data.horaTxn,
+                canalPago: '',
+              })
+              .catch(() => {});
 
             const response: ReversePayResponse = {
               codigoRespuesta: '00',
@@ -672,9 +712,7 @@ export class TransactionalController {
           }
         } else {
           // El pagoId no existe en BDACADEMICO6. Verificar si el alumno existe en BDACADEMICO6
-          const checkStudent = await pool.request()
-            .input('IdConsulta', sql.VarChar(50), data.idConsulta)
-            .query(`
+          const checkStudent = await pool.request().input('IdConsulta', sql.VarChar(50), data.idConsulta).query(`
               SELECT TOP 1 
                 alu.id,
                 LTRIM(RTRIM(per.nombre)) + ' ' + LTRIM(RTRIM(per.apellido_paterno)) AS nombre_completo
@@ -699,7 +737,8 @@ export class TransactionalController {
 
       // Fallback con politecnica_asbanc
       try {
-        const result = await pool.request()
+        const result = await pool
+          .request()
           .input('FechaTxn', sql.VarChar(8), data.fechaTxn)
           .input('HoraTxn', sql.VarChar(6), data.horaTxn)
           .input('CodigoBanco', sql.VarChar(4), data.codigoBanco)

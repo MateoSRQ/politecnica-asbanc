@@ -40,11 +40,10 @@ export async function asbancAuthMiddleware(request: FastifyRequest, reply: Fasti
 
   logger.warn(
     { ip: request.ip, url: request.url, reason: jwtCheck.error },
-    'Petición rechazada: Token ASBANC no coincide con el pactado ni es un JWT válido'
+    'Petición rechazada: Token ASBANC no coincide con el pactado ni es un JWT válido',
   );
   return reply.status(401).send({
     codigoRespuesta: '99',
     descripcionResp: `TOKEN ASBANC INVALIDO O EXPIRADO: ${jwtCheck.error || 'Firma no reconocida'}`,
   });
 }
-

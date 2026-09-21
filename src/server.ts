@@ -14,12 +14,15 @@ export function buildServer(): FastifyInstance {
   const app = fastify({
     logger: false, // Usamos nuestro logger Pino centralizado
     trustProxy: true,
-    connectionTimeout: 5000,
+    connectionTimeout: 30000,
+    keepAliveTimeout: 30000,
     caseSensitive: false, // Soporta URLs tanto en mayúsculas como en minúsculas
   });
 
   // Plugins de seguridad y cabeceras
-  app.register(cors, { origin: true });
+  app.register(cors, {
+    origin: env.CORS_ORIGIN === '*' ? true : env.CORS_ORIGIN.split(',').map((s) => s.trim()),
+  });
   app.register(helmet, { contentSecurityPolicy: false });
 
   if (env.RATE_LIMIT_ENABLED) {
@@ -44,11 +47,17 @@ export function buildServer(): FastifyInstance {
 
   // Manejo de errores no controlados (retorna código 99 según norma ASBANC)
   app.setErrorHandler((error, request, reply) => {
-    const statusCode = error.statusCode || 500;
-    const isClientError = statusCode >= 400 && statusCode < 500;
+    const isTransactional = request.url.toLowerCase().includes('/api/transactional');
+    const rawStatusCode = error.statusCode || 500;
+    // ASBANC V47 Pág. 27: Para métodos transaccionales, el código de estado HTTP siempre es 200
+    const statusCode = isTransactional ? 200 : rawStatusCode;
+    const isClientError = rawStatusCode >= 400 && rawStatusCode < 500;
 
     if (isClientError) {
-      logger.warn({ error: error.message, traceId: request.traceId, statusCode }, 'Error en petición del cliente');
+      logger.warn(
+        { error: error.message, traceId: request.traceId, statusCode: rawStatusCode },
+        'Error en petición del cliente',
+      );
     } else {
       logger.error({ error: error.message, stack: error.stack, traceId: request.traceId }, 'Excepción no controlada');
     }

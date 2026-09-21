@@ -26,8 +26,8 @@ async function request(endpoint: string, body: any): Promise<{ status: number; d
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': AUTH_HEADER,
-      'Accept': '*/*',
+      Authorization: AUTH_HEADER,
+      Accept: '*/*',
     },
     body: JSON.stringify(body),
   });
@@ -53,8 +53,16 @@ async function runSimulation(): Promise<void> {
     codigoProducto: '001',
   });
   const ok1 = res1.status === 200 && res1.data.codigoRespuesta === '00' && res1.data.nombreCliente.length > 0;
-  results.push({ step: 'ValidateCustomer (Existe)', success: ok1, status: res1.status, durationMs: res1.durationMs, response: res1.data });
-  console.log(`   👉 Respuesta: [${res1.data.codigoRespuesta}] ${res1.data.descripcionResp} | Cliente: ${res1.data.nombreCliente} (${res1.durationMs}ms)`);
+  results.push({
+    step: 'ValidateCustomer (Existe)',
+    success: ok1,
+    status: res1.status,
+    durationMs: res1.durationMs,
+    response: res1.data,
+  });
+  console.log(
+    `   👉 Respuesta: [${res1.data.codigoRespuesta}] ${res1.data.descripcionResp} | Cliente: ${res1.data.nombreCliente} (${res1.durationMs}ms)`,
+  );
 
   // 2. Validar Cliente Inexistente (DNI: 99999999)
   console.log('\n2️⃣ Probando ValidateCustomer (Cliente No Existente: 99999999)...');
@@ -65,7 +73,13 @@ async function runSimulation(): Promise<void> {
     codigoProducto: '001',
   });
   const ok2 = res2.status === 200 && res2.data.codigoRespuesta === '16';
-  results.push({ step: 'ValidateCustomer (No Existe)', success: ok2, status: res2.status, durationMs: res2.durationMs, response: res2.data });
+  results.push({
+    step: 'ValidateCustomer (No Existe)',
+    success: ok2,
+    status: res2.status,
+    durationMs: res2.durationMs,
+    response: res2.data,
+  });
   console.log(`   👉 Respuesta: [${res2.data.codigoRespuesta}] ${res2.data.descripcionResp} (${res2.durationMs}ms)`);
 
   // 3. Consultar Deudas (Cliente: 10000001 vía BCP Ventanilla)
@@ -80,10 +94,20 @@ async function runSimulation(): Promise<void> {
   });
   const debts = res3.data.deudasPendientes || [];
   const ok3 = res3.status === 200 && res3.data.codigoRespuesta === '00' && debts.length > 0;
-  results.push({ step: 'ListDebts (Con Deudas)', success: ok3, status: res3.status, durationMs: res3.durationMs, response: res3.data });
-  console.log(`   👉 Respuesta: [${res3.data.codigoRespuesta}] ${res3.data.descripcionResp} | Deudas encontradas: ${debts.length} (${res3.durationMs}ms)`);
+  results.push({
+    step: 'ListDebts (Con Deudas)',
+    success: ok3,
+    status: res3.status,
+    durationMs: res3.durationMs,
+    response: res3.data,
+  });
+  console.log(
+    `   👉 Respuesta: [${res3.data.codigoRespuesta}] ${res3.data.descripcionResp} | Deudas encontradas: ${debts.length} (${res3.durationMs}ms)`,
+  );
   if (debts.length > 0) {
-    console.log(`      Primer recibo: ${debts[0].numDocumento} | Vence: ${debts[0].fechaVencimiento} | Deuda: S/ ${debts[0].deuda}`);
+    console.log(
+      `      Primer recibo: ${debts[0].numDocumento} | Vence: ${debts[0].fechaVencimiento} | Deuda: S/ ${debts[0].deuda}`,
+    );
   }
 
   // 4. Pagar Deuda (Emulando BCP: Canal 10, Op: BCP998877)
@@ -108,8 +132,16 @@ async function runSimulation(): Promise<void> {
     codigoEmpresa: '998',
   });
   const ok4 = res4.status === 200 && res4.data.codigoRespuesta === '00' && res4.data.numOperacionERP.length > 0;
-  results.push({ step: 'PayDebt (Pago Exitoso)', success: ok4, status: res4.status, durationMs: res4.durationMs, response: res4.data });
-  console.log(`   👉 Respuesta: [${res4.data.codigoRespuesta}] ${res4.data.descripcionResp} | NumOperacionERP: ${res4.data.numOperacionERP} (${res4.durationMs}ms)`);
+  results.push({
+    step: 'PayDebt (Pago Exitoso)',
+    success: ok4,
+    status: res4.status,
+    durationMs: res4.durationMs,
+    response: res4.data,
+  });
+  console.log(
+    `   👉 Respuesta: [${res4.data.codigoRespuesta}] ${res4.data.descripcionResp} | NumOperacionERP: ${res4.data.numOperacionERP} (${res4.durationMs}ms)`,
+  );
 
   // 5. Probar Idempotencia (Reenviar el mismo pago exacto)
   console.log('\n5️⃣ Probando Idempotencia de Pago (Reintento de red con mismo NumOperacionBanco)...');
@@ -128,9 +160,20 @@ async function runSimulation(): Promise<void> {
     monedaDoc: '1',
     codigoEmpresa: '998',
   });
-  const ok5 = res5.status === 200 && res5.data.codigoRespuesta === '00' && res5.data.numOperacionERP === res4.data.numOperacionERP;
-  results.push({ step: 'Idempotencia PayDebt', success: ok5, status: res5.status, durationMs: res5.durationMs, response: res5.data });
-  console.log(`   👉 Respuesta Idempotente: [${res5.data.codigoRespuesta}] Mismo NumERP: ${res5.data.numOperacionERP} (${res5.durationMs}ms)`);
+  const ok5 =
+    res5.status === 200 &&
+    res5.data.codigoRespuesta === '00' &&
+    res5.data.numOperacionERP === res4.data.numOperacionERP;
+  results.push({
+    step: 'Idempotencia PayDebt',
+    success: ok5,
+    status: res5.status,
+    durationMs: res5.durationMs,
+    response: res5.data,
+  });
+  console.log(
+    `   👉 Respuesta Idempotente: [${res5.data.codigoRespuesta}] Mismo NumERP: ${res5.data.numOperacionERP} (${res5.durationMs}ms)`,
+  );
 
   // 6. Extorno / Reversión de Pago (ReversePay)
   console.log(`\n6️⃣ Probando ReversePay (Extorno de ${targetDoc} para ${numOpBanco})...`);
@@ -145,7 +188,13 @@ async function runSimulation(): Promise<void> {
     codigoEmpresa: '998',
   });
   const ok6 = res6.status === 200 && res6.data.codigoRespuesta === '00';
-  results.push({ step: 'ReversePay (Extorno)', success: ok6, status: res6.status, durationMs: res6.durationMs, response: res6.data });
+  results.push({
+    step: 'ReversePay (Extorno)',
+    success: ok6,
+    status: res6.status,
+    durationMs: res6.durationMs,
+    response: res6.data,
+  });
   console.log(`   👉 Respuesta: [${res6.data.codigoRespuesta}] ${res6.data.descripcionResp} (${res6.durationMs}ms)`);
 
   // Resumen Final
@@ -161,7 +210,9 @@ async function runSimulation(): Promise<void> {
 
   if (allPass) {
     console.log('\n🎉 ¡TODAS LAS PRUEBAS TRANSACCIONALES PASARON CON ÉXITO!');
-    console.log('⚡ Los tiempos de respuesta están en el rango de milisegundos, cumpliendo con creces el SLA < 3.0s de ASBANC.');
+    console.log(
+      '⚡ Los tiempos de respuesta están en el rango de milisegundos, cumpliendo con creces el SLA < 3.0s de ASBANC.',
+    );
   } else {
     console.log('\n⚠️ Hubo pruebas que no respondieron con el resultado esperado.');
   }

@@ -111,7 +111,9 @@ async function runBatchTests() {
         result.concepto = debt.descDocumento;
         result.monto = debt.deuda;
         result.paso1_listado = true;
-        console.log(`   [1] Listar Deuda OK    : Cuota #${debt.numDocumento} | ${debt.descDocumento} | S/ ${debt.deuda}`);
+        console.log(
+          `   [1] Listar Deuda OK    : Cuota #${debt.numDocumento} | ${debt.descDocumento} | S/ ${debt.deuda}`,
+        );
       } else {
         console.error(`   [1] Listar Deuda FALLÓ :`, listBody);
         results.push(result);
@@ -149,7 +151,9 @@ async function runBatchTests() {
       if (payRes.statusCode === 200 && payBody.codigoRespuesta === '00') {
         result.numOpERP = payBody.numOperacionERP;
         result.paso2_pagado = true;
-        console.log(`   [2] Ejecutar Pago OK   : Banco Op: ${numOpBanco} -> ERP Op: ${payBody.numOperacionERP} | Status: PAGADO`);
+        console.log(
+          `   [2] Ejecutar Pago OK   : Banco Op: ${numOpBanco} -> ERP Op: ${payBody.numOperacionERP} | Status: PAGADO`,
+        );
       } else {
         console.error(`   [2] Ejecutar Pago FALLÓ:`, payBody);
         results.push(result);
@@ -282,7 +286,7 @@ async function runBatchTests() {
     results.map((r) => ({
       '#': r.index,
       'Cód. Alumno': r.codigoAlumno,
-      'Nombre': r.nombre,
+      Nombre: r.nombre,
       'Cuota ID': r.deudaId,
       'Monto (S/)': r.monto.toFixed(2),
       'Op. ERP': r.numOpERP,
@@ -292,7 +296,7 @@ async function runBatchTests() {
       '4. Éxito': r.paso4_exito ? '✅ OK' : '❌ FAIL',
       '5. Revertir': r.paso5_revertido ? '✅ OK' : '❌ FAIL',
       'Tiempo (ms)': r.tiempoTotalMs,
-    }))
+    })),
   );
 
   const totalExitosos = results.filter((r) => r.paso4_exito && r.paso5_revertido).length;

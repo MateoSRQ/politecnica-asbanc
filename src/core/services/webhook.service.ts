@@ -1,3 +1,4 @@
+import { env } from '../../config/env.js';
 import { logger } from '../../infrastructure/telemetry/logger.js';
 
 /**
@@ -31,7 +32,7 @@ export class WebhookService {
   private webhookUrl?: string;
 
   constructor() {
-    this.webhookUrl = process.env.PAYMENT_WEBHOOK_URL || process.env.WEBHOOK_URL;
+    this.webhookUrl = env.PAYMENT_WEBHOOK_URL || process.env.PAYMENT_WEBHOOK_URL || process.env.WEBHOOK_URL;
   }
 
   /**
@@ -55,7 +56,7 @@ export class WebhookService {
         monto: payload.importePagado,
         concepto: payload.concepto,
       },
-      `[WEBHOOK PLACEHOLDER] Evento de pago ${payload.event} emitido para alumno ${payload.codigoAlumno} (Pago ID: ${payload.pagoId})`
+      `[WEBHOOK PLACEHOLDER] Evento de pago ${payload.event} emitido para alumno ${payload.codigoAlumno} (Pago ID: ${payload.pagoId})`,
     );
 
     // =========================================================================
@@ -79,7 +80,7 @@ export class WebhookService {
         if (!response.ok) {
           logger.warn(
             { status: response.status, statusText: response.statusText },
-            'Respuesta no exitosa al despachar webhook de pago'
+            'Respuesta no exitosa al despachar webhook de pago',
           );
         } else {
           logger.info({ status: response.status }, 'Webhook de pago despachado exitosamente');
@@ -91,7 +92,7 @@ export class WebhookService {
     } else {
       logger.info(
         { pagoId: payload.pagoId, numOperacionERP: payload.numOperacionERP },
-        '[WEBHOOK PLACEHOLDER] No se ha configurado PAYMENT_WEBHOOK_URL en .env. Evento registrado localmente.'
+        '[WEBHOOK PLACEHOLDER] No se ha configurado PAYMENT_WEBHOOK_URL en .env. Evento registrado localmente.',
       );
     }
   }

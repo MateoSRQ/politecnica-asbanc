@@ -7,24 +7,24 @@ export async function transactionalRoutes(fastify: FastifyInstance): Promise<voi
   fastify.post(
     '/api/Transactional/ValidateCustomer',
     { preHandler: [asbancAuthMiddleware] },
-    transactionalController.validateCustomer.bind(transactionalController)
+    transactionalController.validateCustomer.bind(transactionalController),
   );
 
   fastify.post(
     '/api/Transactional/ListDebts',
     { preHandler: [asbancAuthMiddleware] },
-    transactionalController.listDebts.bind(transactionalController)
+    transactionalController.listDebts.bind(transactionalController),
   );
 
   fastify.post(
     '/api/Transactional/PayDebt',
     { preHandler: [asbancAuthMiddleware] },
-    transactionalController.payDebt.bind(transactionalController)
+    transactionalController.payDebt.bind(transactionalController),
   );
 
   fastify.post(
     '/api/Transactional/ReversePay',
     { preHandler: [asbancAuthMiddleware] },
-    transactionalController.reversePay.bind(transactionalController)
+    transactionalController.reversePay.bind(transactionalController),
   );
 }
