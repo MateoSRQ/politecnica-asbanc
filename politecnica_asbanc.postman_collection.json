@@ -1,0 +1,662 @@
+{
+  "info": {
+    "_postman_id": "c71a3962-4217-48f0-b99b-f1d248b67191",
+    "name": "Politécnica ASBANC - Gateway FTR & Off-Host V47",
+    "description": "Colección completa para pruebas manuales y de integración de la pasarela bancaria ASBANC V47.\n\nSoporta indistintamente el backend Node.js (puerto 7300) y Java 21 (puerto 7305) cambiando la variable {{baseUrl}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:7300",
+      "type": "string",
+      "description": "URL base del gateway. Usa http://localhost:7300 para Node.js o http://localhost:7305 para Java."
+    },
+    {
+      "key": "clientId",
+      "value": "asbanc_ftr",
+      "type": "string"
+    },
+    {
+      "key": "clientSecret",
+      "value": "asbanc_ftr_secret_2026",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "codigoEmpresa",
+      "value": "998",
+      "type": "string"
+    },
+    {
+      "key": "codigoBanco",
+      "value": "1020",
+      "type": "string"
+    },
+    {
+      "key": "canalPago",
+      "value": "10",
+      "type": "string"
+    },
+    {
+      "key": "formaPago",
+      "value": "01",
+      "type": "string"
+    },
+    {
+      "key": "codigoAlumno",
+      "value": "26023353010012",
+      "type": "string"
+    },
+    {
+      "key": "numDocumento",
+      "value": "10726",
+      "type": "string"
+    },
+    {
+      "key": "importeDeuda",
+      "value": "833.33",
+      "type": "string"
+    },
+    {
+      "key": "numOperacionBanco",
+      "value": "OP49544001",
+      "type": "string"
+    },
+    {
+      "key": "numOperacionERP",
+      "value": "000010726",
+      "type": "string"
+    },
+    {
+      "key": "tipoConsulta",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "fechaTxn",
+      "value": "11102026",
+      "type": "string"
+    },
+    {
+      "key": "horaTxn",
+      "value": "120000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00. Autenticación (OAuth 2.0)",
+      "item": [
+        {
+          "name": "POST /api/Auth/token (Obtener Bearer Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "if (json.access_token) {",
+                  "    pm.collectionVariables.set('authToken', json.access_token);",
+                  "    console.log('✅ Token JWT actualizado en authToken');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{clientId}}\",\n  \"client_secret\": \"{{clientSecret}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Auth/token",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Auth", "token"]
+            },
+            "description": "Emite el token OAuth 2.0 JWT HS256 con vigencia de 24 horas para las transacciones ASBANC."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01. On-Host Transaccional (FTR / YAPAGO)",
+      "item": [
+        {
+          "name": "Paso 1: Validar Cliente (ValidateCustomer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test('Código respuesta es 00', function () {",
+                  "    pm.expect(json.codigoRespuesta).to.eql('00');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoConsulta\": \"1\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"codigoProducto\": \"001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/ValidateCustomer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "ValidateCustomer"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Paso 2: Consultar Deudas (ListDebts)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test('Código respuesta es 00', function () {",
+                  "    pm.expect(json.codigoRespuesta).to.eql('00');",
+                  "});",
+                  "if (json.deudasPendientes && json.deudasPendientes.length > 0) {",
+                  "    const deuda = json.deudasPendientes[0];",
+                  "    pm.collectionVariables.set('numDocumento', deuda.numDocumento);",
+                  "    pm.collectionVariables.set('importeDeuda', deuda.importeDeuda.toString());",
+                  "    console.log('✅ Deuda capturada: Documento=' + deuda.numDocumento + ', Monto=' + deuda.importeDeuda);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoConsulta\": \"1\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"codigoProducto\": \"001\",\n  \"codigoBanco\": \"{{codigoBanco}}\",\n  \"canalPago\": \"{{canalPago}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/ListDebts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "ListDebts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Paso 3: Notificar Pago (PayDebt)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const randomNum = Math.floor(10000000 + Math.random() * 90000000);",
+                  "pm.collectionVariables.set('numOperacionBanco', 'OP' + randomNum);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test('Código respuesta es 00', function () {",
+                  "    pm.expect(json.codigoRespuesta).to.eql('00');",
+                  "});",
+                  "if (json.numOperacionERP) {",
+                  "    pm.collectionVariables.set('numOperacionERP', json.numOperacionERP);",
+                  "    console.log('✅ Pago confirmado: numOperacionERP=' + json.numOperacionERP);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaTxn\": \"{{fechaTxn}}\",\n  \"horaTxn\": \"{{horaTxn}}\",\n  \"canalPago\": \"{{canalPago}}\",\n  \"codigoBanco\": \"{{codigoBanco}}\",\n  \"numOperacionBanco\": \"{{numOperacionBanco}}\",\n  \"formaPago\": \"{{formaPago}}\",\n  \"tipoConsulta\": \"{{tipoConsulta}}\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoProducto\": \"001\",\n  \"numDocumento\": \"{{numDocumento}}\",\n  \"importePagado\": {{importeDeuda}},\n  \"monedaDoc\": \"1\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/PayDebt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "PayDebt"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Paso 4: Validar Idempotencia (Reintento de PayDebt)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test('Código respuesta es 00 en reintento (idempotencia)', function () {",
+                  "    pm.expect(json.codigoRespuesta).to.eql('00');",
+                  "});",
+                  "pm.test('Retorna el mismo numOperacionERP previo', function () {",
+                  "    pm.expect(json.numOperacionERP).to.eql(pm.collectionVariables.get('numOperacionERP'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaTxn\": \"{{fechaTxn}}\",\n  \"horaTxn\": \"{{horaTxn}}\",\n  \"canalPago\": \"{{canalPago}}\",\n  \"codigoBanco\": \"{{codigoBanco}}\",\n  \"numOperacionBanco\": \"{{numOperacionBanco}}\",\n  \"formaPago\": \"{{formaPago}}\",\n  \"tipoConsulta\": \"{{tipoConsulta}}\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoProducto\": \"001\",\n  \"numDocumento\": \"{{numDocumento}}\",\n  \"importePagado\": {{importeDeuda}},\n  \"monedaDoc\": \"1\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/PayDebt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "PayDebt"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Paso 5: Revertir / Extornar Pago (ReversePay)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code es 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test('Código respuesta es 00', function () {",
+                  "    pm.expect(json.codigoRespuesta).to.eql('00');",
+                  "});",
+                  "console.log('✅ Pago extornado y base de datos restaurada intacta.');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaTxn\": \"{{fechaTxn}}\",\n  \"horaTxn\": \"{{horaTxn}}\",\n  \"codigoBanco\": \"{{codigoBanco}}\",\n  \"tipoConsulta\": \"{{tipoConsulta}}\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"numOperacionBanco\": \"{{numOperacionBanco}}\",\n  \"numDocumento\": \"{{numDocumento}}\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"formaPago\": \"{{formaPago}}\",\n  \"importePagado\": {{importeDeuda}},\n  \"monedaDoc\": \"1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/ReversePay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "ReversePay"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02. Telemetría y Diagnóstico (?metrics)",
+      "item": [
+        {
+          "name": "ValidateCustomer con Telemetría (?metrics=true)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoConsulta\": \"1\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"codigoProducto\": \"001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/ValidateCustomer?metrics=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "ValidateCustomer"],
+              "query": [
+                {
+                  "key": "metrics",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListDebts con Telemetría (?metrics=true)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoConsulta\": \"1\",\n  \"idConsulta\": \"{{codigoAlumno}}\",\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"codigoProducto\": \"001\",\n  \"codigoBanco\": \"{{codigoBanco}}\",\n  \"canalPago\": \"{{canalPago}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Transactional/ListDebts?metrics=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Transactional", "ListDebts"],
+              "query": [
+                {
+                  "key": "metrics",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03. Off-Host (Archivos Planos, Conciliación & SFTP)",
+      "item": [
+        {
+          "name": "POST /api/OffHost/GenerateDebts (Generar FTRCOB)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigoEmpresa\": \"{{codigoEmpresa}}\",\n  \"tipoActualizacion\": \"R\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/OffHost/GenerateDebts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "OffHost", "GenerateDebts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/OffHost/ProcessPayments (Procesar FTRPAG)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileName\": \"FTRPAG11102026001.TXT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/OffHost/ProcessPayments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "OffHost", "ProcessPayments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/OffHost/Reconcile (Conciliación Diaria)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileName\": \"FTRPAG11102026001.TXT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/OffHost/Reconcile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "OffHost", "Reconcile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/OffHost/SftpSync (Sincronización Manual SFTP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/OffHost/SftpSync",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "OffHost", "SftpSync"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04. Auditoría Forense",
+      "item": [
+        {
+          "name": "GET /api/Audit (Listado Paginado)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Audit?page=1&limit=20&codigoBanco={{codigoBanco}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Audit"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "codigoBanco",
+                  "value": "{{codigoBanco}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/Audit/export (Descarga CSV)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/Audit/export?format=csv&limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "Audit", "export"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "csv"
+                },
+                {
+                  "key": "limit",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05. Salud y Métricas",
+      "item": [
+        {
+          "name": "GET /health (Healthcheck del Servicio y MSSQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /metrics o /actuator/prometheus (Telemetría)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["metrics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -16,8 +16,8 @@ export interface DebtItem {
   codigoProducto: string;
   numDocumento: string;
   descDocumento: string;
-  fechaVencimiento: string; // DDMMAAAA
-  fechaEmision: string;     // DDMMAAAA
+  fechaVencimiento: string;
+  fechaEmision: string;
   deuda: number;
   pagoMinimo: number;
   monedaDoc: string;

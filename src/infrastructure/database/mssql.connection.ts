@@ -24,6 +24,7 @@ const sqlConfig: sql.config = {
 
 let pool: sql.ConnectionPool | null = null;
 let poolPromise: Promise<sql.ConnectionPool> | null = null;
+let isClosing = false;
 
 export async function getMssqlPool(): Promise<sql.ConnectionPool> {
   if (pool && pool.connected) {
@@ -34,13 +35,20 @@ export async function getMssqlPool(): Promise<sql.ConnectionPool> {
     return poolPromise;
   }
 
+  isClosing = false;
   poolPromise = (async () => {
     try {
       logger.info(
         { server: env.DB_SERVER, port: env.DB_PORT, database: env.DB_NAME },
-        'Conectando a Microsoft SQL Server...'
+        'Conectando a Microsoft SQL Server...',
       );
-      pool = await new sql.ConnectionPool(sqlConfig).connect();
+      const newPool = await new sql.ConnectionPool(sqlConfig).connect();
+      newPool.on('error', (err) => {
+        if (!isClosing) {
+          logger.error({ err: err?.message || err }, 'Error en el pool de conexiones MSSQL (recuperación automática)');
+        }
+      });
+      pool = newPool;
       logger.info('Conexión exitosa a Microsoft SQL Server (pool listo).');
       return pool;
     } catch (error) {
@@ -57,6 +65,7 @@ export async function getMssqlPool(): Promise<sql.ConnectionPool> {
 
 export async function closeMssqlPool(): Promise<void> {
   if (pool) {
+    isClosing = true;
     await pool.close();
     pool = null;
     logger.info('Pool de conexiones MSSQL cerrado correctamente.');

@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { getMssqlPool } from '../../../infrastructure/database/mssql.connection.js';
 import { register } from '../../../infrastructure/telemetry/metrics.js';
+import { asbancAuthMiddleware } from '../middlewares/auth.middleware.js';
 
 export async function healthRoutes(fastify: FastifyInstance): Promise<void> {
-  // 1. Healthcheck detallado
   fastify.get('/health', async (_req, reply) => {
     let dbStatus = 'disconnected';
 
@@ -28,8 +28,7 @@ export async function healthRoutes(fastify: FastifyInstance): Promise<void> {
     });
   });
 
-  // 2. Endpoint de métricas de Prometheus
-  fastify.get('/metrics', async (_req, reply) => {
+  fastify.get('/metrics', { preHandler: [asbancAuthMiddleware] }, async (_req, reply) => {
     reply.header('Content-Type', register.contentType);
     return reply.send(await register.metrics());
   });

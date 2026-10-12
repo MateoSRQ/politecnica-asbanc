@@ -14,7 +14,6 @@ interface TransactionBenchmark {
   monto: number;
   numOpBanco: string;
   numOpERP: string;
-  // Latencias en milisegundos (ms)
   timeValidateMs: number;
   timeListDebtMs: number;
   timePayDebtMs: number;
@@ -28,7 +27,6 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
   let app: FastifyInstance;
   let authToken: string;
 
-  // 5 Estudiantes con deudas pendientes en BDACADEMICO6
   const targetStudents = [
     { codigoAlumno: '26023353010012', dni: '74202604', nombre: 'MARTHA ORTEGA' },
     { codigoAlumno: '26023355010008', dni: '29612370', nombre: 'ZULLY AURORA VELARDE' },
@@ -44,7 +42,6 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
     app = buildServer();
     await app.ready();
 
-    // Autenticación: Emitir token OAuth 2.0 / JWT
     const tokenRes = await app.inject({
       method: 'POST',
       url: '/api/Auth/token',
@@ -64,16 +61,19 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
     await app.close();
     await closeMssqlPool();
 
-    // Imprimir reporte de rendimiento y tiempos por transacción
-    console.log('\n========================================================================================================');
+    console.log(
+      '\n========================================================================================================',
+    );
     console.log('⏱️  REPORTE DE TIEMPOS DE RESPUESTA - BATERÍA DE 5 TRANSACCIONES (BDACADEMICO6)');
-    console.log('========================================================================================================');
+    console.log(
+      '========================================================================================================',
+    );
 
     console.table(
       benchmarks.map((b) => ({
         'Txn #': b.studentIndex,
         'Cód. Alumno': b.codigoAlumno,
-        'Nombre': b.nombre,
+        Nombre: b.nombre,
         'Cuota ID': b.deudaId,
         'Monto (S/)': b.monto.toFixed(2),
         '1. Validar': `${b.timeValidateMs} ms`,
@@ -83,19 +83,20 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         '5. Revertir': `${b.timeReversePayMs} ms`,
         'Total Ciclo': `${b.totalCycleTimeMs} ms`,
         'SLA (<3s)': b.slaCompliant ? '✅ CUMPLE' : '❌ VIOLACIÓN',
-      }))
+      })),
     );
 
     const calcAvg = (key: keyof TransactionBenchmark) =>
       (benchmarks.reduce((acc, curr) => acc + (curr[key] as number), 0) / benchmarks.length).toFixed(1);
 
-    // Verificación final de base de datos intacta (cero registros residuales)
     const pool = await getMssqlPool();
-    const residualCheck = await pool.request().query(
-      "SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE created_by = 'ASBANC_FTR'"
-    );
+    const residualCheck = await pool
+      .request()
+      .query("SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE created_by = 'ASBANC_FTR'");
     expect(residualCheck.recordset[0].c).toBe(0);
-    console.log('🔒 Verificación de Integridad: 0 registros residuales en Ctas_Ctes.Alumno_Pago_Detalle (Base de datos 100% intacta).');
+    console.log(
+      '🔒 Verificación de Integridad: 0 registros residuales en Ctas_Ctes.Alumno_Pago_Detalle (Base de datos 100% intacta).',
+    );
 
     console.log('📊 Resumen Estadístico Promedio por Transacción:');
     console.log(`   • 1. Validar Cliente    (ValidateCustomer) : ${calcAvg('timeValidateMs')} ms`);
@@ -104,10 +105,11 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
     console.log(`   • 4. Re-check / Idemp.  (PayDebt dup)      : ${calcAvg('timeCheckIdempotenceMs')} ms`);
     console.log(`   • 5. Reversión / Extorno(ReversePay)       : ${calcAvg('timeReversePayMs')} ms`);
     console.log(`   • Tiempo Total Ciclo Promedio              : ${calcAvg('totalCycleTimeMs')} ms`);
-    console.log('========================================================================================================\n');
+    console.log(
+      '========================================================================================================\n',
+    );
   });
 
-  // Ejecutar el ciclo para cada una de las 5 transacciones
   targetStudents.forEach((student, idx) => {
     describe(`Transacción #${idx + 1}: ${student.codigoAlumno} - ${student.nombre}`, () => {
       const benchmark: TransactionBenchmark = {
@@ -134,7 +136,7 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
           url: '/api/Transactional/ValidateCustomer',
           headers: { authorization: authToken },
           payload: {
-            tipoConsulta: '0', // 0 = Código de alumno
+            tipoConsulta: '0',
             idConsulta: student.codigoAlumno,
             codigoEmpresa: '998',
             codigoProducto: '001',
@@ -147,7 +149,7 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         const body = JSON.parse(res.body);
         expect(body.codigoRespuesta).toBe('00');
         expect(body.nombreCliente).toBeDefined();
-        expect(elapsed).toBeLessThan(3000); // SLA ASBANC < 3s
+        expect(elapsed).toBeLessThan(3000);
       });
 
       it(`2. ListDebts: listar la deuda más antigua pendiente`, async () => {
@@ -180,7 +182,7 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
 
         benchmark.deudaId = debt.numDocumento;
         benchmark.monto = debt.deuda;
-        expect(elapsed).toBeLessThan(3000); // SLA ASBANC < 3s
+        expect(elapsed).toBeLessThan(3000);
       });
 
       it(`3. PayDebt: ejecutar y pagar la deuda (transacción ACID en MSSQL)`, async () => {
@@ -220,11 +222,10 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         expect(body.numOperacionERP).toBeDefined();
         benchmark.numOpERP = body.numOperacionERP;
 
-        // Validar webhook placeholder
         expect(webhookSpy).toHaveBeenCalled();
         webhookSpy.mockRestore();
 
-        expect(elapsed).toBeLessThan(3000); // SLA ASBANC < 3s
+        expect(elapsed).toBeLessThan(3000);
       });
 
       it(`4. Idempotencia: verificar que la deuda está cancelada y no permite doble cobro`, async () => {
@@ -257,7 +258,6 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         expect(retryBody.codigoRespuesta).toBe('00');
         expect(retryBody.descripcionResp).toContain('IDEMPOTENTE');
 
-        // Además, verificar que la deuda ya no figura como la más antigua pendiente
         const listAgainRes = await app.inject({
           method: 'POST',
           url: '/api/Transactional/ListDebts',
@@ -303,7 +303,6 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         const revBody = JSON.parse(revRes.body);
         expect(revBody.codigoRespuesta).toBe('00');
 
-        // Confirmar restauración completa
         const verifyRestore = await app.inject({
           method: 'POST',
           url: '/api/Transactional/ListDebts',
@@ -321,13 +320,14 @@ describe('Batería de Pruebas Vitest: 5 Transacciones Bancarias Completas (ASBAN
         expect(verifyRestoreBody.codigoRespuesta).toBe('00');
         expect(verifyRestoreBody.deudasPendientes[0].numDocumento).toBe(benchmark.deudaId);
 
-        // Confirmar que el detalle bancario fue eliminado y no quedó huella
-        const checkDetalle = await (await getMssqlPool()).request()
+        const checkDetalle = await (
+          await getMssqlPool()
+        )
+          .request()
           .input('NumOpBanco', benchmark.numOpBanco)
           .query('SELECT COUNT(*) AS c FROM Ctas_Ctes.Alumno_Pago_Detalle WHERE num_documento = @NumOpBanco');
         expect(checkDetalle.recordset[0].c).toBe(0);
 
-        // Resumen del ciclo
         benchmark.totalCycleTimeMs =
           benchmark.timeValidateMs +
           benchmark.timeListDebtMs +

@@ -1,0 +1,319 @@
+================================================================================
+GUIA TECNICA DE PRUEBAS DE INTEGRACION: ASBANC FTR / YAPAGO V47
+POLITECNICA ASBANC - PASARELA DE RECAUDACION BANCARIA MULTIBANCO
+================================================================================
+Normativa Base: "Guía detallada de integración V47.pdf" (YAPAGO / ASBANC FTR)
+Servicios Auditados:
+  - Gateway Node.js (Fastify + TypeScript): http://localhost:7300
+  - Gateway Java (Spring Boot 3.4 + Java 21): http://localhost:7305
+Base de Datos Central: BDACADEMICO6 (Microsoft SQL Server 2022)
+Fecha de Revision: 2026-10-11
+================================================================================
+
+1. OBJETIVO Y ALCANCE
+--------------------------------------------------------------------------------
+Este documento detalla el catalogo de pruebas manuales y tecnicas que deben
+ejecutarse para verificar que ambas implementaciones (Node.js y Java) cumplen
+rigurosamente con los contratos, tiempos de respuesta (SLAs) y protocolos
+financieros estipulados por ASBANC y los bancos afiliados (BCP, BBVA, Interbank,
+Scotiabank, BanBif).
+
+Los archivos ejecutables para HTTP Client (VS Code / WebStorm / IntelliJ) son:
+  - test_node.http  -> Apunta a Node.js en puerto 7300
+  - test_java.http  -> Apunta a Java en puerto 7305
+
+2. PRERREQUISITOS DE EJECUCION
+--------------------------------------------------------------------------------
+1. Base de datos SQL Server 2022 en ejecucion en el puerto 1433 con la base
+   BDACADEMICO6 activa y con credenciales configuradas en .env.
+2. Iniciar el servicio que se desea evaluar:
+   - Para Node.js : npm run dev        (inicia en http://localhost:7300)
+   - Para Java    : npm run start:java (inicia en http://localhost:7305)
+3. Limpieza de datos residuales antes de baterias:
+   - Ejecutar: npm run db:clean-test-data
+
+3. CATALOGO DE PRUEBAS TRANSACCIONALES (ON-HOST)
+================================================================================
+
+--------------------------------------------------------------------------------
+PRUEBA 01: OBTENCION DE TOKEN OAUTH 2.0 / JWT (PAGINA 8 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Auth/token
+Cabecera: Content-Type: application/json
+Payload:
+  {
+    "client_id": "asbanc_ftr",
+    "client_secret": "asbanc_ftr_secret_2026"
+  }
+Tambien soporta cabecera: Authorization: Basic <base64(client_id:client_secret)>
+Respuesta Esperada (HTTP 200):
+  {
+    "access_token": "<JWT_HS256>",
+    "token_type": "Bearer",
+    "expires_in": 86400,
+    "codigoRespuesta": "00"
+  }
+Criterio de Exito: El token es firmado con HS256 y vence en 24 horas.
+
+--------------------------------------------------------------------------------
+PRUEBA 02: VALIDACION DE CLIENTE EXISTENTE (PAGINAS 18, 33 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ValidateCustomer
+Cabecera:
+  Authorization: Bearer <TOKEN>  (O tambien: Basic <TOKEN> segun Pag. 33)
+  Content-Type: application/json
+Payload:
+  {
+    "tipoConsulta": "0",
+    "idConsulta": "26023353010012",
+    "codigoEmpresa": "998",
+    "codigoProducto": "001"
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "00",
+    "descripcionResp": "OK",
+    "nombreCliente": "MARTHA ORTEGA RIOS"
+  }
+Criterio de Exito: Latencia < 50ms (SLA maximo BCP/BBVA: 3.5s; global: 3.0s).
+
+--------------------------------------------------------------------------------
+PRUEBA 03: VALIDACION DE CLIENTE INEXISTENTE (PAGINA 33 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ValidateCustomer
+Payload:
+  {
+    "tipoConsulta": "1",
+    "idConsulta": "99999999",
+    "codigoEmpresa": "998",
+    "codigoProducto": "001"
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "16",
+    "descripcionResp": "CLIENTE NO EXISTE",
+    "nombreCliente": ""
+  }
+Criterio de Exito: Retorna codigo '16' con HTTP 200 estricto.
+
+--------------------------------------------------------------------------------
+PRUEBA 04: CONSULTA DE DEUDA MAS ANTIGUA (PAGINAS 18-23, 34 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ListDebts
+Payload:
+  {
+    "tipoConsulta": "0",
+    "idConsulta": "26023353010012",
+    "codigoEmpresa": "998",
+    "codigoProducto": "001",
+    "codigoBanco": "1020",
+    "canalPago": "10"
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "00",
+    "descripcionResp": "OK",
+    "deudasPendientes": [
+      {
+        "codigoProducto": "001",
+        "numDocumento": "10726",
+        "descDocumento": "MATRICULA 2026-I",
+        "fechaVencimiento": "20032026",
+        "fechaEmision": "01032026",
+        "deuda": 833.33,
+        "pagoMinimo": 833.33,
+        "monedaDoc": "1"
+      }
+    ]
+  }
+Criterio de Exito:
+  - Solo retorna LA DEUDA MAS ANTIGUA pendiente (orden: periodo, cuota, fecha vencimiento).
+  - Array de deudas 'deudasPendientes' presente aun cuando sea 1 documento.
+
+--------------------------------------------------------------------------------
+PRUEBA 05: CONSULTA DE CLIENTE SIN DEUDAS PENDIENTES (PAGINA 34 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ListDebts
+Payload: idConsulta de un alumno que ya cancelo todas sus cuotas.
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "22",
+    "descripcionResp": "CLIENTE SIN DEUDAS PENDIENTES",
+    "deudasPendientes": []
+  }
+Criterio de Exito: Retorna codigo '22' y array vacio [].
+
+--------------------------------------------------------------------------------
+PRUEBA 06: PAGO DE DEUDA EN TIEMPO REAL (PAGINAS 24-25, 35-36 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/PayDebt
+Payload:
+  {
+    "fechaTxn": "11102026",
+    "horaTxn": "143000",
+    "canalPago": "10",
+    "codigoBanco": "1020",
+    "numOperacionBanco": "OP99881122",
+    "formaPago": "01",
+    "tipoConsulta": "0",
+    "idConsulta": "26023353010012",
+    "codigoProducto": "001",
+    "numDocumento": "10726",
+    "importePagado": 833.33,
+    "monedaDoc": "1",
+    "codigoEmpresa": "998"
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "00",
+    "nombreCliente": "MARTHA ORTEGA RIOS",
+    "numOperacionERP": "000010726",
+    "descripcionResp": "OK"
+  }
+Criterio de Exito:
+  - Actualiza Ctas_Ctes.Alumno_Pago a param_estado_pago_id = 16.
+  - Inserta comprobante en Ctas_Ctes.Alumno_Pago_Detalle con num_documento = OP99881122.
+  - Genera numOperacionERP de 9 caracteres formateado a la izquierda con ceros.
+
+--------------------------------------------------------------------------------
+PRUEBA 07: CONTROL DE IDEMPOTENCIA EN PAGO REPETIDO (REINTENTO BANCARIO)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/PayDebt
+Payload: Exactamente el mismo payload que la Prueba 06 (mismo numOperacionBanco).
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "00",
+    "nombreCliente": "MARTHA ORTEGA RIOS",
+    "numOperacionERP": "000010726",
+    "descripcionResp": "PAGO PREVIAMENTE REGISTRADO (IDEMPOTENTE)"
+  }
+Criterio de Exito:
+  - Cero duplicados en base de datos.
+  - Devuelve codigo '00' para confirmar al banco que la transaccion ya fue asentada.
+
+--------------------------------------------------------------------------------
+PRUEBA 08: COBRO DE DEUDA YA CANCELADA POR OTRA OPERACION (PAGINA 36 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/PayDebt
+Payload: Mismo numDocumento ("10726"), pero con DIFERENTE numOperacionBanco ("OP99999999").
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "22",
+    "descripcionResp": "DEUDA YA SE ENCUENTRA CANCELADA"
+  }
+Criterio de Exito: Previene doble cobro rechazando con codigo '22'.
+
+--------------------------------------------------------------------------------
+PRUEBA 09: EXTORNO / ANULACION DE PAGO (PAGINAS 26, 36-37 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ReversePay
+Payload:
+  {
+    "fechaTxn": "11102026",
+    "horaTxn": "143500",
+    "codigoBanco": "1020",
+    "tipoConsulta": "0",
+    "idConsulta": "26023353010012",
+    "numOperacionBanco": "OP99881122",
+    "numDocumento": "10726",
+    "codigoEmpresa": "998"
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "00",
+    "nombreCliente": "MARTHA ORTEGA RIOS",
+    "numOperacionERP": "000010726",
+    "descripcionResp": "OK"
+  }
+Criterio de Exito:
+  - Elimina el comprobante bancario en Ctas_Ctes.Alumno_Pago_Detalle.
+  - Restaura Ctas_Ctes.Alumno_Pago a param_estado_pago_id = 25 (Pendiente).
+  - Al consultar deudas nuevamente (Prueba 04), la cuota vuelve a aparecer pendiente.
+
+--------------------------------------------------------------------------------
+PRUEBA 10: TELEMETRIA DE LATENCIA VIA PARAMETRO GET ?metrics
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ValidateCustomer?metrics
+Payload: Mismo de la Prueba 02.
+Respuesta Esperada (HTTP 200):
+  Cabecera: X-Response-Time-Ms: <ms>
+  Body:
+  {
+    "codigoRespuesta": "00",
+    "descripcionResp": "OK",
+    "nombreCliente": "MARTHA ORTEGA RIOS",
+    "metrics": {
+      "responseTimeMs": 12,
+      "executionTimeMs": 12,
+      "unit": "ms"
+    },
+    "responseTimeMs": 12
+  }
+
+--------------------------------------------------------------------------------
+PRUEBA 11: VALIDACION DE ENTRADA INVALIDA (CONTRATO ASBANC DE ERROR)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ListDebts
+Payload:
+  {
+    "tipoConsulta": "99",
+    "idConsulta": ""
+  }
+Respuesta Esperada (HTTP 200):
+  {
+    "codigoRespuesta": "99",
+    "descripcionResp": "DATOS DE ENTRADA INVALIDOS: ...",
+    "deudasPendientes": []
+  }
+Criterio de Exito: HTTP 200 obligatorio con codigoRespuesta '99' y array de deudas vacio.
+
+--------------------------------------------------------------------------------
+PRUEBA 12: SEGURIDAD Y RECHAZO ANTE TOKEN AUSENTE (PAGINA 8 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/Transactional/ValidateCustomer
+Cabecera: (Sin cabecera Authorization)
+Respuesta Esperada (HTTP 401):
+  {
+    "codigoRespuesta": "99",
+    "descripcionResp": "AUTORIZACION REQUERIDA (CABECERA BASIC AUTH / TOKEN AUSENTE)"
+  }
+
+4. CATALOGO DE PRUEBAS POR LOTES (OFF-HOST)
+================================================================================
+
+--------------------------------------------------------------------------------
+PRUEBA 13: GENERACION DE ARCHIVO PLANO DE DEUDAS FTRCOB (PAGINAS 11-16 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/OffHost/GenerateDebts
+Payload: { "tipoActualizacion": "R", "secuencia": 1 }
+Verificaciones Estrictas:
+  - Nombre de archivo: FTRCOB<DDMMAAAA>001.TXT
+  - Cabecera: Exactamente 210 caracteres.
+  - Registros de detalle: Exactamente 178 caracteres terminados en flag 'F'.
+  - Nombre del alumno: Debe incluir nombres, apellido paterno y apellido materno.
+  - Importes: Formato numerico con 2 decimales sin punto (ej. 83333 para 833.33).
+
+--------------------------------------------------------------------------------
+PRUEBA 14: PROCESAMIENTO DE ARCHIVO DE PAGOS FTRPAG (PAGINAS 16-18 GUIA V47)
+--------------------------------------------------------------------------------
+Metodo: POST /api/OffHost/ProcessPayments
+Payload: { "fileName": "FTRPAG11102026001.TXT" }
+Verificaciones Estrictas:
+  - Lineas de detalle: Exactamente 240 caracteres con prefijo constante 'DD'.
+  - Aplica pagos marcando cuotas como canceladas en base de datos.
+
+--------------------------------------------------------------------------------
+PRUEBA 15: CONCILIACION CONTABLE DIARIA (RECONCILIATION)
+--------------------------------------------------------------------------------
+Metodo: POST /api/OffHost/Reconcile
+Payload: { "fileName": "FTRPAG11102026001.TXT" }
+Respuesta Esperada:
+  Clasificacion automatica de operaciones en:
+  - totalCoincidentes
+  - SOLO_EN_OFFHOST (pagos fuera de linea)
+  - SOLO_EN_ONHOST
+  - DIFERENCIA_MONTO
+
+================================================================================
+FIN DE GUIA DE PRUEBAS DE INTEGRACION
+================================================================================

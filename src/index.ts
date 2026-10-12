@@ -9,7 +9,6 @@ async function main(): Promise<void> {
   logger.info(`Entorno: ${env.NODE_ENV} | Puerto: ${env.PORT} | Host: ${env.HOST}`);
   logger.info('==================================================');
 
-  // Inicializar conexiones a infraestructura
   try {
     await getMssqlPool();
   } catch (error) {
@@ -19,7 +18,7 @@ async function main(): Promise<void> {
   const server = buildServer();
 
   try {
-    await server.listen({ port: env.PORT, host: env.HOST });
+    await server.listen({ port: env.PORT, host: env.HOST, backlog: 2048 });
     logger.info(`Servidor escuchando en http://${env.HOST}:${env.PORT}`);
     logger.info(`Métricas Prometheus activas en http://${env.HOST}:${env.PORT}${env.METRICS_ROUTE}`);
     logger.info(`Health check activo en http://${env.HOST}:${env.PORT}/health`);
@@ -28,7 +27,6 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // Cierre limpio (Graceful Shutdown)
   const shutdown = async (signal: string) => {
     logger.info({ signal }, 'Señal de terminación recibida. Cerrando recursos...');
     await server.close();
@@ -39,6 +37,15 @@ async function main(): Promise<void> {
 
   process.on('SIGINT', () => shutdown('SIGINT'));
   process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+  process.on('unhandledRejection', (reason: any) => {
+    logger.error({ reason: reason?.message || reason, stack: reason?.stack }, 'Unhandled Rejection en proceso');
+  });
+
+  process.on('uncaughtException', (err: Error) => {
+    logger.fatal({ err: err.message, stack: err.stack }, 'Uncaught Exception crítica en proceso');
+    process.exit(1);
+  });
 }
 
 main().catch((err) => {

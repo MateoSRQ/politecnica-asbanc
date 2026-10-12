@@ -1,0 +1,297 @@
+### ================================================================================
+### SUITE DE PRUEBAS MANUALES HTTP - GATEWAY NODE.JS (PUERTO 7300)
+### Normativa: ASBANC FTR / YAPAGO V47
+### Requisito: Iniciar servicio Node.js con `npm run dev`
+### ================================================================================
+
+@baseUrl = http://localhost:7300
+@clientId = asbanc_ftr
+@clientSecret = asbanc_ftr_secret_2026
+@validStudentCode = 201820005
+@nonExistentStudentCode = 99999999
+@invalidStudentCode = ABC-INVALID
+
+### ================================================================================
+### 0. AUTENTICACION OAUTH 2.0 / JWT (PAGINA 8 GUIA V47)
+### ================================================================================
+
+# @name auth
+POST {{baseUrl}}/api/Auth/token
+Content-Type: application/json
+
+{
+  "client_id": "{{clientId}}",
+  "client_secret": "{{clientSecret}}"
+}
+
+### Guardar token obtenido para las siguientes peticiones
+@authToken = {{auth.response.body.access_token}}
+
+### ================================================================================
+### 1. HEALTHCHECK Y TELEMETRIA PROMETHEUS
+### ================================================================================
+
+### 1.1 Estado del Servicio (Healthcheck)
+GET {{baseUrl}}/health
+
+### 1.2 Metricas Prometheus
+GET {{baseUrl}}/metrics
+
+### ================================================================================
+### 2. PRUEBA DE VALIDACION DE CLIENTE (VALIDATE CUSTOMER)
+### ================================================================================
+
+### 2.1 Validar Cliente Existente con Bearer Token (HTTP 200, codigoRespuesta: 00)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "VAL-001-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 2.2 Validar Cliente con Cabecera "Basic <token>" (Especificacion Oficial V47 Pág. 33)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+Authorization: Basic {{authToken}}
+
+{
+  "idConsulta": "VAL-BASIC-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 2.3 Validar Cliente con Telemetria Query ?metrics=true (Inyeccion de tiempo de ejecucion)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer?metrics=true
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "VAL-METRIC-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 2.4 Validar Cliente Inexistente (HTTP 200, codigoRespuesta: 16 - CLIENTE NO EXISTE)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "VAL-INEX-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{nonExistentStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 2.5 Validar Formato Invalido (Error 99 / Error de Validacion de Esquema Zod)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "",
+  "codigoEmpresa": "0001",
+  "codigoCliente": "123"
+}
+
+### ================================================================================
+### 3. PRUEBA DE CONSULTA DE DEUDAS (LIST DEBTS)
+### ================================================================================
+
+### 3.1 Consultar Deudas de Estudiante con Cuotas Pendientes (HTTP 200, codigoRespuesta: 00)
+# @name listDebts
+POST {{baseUrl}}/api/Transaction/ListDebts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "DEB-001-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### Variables extraidas de la primera deuda encontrada
+@numDocumento = {{listDebts.response.body.deudasPendientes[0].numDocumento}}
+@importeDeuda = {{listDebts.response.body.deudasPendientes[0].montoDeuda}}
+@numOperacionBanco = TXN-TEST-{{$timestamp}}
+
+### 3.2 Consultar Deudas de Cliente Inexistente (HTTP 200, codigoRespuesta: 16)
+POST {{baseUrl}}/api/Transaction/ListDebts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "DEB-INEX-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{nonExistentStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### ================================================================================
+### 4. PRUEBA DE PAGO DE DEUDA E IDEMPOTENCIA (PAY DEBT)
+### ================================================================================
+
+### 4.1 Notificar Pago de Deuda (HTTP 200, codigoRespuesta: 00)
+# @name payDebt
+POST {{baseUrl}}/api/Transaction/PayDebt
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "PAY-001-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoBanco": "1020",
+  "codigoCliente": "{{validStudentCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "importePagado": {{importeDeuda}},
+  "formaPago": "EF",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 4.2 Reintento de Pago (Control de Idempotencia ACID - HTTP 200, codigoRespuesta: 00)
+### Debe retornar el MISMO numOperacionERP sin duplicar el cobro en base de datos
+POST {{baseUrl}}/api/Transaction/PayDebt
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "PAY-IDEM-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoBanco": "1020",
+  "codigoCliente": "{{validStudentCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "importePagado": {{importeDeuda}},
+  "formaPago": "EF",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### ================================================================================
+### 5. PRUEBA DE REVERSION / EXTORNO TRANSACCIONAL (REVERSE PAY)
+### ================================================================================
+
+### 5.1 Revertir Pago Realizado (HTTP 200, codigoRespuesta: 00)
+### Restaura la deuda al estado pendiente (25) y elimina el registro de pago
+POST {{baseUrl}}/api/Transaction/ReversePay
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "REV-001-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoBanco": "1020",
+  "codigoCliente": "{{validStudentCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "numOperacionBanco": "{{numOperacionBanco}}",
+  "importePagado": {{importeDeuda}},
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 5.2 Revertir Operacion Inexistente (HTTP 200, codigoRespuesta: 99)
+POST {{baseUrl}}/api/Transaction/ReversePay
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "idConsulta": "REV-INEX-{{$timestamp}}",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoBanco": "1020",
+  "codigoCliente": "{{validStudentCode}}",
+  "numDocumento": "{{numDocumento}}",
+  "numOperacionBanco": "OP-NON-EXISTENT-99999",
+  "importePagado": {{importeDeuda}},
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### ================================================================================
+### 6. SEGURIDAD Y CONTROL DE ERRORES BANCARIOS
+### ================================================================================
+
+### 6.1 Peticion sin Token de Autenticacion (HTTP 401 con JSON codigoRespuesta: 99)
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+
+{
+  "idConsulta": "UNAUTH-001",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### 6.2 Token Invalido / Falso
+POST {{baseUrl}}/api/Transaction/ValidateCustomer
+Content-Type: application/json
+Authorization: Bearer token_falso_invalido_123456
+
+{
+  "idConsulta": "UNAUTH-002",
+  "codigoEmpresa": "0001",
+  "codigoServicio": "01",
+  "codigoAgencia": "001",
+  "codigoCanal": "01",
+  "codigoCliente": "{{validStudentCode}}",
+  "fechaHoraOperacion": "2026-10-11T12:00:00"
+}
+
+### ================================================================================
+### 7. MODULO OFF-HOST (ARCHIVOS PLANOS FTRCOB Y CONCILIACION)
+### ================================================================================
+
+### 7.1 Generar Archivo Plano de Deudas FTRCOB (Cabecera 210 chars / Detalle 178 chars)
+POST {{baseUrl}}/api/OffHost/GenerateDebts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "tipoActualizacion": "R",
+  "secuencia": 1
+}
+
+### ================================================================================
+### 8. CONSULTA DE AUDITORIA FORENSE
+### ================================================================================
+
+### 8.1 Consultar ultimos 10 registros de auditoria transaccional
+GET {{baseUrl}}/api/Audit?limit=10
+Authorization: Bearer {{authToken}}

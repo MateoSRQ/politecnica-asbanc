@@ -1,0 +1,25 @@
+# ==============================================================================
+# Perfil de Producción (prod / production) - Politécnica ASBANC Java
+# ==============================================================================
+server:
+  port: ${JAVA_PORT:${PORT:7305}}
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+logging:
+  level:
+    root: WARN
+    pe.edu.politecnica.asbanc: INFO
+    org.springframework.web: WARN
+
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics

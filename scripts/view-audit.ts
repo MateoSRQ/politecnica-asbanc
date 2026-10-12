@@ -28,7 +28,6 @@ async function viewAudit(): Promise<void> {
 
   const auditTable = await getAuditTableName(pool);
 
-  // Parámetro de cantidad a mostrar (default: 5 detallados)
   const argLimit = parseInt(process.argv[2], 10);
   const detailLimit = !isNaN(argLimit) && argLimit > 0 ? argLimit : 5;
 
@@ -55,15 +54,15 @@ async function viewAudit(): Promise<void> {
 
   console.table(
     result.recordset.map((r: any) => ({
-      'ID': r.Id,
-      'Método': r.Metodo,
-      'Banco': r.Banco,
+      ID: r.Id,
+      Método: r.Metodo,
+      Banco: r.Banco,
       'Id Consulta': r.IdConsulta || 'N/A',
       'Op. Banco': r.NumOperacionBanco || 'N/A',
       'Cod Resp': r.Resp,
-      'Latencia': r.Latencia,
+      Latencia: r.Latencia,
       'Fecha y Hora': r.Fecha,
-    }))
+    })),
   );
 
   console.log('\n================================================================================');
@@ -72,21 +71,41 @@ async function viewAudit(): Promise<void> {
 
   result.recordset.forEach((tx: any, i: number) => {
     console.log(`\n--------------------------------------------------------------------------------`);
-    console.log(`🔹 [${i + 1}/${result.recordset.length}] ID Transacción: #${tx.Id} | Método: ${tx.Metodo} | Latencia: ${tx.Latencia}`);
+    console.log(
+      `🔹 [${i + 1}/${result.recordset.length}] ID Transacción: #${tx.Id} | Método: ${tx.Metodo} | Latencia: ${tx.Latencia}`,
+    );
     console.log(`   Trace ID  : ${tx.TraceId}`);
     console.log(`   Fecha     : ${tx.Fecha}`);
     console.log(`   Respuesta : Código ASBANC "${tx.Resp}"`);
 
     let reqObj = null;
     let respObj = null;
-    try { reqObj = JSON.parse(tx.RequestPayload); } catch { reqObj = tx.RequestPayload; }
-    try { respObj = JSON.parse(tx.ResponsePayload); } catch { respObj = tx.ResponsePayload; }
+    try {
+      reqObj = JSON.parse(tx.RequestPayload);
+    } catch {
+      reqObj = tx.RequestPayload;
+    }
+    try {
+      respObj = JSON.parse(tx.ResponsePayload);
+    } catch {
+      respObj = tx.ResponsePayload;
+    }
 
     console.log(`\n   📥 PAYLOAD ENVIADO POR EL BANCO (Request):`);
-    console.log(JSON.stringify(reqObj, null, 6).split('\n').map(l => '      ' + l).join('\n'));
+    console.log(
+      JSON.stringify(reqObj, null, 6)
+        .split('\n')
+        .map((l) => '      ' + l)
+        .join('\n'),
+    );
 
     console.log(`\n   📤 RESPUESTA RETORNADA AL BANCO (Response):`);
-    console.log(JSON.stringify(respObj, null, 6).split('\n').map(l => '      ' + l).join('\n'));
+    console.log(
+      JSON.stringify(respObj, null, 6)
+        .split('\n')
+        .map((l) => '      ' + l)
+        .join('\n'),
+    );
   });
 
   const summary = await pool.request().query(`

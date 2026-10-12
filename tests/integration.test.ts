@@ -13,7 +13,6 @@ describe('Pruebas de Integración End-to-End de Rutas HTTP (server.inject)', () 
     app = buildServer();
     await app.ready();
 
-    // Generar un token válido para las pruebas transaccionales
     const tokenRes = await app.inject({
       method: 'POST',
       url: '/api/Auth/token',
@@ -44,10 +43,20 @@ describe('Pruebas de Integración End-to-End de Rutas HTTP (server.inject)', () 
       expect(body.services.mssql).toBe('connected');
     });
 
-    it('GET /metrics debe exponer métricas Prometheus en formato texto plano', async () => {
+    it('GET /metrics debe rechazar peticiones sin token con 401', async () => {
       const res = await app.inject({
         method: 'GET',
         url: '/metrics',
+      });
+
+      expect(res.statusCode).toBe(401);
+    });
+
+    it('GET /metrics debe exponer métricas Prometheus con token JWT válido', async () => {
+      const res = await app.inject({
+        method: 'GET',
+        url: '/metrics',
+        headers: { authorization: `Bearer ${validToken}` },
       });
 
       expect(res.statusCode).toBe(200);

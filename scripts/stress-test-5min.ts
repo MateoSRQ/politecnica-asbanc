@@ -1,10 +1,3 @@
-/**
- * ==========================================================
- * PRUEBA DE ESTRÉS Y RENDIMIENTO CONTINUA (5 MINUTOS)
- * Específica para Certificación ASBANC FTR / YAPAGO
- * ==========================================================
- */
-
 import fs from 'node:fs';
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
@@ -13,8 +6,8 @@ import { env } from '../src/config/env.js';
 
 const BASE_URL = `http://127.0.0.1:${env.PORT}`;
 const AUTH_HEADER = `Basic ${env.ASBANC_AUTH_SECRET}`;
-const TEST_DURATION_SECONDS = 300; // 5 minutos exactos
-const NUM_WORKERS = 10; // 10 ventanillas concurrentes (Norma ASBANC V47 pág. 28)
+const TEST_DURATION_SECONDS = 300;
+const NUM_WORKERS = 10;
 
 const CLIENT_IDENTIFIERS = [
   { tipo: '1', id: '10000001' },
@@ -27,7 +20,7 @@ const CLIENT_IDENTIFIERS = [
   { tipo: '0', id: '202610003' },
   { tipo: '2', id: '20103040501' },
   { tipo: '2', id: '20324578596' },
-  { tipo: '1', id: '99999999' }, // Inexistente para probar código 16
+  { tipo: '1', id: '99999999' },
 ];
 
 const BANKS = ['1020', '1023', '1022', '1024'];
@@ -39,8 +32,8 @@ interface Stats {
   byStatus: Record<string, number>;
   byBank: Record<string, number>;
   latencies: number[];
-  slaViolations: number; // > 3000ms
-  slaWarnings: number;    // > 2500ms
+  slaViolations: number;
+  slaWarnings: number;
   startTime: number;
   endTime: number;
 }
@@ -64,7 +57,7 @@ async function postJson(endpoint: string, body: any): Promise<{ durationMs: numb
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': AUTH_HEADER,
+        Authorization: AUTH_HEADER,
       },
       body: JSON.stringify(body),
     });
@@ -106,7 +99,6 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
     const bank = BANKS[Math.floor(Math.random() * BANKS.length)];
     const channel = CHANNELS[Math.floor(Math.random() * CHANNELS.length)];
 
-    // 1. ValidateCustomer
     const valRes = await postJson('/api/Transactional/ValidateCustomer', {
       tipoConsulta: client.tipo,
       idConsulta: client.id,
@@ -115,7 +107,6 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
     });
     recordResult('ValidateCustomer', bank, valRes.durationMs, valRes.data.codigoRespuesta || '99');
 
-    // 2. ListDebts
     const listRes = await postJson('/api/Transactional/ListDebts', {
       tipoConsulta: client.tipo,
       idConsulta: client.id,
@@ -126,7 +117,6 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
     });
     recordResult('ListDebts', bank, listRes.durationMs, listRes.data.codigoRespuesta || '99');
 
-    // 3. PayDebt si hay deudas
     const debts = listRes.data.deudasPendientes || [];
     if (debts.length > 0) {
       const debtToPay = debts[0];
@@ -149,8 +139,7 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
       });
       recordResult('PayDebt', bank, payRes.durationMs, payRes.data.codigoRespuesta || '99');
 
-      // 4. Prueba de Idempotencia (10% de las veces)
-      if (Math.random() < 0.10) {
+      if (Math.random() < 0.1) {
         const idempRes = await postJson('/api/Transactional/PayDebt', {
           fechaTxn: '11092026',
           horaTxn: '183000',
@@ -169,7 +158,6 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
         recordResult('PayDebt_Idempotent', bank, idempRes.durationMs, idempRes.data.codigoRespuesta || '99');
       }
 
-      // 5. Extorno / ReversePay (15% de las veces para reabrir la deuda y probar reversas)
       if (Math.random() < 0.15) {
         const revRes = await postJson('/api/Transactional/ReversePay', {
           fechaTxn: '11092026',
@@ -184,24 +172,20 @@ async function runWorker(workerId: number, stopTime: number, pool: sql.Connectio
         recordResult('ReversePay', bank, revRes.durationMs, revRes.data.codigoRespuesta || '99');
       }
     } else if (client.id !== '99999999') {
-      // Si el cliente se quedó sin deudas, restablecer sus deudas en MSSQL para que el ciclo continúe
       try {
-        await pool.request()
+        await pool
+          .request()
           .input('IdConsulta', sql.VarChar(14), client.id)
-          .input('TipoConsulta', sql.VarChar(1), client.tipo)
-          .query(`
+          .input('TipoConsulta', sql.VarChar(1), client.tipo).query(`
             UPDATE d
             SET d.Estado = 'PENDIENTE', d.FechaPago = NULL, d.NumOperacionERP = NULL
             FROM dbo.Deudas d
             INNER JOIN dbo.Clientes c ON c.Id = d.ClienteId
             WHERE c.IdConsulta = @IdConsulta AND c.TipoConsulta = @TipoConsulta
           `);
-      } catch {
-        // Ignorar
-      }
+      } catch {}
     }
 
-    // Pequeña pausa de 100ms a 300ms por ventanilla para emular ritmo humano realista
     await new Promise((r) => setTimeout(r, 100 + Math.random() * 200));
   }
 }
@@ -214,7 +198,6 @@ async function main(): Promise<void> {
   console.log(`🚀 Canales: Ventanilla (10), Yape (81), Web (60), Agente (30)`);
   console.log('🚀 =========================================================\n');
 
-  // Conectar a MSSQL para mantenimiento de deudas durante la prueba
   const pool = await sql.connect({
     user: env.DB_USER,
     password: env.DB_PASSWORD,
@@ -230,7 +213,6 @@ async function main(): Promise<void> {
   stats.startTime = Date.now();
   const stopTime = stats.startTime + TEST_DURATION_SECONDS * 1000;
 
-  // Temporizador de reporte en consola cada 30 segundos
   const intervalId = setInterval(() => {
     const elapsedSec = Math.round((Date.now() - stats.startTime) / 1000);
     const remainingSec = Math.max(0, TEST_DURATION_SECONDS - elapsedSec);
@@ -244,11 +226,10 @@ async function main(): Promise<void> {
     const secStr = String(elapsedSec % 60).padStart(2, '0');
 
     console.log(
-      `⏱️ [${minStr}:${secStr} / 05:00] Txns: ${stats.totalRequests.toLocaleString()} | RPS: ${rps} | Media: ${avg}ms | p95: ${p95}ms | Errores 99: ${stats.byStatus['99'] || 0} | SLA Violations (>3s): ${stats.slaViolations}`
+      `⏱️ [${minStr}:${secStr} / 05:00] Txns: ${stats.totalRequests.toLocaleString()} | RPS: ${rps} | Media: ${avg}ms | p95: ${p95}ms | Errores 99: ${stats.byStatus['99'] || 0} | SLA Violations (>3s): ${stats.slaViolations}`,
     );
   }, 30000);
 
-  // Lanzar las 10 ventanillas concurrentes
   const workers = Array.from({ length: NUM_WORKERS }, (_, i) => runWorker(i + 1, stopTime, pool));
   await Promise.all(workers);
 
@@ -256,10 +237,11 @@ async function main(): Promise<void> {
   stats.endTime = Date.now();
   await pool.close();
 
-  // Análisis Final
   const totalSeconds = (stats.endTime - stats.startTime) / 1000;
   const sortedLatencies = [...stats.latencies].sort((a, b) => a - b);
-  const avgLatency = sortedLatencies.length ? (sortedLatencies.reduce((a, b) => a + b, 0) / sortedLatencies.length).toFixed(1) : '0';
+  const avgLatency = sortedLatencies.length
+    ? (sortedLatencies.reduce((a, b) => a + b, 0) / sortedLatencies.length).toFixed(1)
+    : '0';
   const minLatency = sortedLatencies[0] || 0;
   const maxLatency = sortedLatencies[sortedLatencies.length - 1] || 0;
   const p50 = calculatePercentile(sortedLatencies, 50);
@@ -267,16 +249,12 @@ async function main(): Promise<void> {
   const p95 = calculatePercentile(sortedLatencies, 95);
   const p99 = calculatePercentile(sortedLatencies, 99);
 
-  // Consultar métricas de Prometheus finales
   let prometheusMetrics = '';
   try {
     const mRes = await fetch(`${BASE_URL}/metrics`);
     prometheusMetrics = await mRes.text();
-  } catch {
-    //
-  }
+  } catch {}
 
-  // Consultar base de datos final
   let totalTxnDB = 0;
   let totalAuditDB = 0;
   try {
@@ -296,9 +274,7 @@ async function main(): Promise<void> {
     const r2 = await reportPool.request().query('SELECT COUNT(*) AS c FROM dbo.AuditoriaLogs');
     totalAuditDB = r2.recordset[0].c;
     await reportPool.close();
-  } catch {
-    //
-  }
+  } catch {}
 
   const finalReport = {
     testDurationSeconds: totalSeconds,
@@ -307,7 +283,9 @@ async function main(): Promise<void> {
     slaAnalysis: {
       slaThresholdMs: 3000,
       slaViolationsCount: stats.slaViolations,
-      slaCompliancePercentage: Number((((stats.totalRequests - stats.slaViolations) / stats.totalRequests) * 100).toFixed(2)),
+      slaCompliancePercentage: Number(
+        (((stats.totalRequests - stats.slaViolations) / stats.totalRequests) * 100).toFixed(2),
+      ),
       slaWarningsCount: stats.slaWarnings,
     },
     latencyMetricsMs: {

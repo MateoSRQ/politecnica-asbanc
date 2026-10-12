@@ -9,17 +9,20 @@ import { healthRoutes } from './interfaces/http/routes/health.routes.js';
 import { transactionalRoutes } from './interfaces/http/routes/transactional.routes.js';
 import { auditRoutes } from './interfaces/http/routes/audit.routes.js';
 import { authRoutes } from './interfaces/http/routes/auth.routes.js';
+import { offHostRoutes } from './interfaces/http/routes/off-host.routes.js';
 
 export function buildServer(): FastifyInstance {
   const app = fastify({
-    logger: false, // Usamos nuestro logger Pino centralizado
+    logger: false,
     trustProxy: true,
-    connectionTimeout: 5000,
-    caseSensitive: false, // Soporta URLs tanto en mayúsculas como en minúsculas
+    connectionTimeout: 30000,
+    keepAliveTimeout: 30000,
+    caseSensitive: false,
   });
 
-  // Plugins de seguridad y cabeceras
-  app.register(cors, { origin: true });
+  app.register(cors, {
+    origin: env.CORS_ORIGIN === '*' ? true : env.CORS_ORIGIN.split(',').map((s) => s.trim()),
+  });
   app.register(helmet, { contentSecurityPolicy: false });
 
   if (env.RATE_LIMIT_ENABLED) {
@@ -33,22 +36,25 @@ export function buildServer(): FastifyInstance {
     });
   }
 
-  // Hooks de auditoría y telemetría (MDC, latencia, Prometheus)
   registerAuditHooks(app);
 
-  // Registro de rutas
   app.register(healthRoutes);
   app.register(authRoutes);
   app.register(transactionalRoutes);
   app.register(auditRoutes);
+  app.register(offHostRoutes);
 
-  // Manejo de errores no controlados (retorna código 99 según norma ASBANC)
   app.setErrorHandler((error, request, reply) => {
-    const statusCode = error.statusCode || 500;
-    const isClientError = statusCode >= 400 && statusCode < 500;
+    const isTransactional = request.url.toLowerCase().includes('/api/transactional');
+    const rawStatusCode = error.statusCode || 500;
+    const statusCode = isTransactional ? 200 : rawStatusCode;
+    const isClientError = rawStatusCode >= 400 && rawStatusCode < 500;
 
     if (isClientError) {
-      logger.warn({ error: error.message, traceId: request.traceId, statusCode }, 'Error en petición del cliente');
+      logger.warn(
+        { error: error.message, traceId: request.traceId, statusCode: rawStatusCode },
+        'Error en petición del cliente',
+      );
     } else {
       logger.error({ error: error.message, stack: error.stack, traceId: request.traceId }, 'Excepción no controlada');
     }
@@ -61,7 +67,6 @@ export function buildServer(): FastifyInstance {
     reply.status(statusCode).send(response);
   });
 
-  // Manejo de ruta no encontrada
   app.setNotFoundHandler((request, reply) => {
     reply.status(404).send({
       codigoRespuesta: '99',

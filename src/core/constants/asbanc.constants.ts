@@ -1,7 +1,3 @@
-// ==========================================================
-// POLITECNICA ASBANC - CONSTANTES OFICIALES ASBANC V47
-// ==========================================================
-
 export const ASBANC_RESPONSE_CODES = {
   OK: '00',
   OUT_OF_HOURS: '05',
@@ -88,6 +84,6 @@ export const ASBANC_PAYMENT_METHODS = {
 } as const;
 
 export const ASBANC_CURRENCIES = {
-  PEN: '1', // Soles
-  USD: '2', // Dólares
+  PEN: '1',
+  USD: '2',
 } as const;

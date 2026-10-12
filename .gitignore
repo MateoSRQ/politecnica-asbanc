@@ -5,3 +5,7 @@ coverage/
 *.log
 .DS_Store
 .idea/
+target/
+java/target/
+storage/off-host/*.TXT
+storage/off-host/*.json
