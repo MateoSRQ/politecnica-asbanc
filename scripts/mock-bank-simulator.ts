@@ -1,11 +1,3 @@
-/**
- * ==========================================================
- * SIMULADOR BANCARIO ASBANC FTR / YAPAGO
- * Emula las peticiones de los bancos (BCP, BBVA, Interbank, Yape)
- * verificando los contratos oficiales de la Guía V47 y el SLA < 3s
- * ==========================================================
- */
-
 import { performance } from 'node:perf_hooks';
 import { env } from '../src/config/env.js';
 
@@ -44,7 +36,6 @@ async function runSimulation(): Promise<void> {
 
   const results: TestResult[] = [];
 
-  // 1. Validar Cliente Existente (DNI: 10000001)
   console.log('1️⃣ Probando ValidateCustomer (Cliente Existente: 10000001)...');
   const res1 = await request('/api/Transactional/ValidateCustomer', {
     tipoConsulta: '1',
@@ -64,7 +55,6 @@ async function runSimulation(): Promise<void> {
     `   👉 Respuesta: [${res1.data.codigoRespuesta}] ${res1.data.descripcionResp} | Cliente: ${res1.data.nombreCliente} (${res1.durationMs}ms)`,
   );
 
-  // 2. Validar Cliente Inexistente (DNI: 99999999)
   console.log('\n2️⃣ Probando ValidateCustomer (Cliente No Existente: 99999999)...');
   const res2 = await request('/api/Transactional/ValidateCustomer', {
     tipoConsulta: '1',
@@ -82,7 +72,6 @@ async function runSimulation(): Promise<void> {
   });
   console.log(`   👉 Respuesta: [${res2.data.codigoRespuesta}] ${res2.data.descripcionResp} (${res2.durationMs}ms)`);
 
-  // 3. Consultar Deudas (Cliente: 10000001 vía BCP Ventanilla)
   console.log('\n3️⃣ Probando ListDebts (BCP Ventanilla)...');
   const res3 = await request('/api/Transactional/ListDebts', {
     tipoConsulta: '1',
@@ -110,7 +99,6 @@ async function runSimulation(): Promise<void> {
     );
   }
 
-  // 4. Pagar Deuda (Emulando BCP: Canal 10, Op: BCP998877)
   const targetDoc = debts[0]?.numDocumento || 'B01-0000000002';
   const targetAmount = debts[0]?.deuda || 1500;
   const numOpBanco = 'BCP' + Math.floor(10000000 + Math.random() * 90000000);
@@ -143,7 +131,6 @@ async function runSimulation(): Promise<void> {
     `   👉 Respuesta: [${res4.data.codigoRespuesta}] ${res4.data.descripcionResp} | NumOperacionERP: ${res4.data.numOperacionERP} (${res4.durationMs}ms)`,
   );
 
-  // 5. Probar Idempotencia (Reenviar el mismo pago exacto)
   console.log('\n5️⃣ Probando Idempotencia de Pago (Reintento de red con mismo NumOperacionBanco)...');
   const res5 = await request('/api/Transactional/PayDebt', {
     fechaTxn: '11092026',
@@ -175,7 +162,6 @@ async function runSimulation(): Promise<void> {
     `   👉 Respuesta Idempotente: [${res5.data.codigoRespuesta}] Mismo NumERP: ${res5.data.numOperacionERP} (${res5.durationMs}ms)`,
   );
 
-  // 6. Extorno / Reversión de Pago (ReversePay)
   console.log(`\n6️⃣ Probando ReversePay (Extorno de ${targetDoc} para ${numOpBanco})...`);
   const res6 = await request('/api/Transactional/ReversePay', {
     fechaTxn: '11092026',
@@ -197,7 +183,6 @@ async function runSimulation(): Promise<void> {
   });
   console.log(`   👉 Respuesta: [${res6.data.codigoRespuesta}] ${res6.data.descripcionResp} (${res6.durationMs}ms)`);
 
-  // Resumen Final
   console.log('\n📊 =========================================================');
   console.log('📊 RESUMEN DE LA SIMULACIÓN BANCARIA ASBANC:');
   console.log('📊 =========================================================');

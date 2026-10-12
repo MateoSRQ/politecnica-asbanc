@@ -17,10 +17,6 @@ interface AuditQueryFilter {
 }
 
 export class AuditController {
-  /**
-   * GET /api/Audit
-   * Consulta paginada con filtros de auditoría forense
-   */
   async getAudits(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
       const query = (request.query || {}) as AuditQueryFilter;
@@ -83,7 +79,6 @@ export class AuditController {
 
       const auditTable = await this.getAuditTableName(pool);
 
-      // Total count
       const countResult = await req.query(`
         SELECT COUNT(*) AS Total
         FROM ${auditTable}
@@ -91,7 +86,6 @@ export class AuditController {
       `);
       const total = countResult.recordset[0].Total;
 
-      // Paged records
       req.input('Offset', sql.Int, offset);
       req.input('PageSize', sql.Int, pageSize);
 
@@ -151,10 +145,6 @@ export class AuditController {
     }
   }
 
-  /**
-   * GET /api/Audit/:id
-   * Obtener un registro de auditoría individual por ID
-   */
   async getAuditById(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
       const params = (request.params || {}) as { id: string };
@@ -208,10 +198,6 @@ export class AuditController {
     }
   }
 
-  /**
-   * GET /api/Audit/export
-   * Descarga o exportación de auditorías en CSV o JSON
-   */
   async exportAudits(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
       const query = (request.query || {}) as AuditQueryFilter;
@@ -306,7 +292,6 @@ export class AuditController {
         return;
       }
 
-      // Formato CSV por defecto (RFC 4180 y mitigación de inyección de fórmulas)
       const headers = [
         'Id',
         'TraceId',
@@ -358,11 +343,9 @@ export class AuditController {
   private formatCsvCell(val: any): string {
     if (val === null || val === undefined) return '""';
     let str = String(val);
-    // Mitigar CSV Formula Injection (=, +, -, @)
     if (/^[=+\-@]/.test(str)) {
       str = "'" + str;
     }
-    // Escapar comillas dobles según RFC 4180
     return `"${str.replace(/"/g, '""')}"`;
   }
 

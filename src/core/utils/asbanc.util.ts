@@ -1,15 +1,3 @@
-/**
- * Utilidades de saneamiento y formateo según la norma ASBANC FTR / YAPAGO V47
- */
-
-/**
- * Normaliza y sanea cadenas para cumplimiento ASBANC FTR:
- * - Mayúsculas
- * - Sin acentos ni diacríticos
- * - Sustituye Ñ/ñ por N/n
- * - Elimina caracteres especiales no permitidos
- * - Longitud máxima configurable
- */
 export function sanitizeAsbancString(text: string, maxLength = 30): string {
   if (!text) return '';
   return text
@@ -24,9 +12,6 @@ export function sanitizeAsbancString(text: string, maxLength = 30): string {
     .substring(0, maxLength);
 }
 
-/**
- * Convierte un objeto Date o string ISO a formato ASBANC DDMMAAAA
- */
 export function formatDateAsbanc(dateInput: Date | string | null | undefined): string {
   if (!dateInput) {
     const now = new Date();
@@ -47,9 +32,6 @@ export function formatDateAsbanc(dateInput: Date | string | null | undefined): s
   return `${d}${m}${y}`;
 }
 
-/**
- * Convierte formato DDMMAAAA a objeto Date
- */
 export function parseAsbancDate(dateStr: string, timeStr = '000000'): Date {
   if (!dateStr || dateStr.length !== 8) {
     return new Date();

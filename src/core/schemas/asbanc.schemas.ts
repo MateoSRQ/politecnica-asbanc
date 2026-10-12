@@ -1,12 +1,9 @@
 import { z } from 'zod';
 
-// Regex de caracteres permitidos según especificación ASBANC V47
-// "No soporta caracteres especiales ni espacios en blanco, solo números y letras sin ningún tipo de acentuación. También se excluye la Ñ."
 const alphanumericRegex = /^[a-zA-Z0-9-]+$/;
-const dateRegex = /^\d{8}$/; // DDMMAAAA
-const timeRegex = /^\d{6}$/; // HHMMSS
+const dateRegex = /^\d{8}$/;
+const timeRegex = /^\d{6}$/;
 
-// 1. Validar Cliente
 export const validateCustomerSchema = z.object({
   tipoConsulta: z.string().trim().min(1).max(1),
   idConsulta: z.string().trim().toUpperCase().min(1).max(14).regex(alphanumericRegex, {
@@ -16,7 +13,6 @@ export const validateCustomerSchema = z.object({
   codigoProducto: z.string().trim().min(1).max(3),
 });
 
-// 2. Consultar Deudas
 export const listDebtsSchema = z.object({
   tipoConsulta: z.string().trim().min(1).max(1),
   idConsulta: z.string().trim().toUpperCase().min(1).max(14).regex(alphanumericRegex),
@@ -26,7 +22,6 @@ export const listDebtsSchema = z.object({
   canalPago: z.string().trim().min(1).max(2),
 });
 
-// 3. Pagar Deuda
 export const payDebtSchema = z.object({
   fechaTxn: z.string().trim().regex(dateRegex, { message: 'fechaTxn debe tener formato DDMMAAAA' }),
   horaTxn: z.string().trim().regex(timeRegex, { message: 'horaTxn debe tener formato HHMMSS' }),
@@ -43,7 +38,6 @@ export const payDebtSchema = z.object({
   codigoEmpresa: z.string().trim().min(1).max(3),
 });
 
-// 4. Revertir Pago
 export const reversePaySchema = z.object({
   fechaTxn: z.string().trim().regex(dateRegex, { message: 'fechaTxn debe tener formato DDMMAAAA' }),
   horaTxn: z.string().trim().regex(timeRegex, { message: 'horaTxn debe tener formato HHMMSS' }),

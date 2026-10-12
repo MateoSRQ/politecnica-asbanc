@@ -9,17 +9,17 @@ import { healthRoutes } from './interfaces/http/routes/health.routes.js';
 import { transactionalRoutes } from './interfaces/http/routes/transactional.routes.js';
 import { auditRoutes } from './interfaces/http/routes/audit.routes.js';
 import { authRoutes } from './interfaces/http/routes/auth.routes.js';
+import { offHostRoutes } from './interfaces/http/routes/off-host.routes.js';
 
 export function buildServer(): FastifyInstance {
   const app = fastify({
-    logger: false, // Usamos nuestro logger Pino centralizado
+    logger: false,
     trustProxy: true,
     connectionTimeout: 30000,
     keepAliveTimeout: 30000,
-    caseSensitive: false, // Soporta URLs tanto en mayúsculas como en minúsculas
+    caseSensitive: false,
   });
 
-  // Plugins de seguridad y cabeceras
   app.register(cors, {
     origin: env.CORS_ORIGIN === '*' ? true : env.CORS_ORIGIN.split(',').map((s) => s.trim()),
   });
@@ -36,20 +36,17 @@ export function buildServer(): FastifyInstance {
     });
   }
 
-  // Hooks de auditoría y telemetría (MDC, latencia, Prometheus)
   registerAuditHooks(app);
 
-  // Registro de rutas
   app.register(healthRoutes);
   app.register(authRoutes);
   app.register(transactionalRoutes);
   app.register(auditRoutes);
+  app.register(offHostRoutes);
 
-  // Manejo de errores no controlados (retorna código 99 según norma ASBANC)
   app.setErrorHandler((error, request, reply) => {
     const isTransactional = request.url.toLowerCase().includes('/api/transactional');
     const rawStatusCode = error.statusCode || 500;
-    // ASBANC V47 Pág. 27: Para métodos transaccionales, el código de estado HTTP siempre es 200
     const statusCode = isTransactional ? 200 : rawStatusCode;
     const isClientError = rawStatusCode >= 400 && rawStatusCode < 500;
 
@@ -70,7 +67,6 @@ export function buildServer(): FastifyInstance {
     reply.status(statusCode).send(response);
   });
 
-  // Manejo de ruta no encontrada
   app.setNotFoundHandler((request, reply) => {
     reply.status(404).send({
       codigoRespuesta: '99',

@@ -28,7 +28,6 @@ async function viewAudit(): Promise<void> {
 
   const auditTable = await getAuditTableName(pool);
 
-  // Parámetro de cantidad a mostrar (default: 5 detallados)
   const argLimit = parseInt(process.argv[2], 10);
   const detailLimit = !isNaN(argLimit) && argLimit > 0 ? argLimit : 5;
 

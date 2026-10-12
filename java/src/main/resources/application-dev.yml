@@ -1,0 +1,16 @@
+# ==============================================================================
+# Perfil de Desarrollo Local (dev) - Politécnica ASBANC Java
+# ==============================================================================
+server:
+  port: ${JAVA_PORT:${PORT:7305}}
+
+logging:
+  level:
+    root: INFO
+    pe.edu.politecnica.asbanc: DEBUG
+    org.springframework.web: INFO
+
+management:
+  endpoint:
+    health:
+      show-details: always

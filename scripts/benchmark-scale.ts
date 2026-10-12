@@ -61,7 +61,6 @@ async function runBenchmarkScale() {
   const app = buildServer();
   await app.ready();
 
-  // 1. Obtener Token JWT
   console.log('🔑 Obteniendo token OAuth 2.0 / JWT desde /api/Auth/token...');
   const tokenRes = await app.inject({
     method: 'POST',
@@ -80,7 +79,6 @@ async function runBenchmarkScale() {
   const authToken = 'Bearer ' + JSON.parse(tokenRes.body).access_token;
   console.log('✅ Token JWT generado satisfactoriamente.\n');
 
-  // 2. Extraer estudiantes reales con deuda pendiente
   console.log('🔍 Seleccionando padrón de estudiantes reales con deudas pendientes en BDACADEMICO6...');
   const studentsRes = await pool.request().query(`
     SELECT TOP 1200 
@@ -118,7 +116,6 @@ async function runBenchmarkScale() {
       const codigoAlumno = targetStudents[i];
       const cycleStart = performance.now();
 
-      // A) PASO 1: ListDebts
       const t0List = performance.now();
       const listRes = await app.inject({
         method: 'POST',
@@ -148,7 +145,6 @@ async function runBenchmarkScale() {
       const monto = debt.deuda;
       const numOpBanco = 'OP' + Date.now().toString().slice(-6) + (i + 1).toString().padStart(4, '0');
 
-      // B) PASO 2: PayDebt
       const t0Pay = performance.now();
       const payRes = await app.inject({
         method: 'POST',
@@ -180,7 +176,6 @@ async function runBenchmarkScale() {
         continue;
       }
 
-      // C) PASO 3: ReversePay (Extorno limpio y restauración de BD)
       const t0Rev = performance.now();
       const revRes = await app.inject({
         method: 'POST',
@@ -250,7 +245,6 @@ async function runBenchmarkScale() {
     );
   }
 
-  // 3. Verificación de integridad final
   console.log('================================================================================');
   console.log('🔒 VERIFICACIÓN DE INTEGRIDAD EN LA BASE DE DATOS (BDACADEMICO6)');
   console.log('================================================================================');
@@ -278,7 +272,6 @@ async function runBenchmarkScale() {
     console.warn('   ⚠️ ADVERTENCIA: Existen registros residuales que requieren limpieza.\n');
   }
 
-  // 4. Tablas consolidadas
   console.log('================================================================================');
   console.log('📊 TABLA COMPARATIVA CONSOLIDADA: TIEMPOS DE RESPUESTA POR ESCALA');
   console.log('================================================================================');

@@ -86,8 +86,8 @@ describe('Pruebas de Esquemas ASBANC FTR V47 (Zod)', () => {
 
     it('debe rechazar formatos de fecha u hora incorrectos', () => {
       const invalid = {
-        fechaTxn: '2026-05-24', // Formato no permitido (debe ser DDMMAAAA)
-        horaTxn: '15:31', // Debe ser HHMMSS
+        fechaTxn: '2026-05-24',
+        horaTxn: '15:31',
         canalPago: '10',
         codigoBanco: '1020',
         numOperacionBanco: 'A05478452120',

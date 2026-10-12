@@ -25,7 +25,6 @@ describe('Pruebas de Seguridad y Tokens JWT (Página 8 Guía V47)', () => {
   it('debe rechazar un token manipulado (tampered)', () => {
     const token = signJwt({ sub: 'asbanc_ftr' }, secret, 3600);
     const parts = token.split('.');
-    // Manipulamos el payload
     const tamperedPayload = Buffer.from(JSON.stringify({ sub: 'hacker' })).toString('base64url');
     const tamperedToken = `${parts[0]}.${tamperedPayload}.${parts[2]}`;
 
@@ -34,7 +33,6 @@ describe('Pruebas de Seguridad y Tokens JWT (Página 8 Guía V47)', () => {
   });
 
   it('debe rechazar un token expirado', () => {
-    // Expiración negativa (-10s)
     const token = signJwt({ sub: 'asbanc_ftr' }, secret, -10);
     const check = verifyJwt(token, secret);
     expect(check.valid).toBe(false);

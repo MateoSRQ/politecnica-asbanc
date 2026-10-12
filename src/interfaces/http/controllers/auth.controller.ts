@@ -12,10 +12,6 @@ interface TokenRequestBody {
 }
 
 export class AuthController {
-  /**
-   * POST /api/Auth/token
-   * ASBANC FTR V47 (Pág. 8)
-   */
   async generateToken(request: FastifyRequest<{ Body: TokenRequestBody }>, reply: FastifyReply): Promise<void> {
     try {
       let clientId = request.body?.client_id || request.body?.username;

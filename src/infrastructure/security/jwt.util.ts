@@ -8,9 +8,6 @@ export interface JwtPayload {
   [key: string]: any;
 }
 
-/**
- * Genera un token JWT firmado con HMAC-SHA256 (HS256)
- */
 export function signJwt(payload: Record<string, any>, secret: string, expiresInSeconds: number = 86400): string {
   const now = Math.floor(Date.now() / 1000);
   const fullPayload: JwtPayload = {
@@ -30,9 +27,6 @@ export function signJwt(payload: Record<string, any>, secret: string, expiresInS
   return `${encodedHeader}.${encodedPayload}.${signature}`;
 }
 
-/**
- * Verifica la firma y vigencia de un token JWT
- */
 export function verifyJwt(token: string, secret: string): { valid: boolean; payload?: JwtPayload; error?: string } {
   try {
     const parts = token.split('.');
@@ -63,9 +57,6 @@ export function verifyJwt(token: string, secret: string): { valid: boolean; payl
   }
 }
 
-/**
- * Compara dos cadenas de texto en tiempo constante para mitigar ataques de canal lateral (timing attacks)
- */
 export function timingSafeStringEqual(a: string, b: string): boolean {
   if (typeof a !== 'string' || typeof b !== 'string') return false;
   const bufA = Buffer.from(a, 'utf8');

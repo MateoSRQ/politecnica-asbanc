@@ -42,7 +42,6 @@ async function runBatchTests() {
   const app = buildServer();
   await app.ready();
 
-  // 1. Obtener Token de autenticación JWT
   console.log('🔑 Obteniendo token JWT desde /api/Auth/token...');
   const tokenRes = await app.inject({
     method: 'POST',
@@ -87,15 +86,12 @@ async function runBatchTests() {
     };
 
     try {
-      // -------------------------------------------------------------
-      // PASO 1: Listar Deuda Más Antigua no pagada
-      // -------------------------------------------------------------
       const listRes = await app.inject({
         method: 'POST',
         url: '/api/Transactional/ListDebts',
         headers: { authorization: authToken },
         payload: {
-          tipoConsulta: '0', // 0 = Código de alumno
+          tipoConsulta: '0',
           idConsulta: student.codigoAlumno,
           codigoEmpresa: '998',
           codigoProducto: '001',
@@ -120,9 +116,6 @@ async function runBatchTests() {
         continue;
       }
 
-      // -------------------------------------------------------------
-      // PASO 2: Ejecutar el Pago Bancario (PayDebt)
-      // -------------------------------------------------------------
       const numOpBanco = 'OP' + Date.now().toString().slice(-6) + (i + 1).toString().padStart(2, '0');
       result.numOpBanco = numOpBanco;
 
@@ -160,10 +153,6 @@ async function runBatchTests() {
         continue;
       }
 
-      // -------------------------------------------------------------
-      // PASO 3: Revisar si ya está pagado (Idempotencia y exclusión)
-      // -------------------------------------------------------------
-      // A) Reintento de pago: debe responder 00 con detección de duplicado
       const dupPayRes = await app.inject({
         method: 'POST',
         url: '/api/Transactional/PayDebt',
@@ -187,7 +176,6 @@ async function runBatchTests() {
 
       const dupBody = JSON.parse(dupPayRes.body);
 
-      // B) Listar deudas: la cuota ya no debe figurar como la más antigua
       const listAfterRes = await app.inject({
         method: 'POST',
         url: '/api/Transactional/ListDebts',
@@ -214,17 +202,11 @@ async function runBatchTests() {
         console.warn(`   [3] Verificación Advertencia:`, { dupBody, listAfterBody });
       }
 
-      // -------------------------------------------------------------
-      // PASO 4: Comprobar Éxito
-      // -------------------------------------------------------------
       if (result.paso1_listado && result.paso2_pagado && result.paso3_idempotencia) {
         result.paso4_exito = true;
         console.log(`   [4] Comprobar Éxito OK  : Transacción verificada y registrada en ledger`);
       }
 
-      // -------------------------------------------------------------
-      // PASO 5: Revertir Pago (ReversePay)
-      // -------------------------------------------------------------
       const revRes = await app.inject({
         method: 'POST',
         url: '/api/Transactional/ReversePay',
@@ -241,7 +223,6 @@ async function runBatchTests() {
 
       const revBody = JSON.parse(revRes.body);
       if (revRes.statusCode === 200 && revBody.codigoRespuesta === '00') {
-        // Verificar que la cuota original volvió al estado pendiente
         const checkRestoreRes = await app.inject({
           method: 'POST',
           url: '/api/Transactional/ListDebts',
@@ -275,9 +256,6 @@ async function runBatchTests() {
   await app.close();
   await closeMssqlPool();
 
-  // -------------------------------------------------------------
-  // TABLA RESUMEN FINAL
-  // -------------------------------------------------------------
   console.log('\n========================================================================');
   console.log('📊 RESUMEN FINAL DE LA BATERÍA DE PRUEBAS (10/10 ALUMNOS)');
   console.log('========================================================================');

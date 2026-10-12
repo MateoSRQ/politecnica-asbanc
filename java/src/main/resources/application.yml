@@ -1,0 +1,85 @@
+server:
+  port: ${JAVA_PORT:${PORT:7305}}
+  compression:
+    enabled: true
+    mime-types: application/json,text/plain,text/csv
+  tomcat:
+    threads:
+      max: 500
+      min-spare: 50
+    connection-timeout: 60000ms
+    keep-alive-timeout: 60000ms
+    accept-count: 5000
+    max-connections: 10000
+
+spring:
+  application:
+    name: politecnica-asbanc-java
+  threads:
+    virtual:
+      enabled: true # Java 21 Project Loom: Manejo masivo de peticiones concurrentes I/O-bound
+
+  datasource:
+    url: jdbc:sqlserver://${DB_SERVER:127.0.0.1}:${DB_PORT:1433};databaseName=${DB_NAME:BDACADEMICO6};encrypt=${DB_ENCRYPT:false};trustServerCertificate=${DB_TRUST_SERVER_CERTIFICATE:true};
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      pool-name: AsbancHikariPool
+      minimum-idle: ${DB_POOL_MIN:50}
+      maximum-pool-size: ${DB_POOL_MAX:100}
+      idle-timeout: 300000
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:30000}
+      max-lifetime: 1800000
+      auto-commit: true
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+  mvc:
+    pathmatching:
+      matching-strategy: path_pattern_parser
+
+# Spring Boot Actuator y Métricas Prometheus (espejo de /metrics en Node.js)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+
+# Configuración Específica de Negocio ASBANC FTR
+asbanc:
+  test-mode: ${TEST_MODE:false}
+  client-id: ${ASBANC_CLIENT_ID:asbanc_ftr}
+  client-secret: ${ASBANC_CLIENT_SECRET:}
+  jwt-secret: ${JWT_SECRET:${ASBANC_JWT_SECRET:}}
+  jwt-expiration-seconds: ${JWT_EXPIRATION_SECONDS:${ASBANC_JWT_EXPIRES_IN:86400}}
+  company-code: ${ASBANC_DEFAULT_COMPANY_CODE:${ASBANC_COMPANY_CODE:998}}
+  sla-warning-threshold-ms: ${SLA_WARNING_THRESHOLD_MS:2500}
+  cors-origin: ${CORS_ORIGIN:*}
+  webhook-url: ${PAYMENT_WEBHOOK_URL:}
+  audit:
+    batch-size: 50
+    flush-interval-ms: 100
+  off-host:
+    storage-dir: ${OFF_HOST_DIR:./storage/off-host}
+  sftp:
+    enabled: ${ASBANC_SFTP_ENABLED:false}
+    host: ${ASBANC_SFTP_HOST:}
+    port: ${ASBANC_SFTP_PORT:22}
+    username: ${ASBANC_SFTP_USER:}
+    password: ${ASBANC_SFTP_PASSWORD:}
+    private-key-path: ${ASBANC_SFTP_KEY_PATH:}
+    remote-inbound-dir: ${ASBANC_SFTP_REMOTE_INBOUND_DIR:/inbound}
+    remote-outbound-dir: ${ASBANC_SFTP_REMOTE_OUTBOUND_DIR:/outbound}
+    auto-reconcile: ${ASBANC_SFTP_AUTO_RECONCILE:true}
+    cron-upload-debts: ${ASBANC_SFTP_CRON_UPLOAD:0 0 2 * * ?}
+    cron-download-payments: ${ASBANC_SFTP_CRON_DOWNLOAD:0 0 22 * * ?}

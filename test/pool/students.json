@@ -1,0 +1,4002 @@
+[
+  {
+    "codigoAlumno": "26093351020001",
+    "dni": "09856195",
+    "nombre": "MARTIN LEONARDO VASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38635",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26093352020001",
+    "dni": "45213062",
+    "nombre": "KATHERINE YASMIN PEREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38592",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020191",
+    "dni": "46881387",
+    "nombre": "NILDA FIORELLA RUMICHE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38573",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011105020041",
+    "dni": "61176878",
+    "nombre": "STEPHANO MIGUEL LACA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38569",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010051",
+    "dni": "42582590",
+    "nombre": "EDDIE THRU VALER",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38530",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010047",
+    "dni": "41456367",
+    "nombre": "JULIO GUILLERMO SOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38529",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010008",
+    "dni": "10312181",
+    "nombre": "PAOLO MAX MINAYA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38528",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26093353020002",
+    "dni": "16679603",
+    "nombre": "CARLOS ENRIQUE LLONTOP",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38510",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304010021",
+    "dni": "80129064",
+    "nombre": "GEORGETTE VILMA GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38497",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212020076",
+    "dni": "75397595",
+    "nombre": "CRISTIAN JACK REYES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38484",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26093353020001",
+    "dni": "43355100",
+    "nombre": "LUIS ALBERTO MAYHUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38477",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023354010006",
+    "dni": "43305013",
+    "nombre": "EIDER LEON",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38385",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351020008",
+    "dni": "16756442",
+    "nombre": "RONAL MARTIN MEGO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38258",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010021",
+    "dni": "05644135",
+    "nombre": "ERICA ELIZABETH GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38019",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010018",
+    "dni": "44818017",
+    "nombre": "MIÜLLER MENDOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38016",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26053356010002",
+    "dni": "46396033",
+    "nombre": "JULIO ANDERSON SIHUACOLLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "38015",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020045",
+    "dni": "43588111",
+    "nombre": "EINSTEN ALBERTO LLANOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37137",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020065",
+    "dni": "72250822",
+    "nombre": "EDDY JUAN MANUEL QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37131",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020044",
+    "dni": "47351219",
+    "nombre": "RENZO JOSE MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37123",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020064",
+    "dni": "74314573",
+    "nombre": "FRANK ELEODORO GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37119",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020112",
+    "dni": "44884079",
+    "nombre": "NEHIN ALIPIO HUAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37113",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020068",
+    "dni": "48669128",
+    "nombre": "JUAN DIEGO HUANCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37107",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020077",
+    "dni": "48631811",
+    "nombre": "ANDREA MILAGROS AYUDANTE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37093",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020067",
+    "dni": "42219907",
+    "nombre": "YHONY QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37051",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020061",
+    "dni": "45868152  ",
+    "nombre": "JORGE HUMBERTO FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37045",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020060",
+    "dni": "45511492",
+    "nombre": "JUAN SAICO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37039",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020111",
+    "dni": "46691553",
+    "nombre": "ALEXANDER CHAVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37033",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020060",
+    "dni": "73433758",
+    "nombre": "DORCAS SOFIA PEÑA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37013",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020059",
+    "dni": "41874986",
+    "nombre": "CAROL ARIAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37007",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021222020021",
+    "dni": "73190253",
+    "nombre": "JAZMÍN MILAGROS PAUCAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "37001",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020058",
+    "dni": "10350258",
+    "nombre": "DIANA CANCINO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36991",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020317",
+    "dni": "46574283",
+    "nombre": "JUAN VICENTE VILCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36973",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020081",
+    "dni": "47475256",
+    "nombre": "ADRIAN MARTIN VILLA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36961",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020066",
+    "dni": "76870693",
+    "nombre": "ROY ROGER JUNIOR EGOAVIL",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36955",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020080",
+    "dni": "74404323",
+    "nombre": "RONALDO URIEL LAURA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36949",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020079",
+    "dni": "29585535",
+    "nombre": "LUIS ATAMARI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36943",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020041",
+    "dni": "10189477",
+    "nombre": "ISRRAEL GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36937",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020078",
+    "dni": "46204588",
+    "nombre": "RONALD PIZARRO FERNÁNDEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36931",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020110",
+    "dni": "46778700",
+    "nombre": "JHON JHONATAN MEJIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36925",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021224020015",
+    "dni": "46706152",
+    "nombre": "GUSTAVO ALONSO ALFARO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36919",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020040",
+    "dni": "47839593",
+    "nombre": "YRWIN GILBERTO LAURA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36911",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021213020047",
+    "dni": "06778509",
+    "nombre": "LUIS ANGEL RAMOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36907",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020076",
+    "dni": "44144282",
+    "nombre": "KEPLER ADOLFO SALDIVAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36899",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223020205",
+    "dni": "23981723",
+    "nombre": "DAVID ELOY CHECCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36895",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020109",
+    "dni": "70573617",
+    "nombre": "LOREN DE FATIMA MENA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36889",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021313020046",
+    "dni": "62969129",
+    "nombre": "XIMENA MAYTE VALLES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36883",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020190",
+    "dni": "44268760",
+    "nombre": "LUIS ALEXIS NILBAR JURADO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36877",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020075",
+    "dni": "45640749",
+    "nombre": "MARIA DE JESUS URIBE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36872",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020072",
+    "dni": "48088831",
+    "nombre": "VASQUEZ ENCALADA YOJANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36858",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020062",
+    "dni": "72874272",
+    "nombre": "STEFANY ALEXANDRA YARASCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36857",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021222020020",
+    "dni": "70522560",
+    "nombre": "CRISTIAN ABEL FALCON",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36853",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020038",
+    "dni": "07626119",
+    "nombre": "MARCO ANTONIO TIHUAY",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36847",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020037",
+    "dni": "77529883",
+    "nombre": "USNARA NATALI FACHO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36842",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020035",
+    "dni": "40873765",
+    "nombre": "PAUL JUNIOR CORNEJO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36837",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020033",
+    "dni": "72857464",
+    "nombre": "MARISOL SHYALER FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36827",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020034",
+    "dni": "46075794",
+    "nombre": "MAYRA CLELIA SOFIA MOROTE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36823",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020057",
+    "dni": "46995351",
+    "nombre": "LUIS FELIPE SARAVIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36811",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020056",
+    "dni": "47214336",
+    "nombre": "LESLIE KRAMER MENDOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36806",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020108",
+    "dni": "27677094",
+    "nombre": "JOSE SERBANDO PEREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36799",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020106",
+    "dni": "45734395",
+    "nombre": "JOHNNATAN DAVID HERNANDEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36794",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020105",
+    "dni": "77166194",
+    "nombre": "JOSE MICHAEL PEREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36789",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020103",
+    "dni": "47235501",
+    "nombre": "AMELIA KATHIUSKA DEL CARPIO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36779",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020104",
+    "dni": "09455006",
+    "nombre": "JOSE LUIS SAAVEDRA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36769",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020098",
+    "dni": "46866973",
+    "nombre": "TANIA CAROLINA GAVILAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36767",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020101",
+    "dni": "71309484",
+    "nombre": "ANGELA JENIFER ABIGAIL REYES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36763",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020100",
+    "dni": "45343330",
+    "nombre": "YHONY WILIAR CHUQUITARQUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36757",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021214020018",
+    "dni": "45960242",
+    "nombre": "LIZ CAROLINA ANCO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36749",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020074",
+    "dni": "70683154",
+    "nombre": "DIEGO ALFREDO QUEA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36745",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020063",
+    "dni": "45091159",
+    "nombre": "HUGO STEFF ZAMBRANO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36727",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021313020045",
+    "dni": "70128691",
+    "nombre": "LUIS PATRICIO SOTO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36721",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020039",
+    "dni": "09645400",
+    "nombre": "CESAR AUGUSTO CALDAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36715",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020012",
+    "dni": "72577657",
+    "nombre": "EDWAR PAUL RIVERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36697",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020008",
+    "dni": "47845555",
+    "nombre": "ROCIO ARIAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36692",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020007",
+    "dni": "46461979",
+    "nombre": "KENJI ADILSON ARIAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36687",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020006",
+    "dni": "70507719",
+    "nombre": "GABRIELA ISABEL CASTRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36682",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020003",
+    "dni": "47858236",
+    "nombre": "FRANZ BORIS COBEÑAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36672",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020005",
+    "dni": "70551781",
+    "nombre": "MARILYN PAMELA IZQUIERDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36666",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020001",
+    "dni": "46825802",
+    "nombre": "MIGUEL ANGEL CHOZO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36661",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021121010003",
+    "dni": "61222217",
+    "nombre": "SADITH LOURDES RUTH MITMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36654",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011105020040",
+    "dni": "74612273",
+    "nombre": "GENSI ANEHELI HUARANCCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36643",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021214020019",
+    "dni": "06730816",
+    "nombre": "JOSE LUIS ALEGRIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36625",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020107",
+    "dni": "23861969",
+    "nombre": "FERNANDO ARDILES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36619",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302010007",
+    "dni": "43914231",
+    "nombre": "FIDEL RAMIRO GUILLEN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36611",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021303020005",
+    "dni": "74821711",
+    "nombre": "SOL MARIA QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36607",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020043",
+    "dni": "40066143",
+    "nombre": "CARLOS ENRIQUE AGUILAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36582",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021303020004",
+    "dni": "73066834",
+    "nombre": "ENZO FABRIZIO LEGUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36576",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010011",
+    "dni": "41392461",
+    "nombre": "MEILIN KATTINA VALDIVIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36453",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010010",
+    "dni": "46199320",
+    "nombre": "KAROL BRIGITTE HUAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36452",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010009",
+    "dni": "47124866",
+    "nombre": "LUIS GUILLERMO GUZMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36451",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010008",
+    "dni": "29612370",
+    "nombre": "ZULLY AURORA VELARDE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36450",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010007",
+    "dni": "41502533",
+    "nombre": "EVELYN SHULAY MOLINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36449",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010006",
+    "dni": "71482588",
+    "nombre": "VLADIMIR ISMAEL CANDIA FALCON",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36448",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010005",
+    "dni": "71870210",
+    "nombre": "FIORELA FLOR INGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36447",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010004",
+    "dni": "23272027",
+    "nombre": "LUIS ALBERTO VARGAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36446",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010003",
+    "dni": "72608309",
+    "nombre": "ELÍZABETH RAQUEL RETO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36445",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023355010002",
+    "dni": "42028392",
+    "nombre": "DIOMEDES YOVANA HILARI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36444",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26063354010001",
+    "dni": "06668205",
+    "nombre": "YOBER PAUL ALCARAZO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36383",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023354010005",
+    "dni": "43652531",
+    "nombre": "TONY TEODORICO OLORTEGUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36382",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023354010003",
+    "dni": "46241524",
+    "nombre": "ABEL JOE REYES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36381",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023354010002",
+    "dni": "70429650",
+    "nombre": "MARÍA DE JESÚS LINDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36380",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023354010001",
+    "dni": "46588907",
+    "nombre": "CARLOS ALBERTO VASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36379",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020062",
+    "dni": "09656858",
+    "nombre": "CESAR AUGUSTO DUEÑAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36375",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010013",
+    "dni": "42228175",
+    "nombre": "RONALD ESPINOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36239",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010012",
+    "dni": "74202604",
+    "nombre": "MARTHA ORTEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36238",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010010",
+    "dni": "74912087",
+    "nombre": "ANGIE CAMILA CUTI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36237",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010009",
+    "dni": "29626116",
+    "nombre": "VIVIANA CALSINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36236",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010008",
+    "dni": "45319937",
+    "nombre": "PRISHILA NOHELY CASTRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36235",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010006",
+    "dni": "40874421",
+    "nombre": "MARLENI HUAMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36234",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010005",
+    "dni": "41460153",
+    "nombre": "PERCY RICHARD BOLIVAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36233",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010004",
+    "dni": "09886337",
+    "nombre": "KATY ASUNCIÓN SANTA MARÍA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36232",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010003",
+    "dni": "41277123",
+    "nombre": "JESUS CRISTHIAN MAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36231",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010002",
+    "dni": "48741474",
+    "nombre": "KATHERIN SUSAN RIVADENEYRA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36230",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023353010001",
+    "dni": "40549434",
+    "nombre": "WALDO JAVIER DURAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36229",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021303020003",
+    "dni": "70694771",
+    "nombre": "SAID ALEJANDRO MAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36225",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351020003",
+    "dni": "42582113",
+    "nombre": "ANA LUISA ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36198",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351020002",
+    "dni": "21537366",
+    "nombre": "FLOR ADELA RAMOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36197",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021303020002",
+    "dni": "44398689",
+    "nombre": "YOEL ALEJANDRO ROSAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36193",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021313020044",
+    "dni": "46149507",
+    "nombre": "ELIAS HUARCUSI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36187",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351020001",
+    "dni": "21576772",
+    "nombre": "MARIA OLGA MARTINA VARGAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36100",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010007",
+    "dni": "70285441",
+    "nombre": "CARLOS ALDAIR MOSCOSO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36099",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010006",
+    "dni": "42507866",
+    "nombre": "DIANA LOURDES SALCEDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36098",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26063351010001",
+    "dni": "41078621",
+    "nombre": "LUIS ALBERTO OBLITAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36097",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010005",
+    "dni": "48036844",
+    "nombre": "FLAVIA SILVANA GOMEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36096",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010004",
+    "dni": "75953408",
+    "nombre": "NUDVIAN VERENIA QUEZADA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36095",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010002",
+    "dni": "72357559",
+    "nombre": "ALLISON NICOLL MALCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36094",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023351010001",
+    "dni": "74318179",
+    "nombre": "LEILA CLARIBEL MEJIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "36093",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010020",
+    "dni": "47968187",
+    "nombre": "EDUARDO GUSTAVO POMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35888",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010019",
+    "dni": "44416587",
+    "nombre": "CARMEN MARIA BUSTAMANTE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35887",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010017",
+    "dni": "47361546",
+    "nombre": "MELISSA DIANA RIMAC",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35886",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010016",
+    "dni": "46922425",
+    "nombre": "EROY NOA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35885",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010015",
+    "dni": "43047241",
+    "nombre": "PABLO EUSEBIO CENTENO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35884",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010014",
+    "dni": "46301598",
+    "nombre": "TOMMY PIER RODRÍGUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35883",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010013",
+    "dni": "75480329",
+    "nombre": "WALDIR CLAUDIO LIZARAZO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35882",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010012",
+    "dni": "71728684",
+    "nombre": "MILADY DAPHNE QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35881",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010011",
+    "dni": "73102566",
+    "nombre": "VENANCIO YELSIN CONDE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35880",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010010",
+    "dni": "71737047",
+    "nombre": "JUAN DIEGO SANDOVAL",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35879",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010008",
+    "dni": "07488417",
+    "nombre": "ANA DEIDAMIA VILLEGAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35878",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010007",
+    "dni": "70239141",
+    "nombre": "WALDIR RONALDO RAMÍREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35877",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010006",
+    "dni": "71957230",
+    "nombre": "ALEXS ISLACHIN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35876",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010004",
+    "dni": "76013812",
+    "nombre": "HERMES QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35875",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010003",
+    "dni": "71266571",
+    "nombre": "LUIS CARLOS ARCE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35874",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010002",
+    "dni": "71400302",
+    "nombre": "AURORA CRISTINA NORIEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35873",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023356010001",
+    "dni": "74778139",
+    "nombre": "SANYURI ZEIDA ROMERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35872",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010050",
+    "dni": "05392974",
+    "nombre": "GEORGE PAUL GOYCOCHEA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35703",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010049",
+    "dni": "10042636",
+    "nombre": "EDGARDO FELIX TINEO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35702",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010048",
+    "dni": "15738847",
+    "nombre": "JENNER FABIAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35701",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010014",
+    "dni": "70298342",
+    "nombre": "HARDY HAROLD HARO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35700",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010012",
+    "dni": "77539554",
+    "nombre": "MELANY BEATRIZ PILA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35699",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010011",
+    "dni": "46111311",
+    "nombre": "JORGE NIXON GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35698",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010010",
+    "dni": "71414348",
+    "nombre": "JULIO JESUS ROMERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35697",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010009",
+    "dni": "43650208",
+    "nombre": "JOSIMAR FROILAN BENAVENTE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35696",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010006",
+    "dni": "47475890",
+    "nombre": "CHRISTIAN YRVIN MUÑOZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35695",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010005",
+    "dni": "41588171",
+    "nombre": "RODOLFO RAY CHOQUEHUANCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35694",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010004",
+    "dni": "25331646",
+    "nombre": "JITLER DISNEY MONDRAGÓN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35693",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010003",
+    "dni": "44304293",
+    "nombre": "HERNAN GERMAN HILARIO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35692",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010002",
+    "dni": "46921635",
+    "nombre": "DANIEL ALFREDO HERRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35691",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010001",
+    "dni": "72016837",
+    "nombre": "RAUL MIGUEL ENCISO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35690",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021112020022",
+    "dni": "71181683",
+    "nombre": "MELANINE JULIETH LOPEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35687",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021221020042",
+    "dni": "71362989",
+    "nombre": "FRANCISCO JAVIER CUELLAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35680",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020036",
+    "dni": "46129224",
+    "nombre": "SENDY MARIBEL MENDOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35674",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020061",
+    "dni": "10202741",
+    "nombre": "IVAN ANGULO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35668",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020073",
+    "dni": "71352887",
+    "nombre": "CAMILA LUCIANA CARDENAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35663",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010074",
+    "dni": "72689351",
+    "nombre": "MARILYN ROCIO BAUTISTA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35654",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020102",
+    "dni": "46494304",
+    "nombre": "YUDELI GABRIELA SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35584",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020032",
+    "dni": "73682051",
+    "nombre": "ROBINSON ALBERTO VASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35540",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021303020001",
+    "dni": "09596800",
+    "nombre": "LUIS MANUEL GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35533",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020041",
+    "dni": "72724808",
+    "nombre": "JACKSON EDWIN MENDOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35527",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020040",
+    "dni": "09773618",
+    "nombre": "JACKIE VICENTE CESPEDES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35521",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020035",
+    "dni": "41184047",
+    "nombre": "TATIANA VERUSKA DIOSES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35508",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321010007",
+    "dni": "45145533",
+    "nombre": "ALCIDES FRANCO SACACA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35507",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021313020042",
+    "dni": "70979924",
+    "nombre": "LUIS ALBERTO VALDERRAMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35502",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020071",
+    "dni": "47550768",
+    "nombre": "LISSETH GRACE ZUÑIGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35497",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020070",
+    "dni": "47508985",
+    "nombre": "ERICK ISAAC FERNÁNDEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35492",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020069",
+    "dni": "73998485",
+    "nombre": "ROSAURA GAMBOA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35487",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020068",
+    "dni": "72771202",
+    "nombre": "ALICE ARACELI MAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35482",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020049",
+    "dni": "70440426",
+    "nombre": "AARON AYRTON RIEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35466",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020044",
+    "dni": "44719192",
+    "nombre": "GEANINNA MARGARITA QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35465",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020099",
+    "dni": "74023633",
+    "nombre": "ISABEL ANTONIETA QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35461",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020097",
+    "dni": "48053504",
+    "nombre": "FRANCO ANTONIO CCAMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35456",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020096",
+    "dni": "72190232",
+    "nombre": "JEAN LOUIS CHAVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35451",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020095",
+    "dni": "41502897",
+    "nombre": "MARCELINA LISSETH SOTO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35446",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020094",
+    "dni": "46467800",
+    "nombre": "JUAN CARLOS MAYTA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35441",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020093",
+    "dni": "40371489",
+    "nombre": "ANTONELLA DARCY VALLE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35436",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020092",
+    "dni": "47081057",
+    "nombre": "GUSTAVO ADOLFO ARCE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35393",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020091",
+    "dni": "76531638",
+    "nombre": "DELIA MILAGRO TRISOLLINI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35392",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020088",
+    "dni": "74723272",
+    "nombre": "ABIGAID CELESTE REATEGUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35391",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020087",
+    "dni": "42224771",
+    "nombre": "LARRI INAVEL SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35390",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020069",
+    "dni": "48469557",
+    "nombre": "GUILLERMO LIVERT SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35389",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020013",
+    "dni": "33678460",
+    "nombre": "DAVID ARAUJO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35388",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020001",
+    "dni": "45833505",
+    "nombre": "JULIO CESAR DEL PINO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35387",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020055",
+    "dni": "44064482",
+    "nombre": "WILBER GAMBOA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35382",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020054",
+    "dni": "29650642",
+    "nombre": "YOEL FRANCISCO FIGUEROA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35378",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020049",
+    "dni": "46185725",
+    "nombre": "IRIS ANDREA MULTHUAPTFF",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35349",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020047",
+    "dni": "43059752",
+    "nombre": "ERICK ANTHONY FIGUEROA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35348",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020043",
+    "dni": "48243623",
+    "nombre": "EDISON ALEX CORAHUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35347",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020039",
+    "dni": "09963785",
+    "nombre": "PAUL HERNAN ROSAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35346",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020033",
+    "dni": "40466956",
+    "nombre": "KAREN JEANNETTE BARSALLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35345",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020031",
+    "dni": "46769904",
+    "nombre": "LUIS EDUARDO PORRAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35341",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010046",
+    "dni": "44122190",
+    "nombre": "JOSE HUGO LIMAYLLA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35222",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010045",
+    "dni": "70251802",
+    "nombre": "DALLIN MIGUEL HUAMANCHUMO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35221",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010044",
+    "dni": "45847703",
+    "nombre": "EVA MARCELA CORAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35220",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010043",
+    "dni": "45564578",
+    "nombre": "DEYVI YACIR MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35219",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010042",
+    "dni": "47539241",
+    "nombre": "JEANINA JEMELIN DIAZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35218",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010041",
+    "dni": "76434121",
+    "nombre": "ANTONY GIULLIANO ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35217",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010040",
+    "dni": "71274934",
+    "nombre": "MARIO DARIO MEJIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35216",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010039",
+    "dni": "71632346",
+    "nombre": "HENRY JUNIOR ESPINOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35215",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010038",
+    "dni": "42419706",
+    "nombre": "CYNTHIA ANALI CANALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35214",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010037",
+    "dni": "41675817",
+    "nombre": "MARIA CHAMBA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35213",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010036",
+    "dni": "72607887",
+    "nombre": "JOSIAS JAVIER ROMERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35212",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010035",
+    "dni": "40165389",
+    "nombre": "JORGE ANTONIO TICONA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35211",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010034",
+    "dni": "73346301",
+    "nombre": "JATSUMI VICTORIA MAGUIÑA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35210",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010033",
+    "dni": "75418003",
+    "nombre": "JENNIFER LUISA TUCTO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35209",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010032",
+    "dni": "44730422",
+    "nombre": "RENZO GIOVANNI MORALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35208",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010031",
+    "dni": "43924639",
+    "nombre": "LEONARDO ARTURO ORE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35207",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010030",
+    "dni": "75905821",
+    "nombre": "CARLA MARGOT VILLANUEVA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35206",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010029",
+    "dni": "46474016",
+    "nombre": "RUBEN AGUSTIN GUILLERMO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35205",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010028",
+    "dni": "71080437",
+    "nombre": "MARIA TERESA YARLEQUE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35204",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010027",
+    "dni": "73522054",
+    "nombre": "JENIFER KARINA HUANCOLLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35203",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010026",
+    "dni": "76693973",
+    "nombre": "MAYLY FIORELA RUIZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35202",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010025",
+    "dni": "46253291",
+    "nombre": "RONALD ARANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35201",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010024",
+    "dni": "46369444",
+    "nombre": "JULIO SAMUEL POMARROSA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35200",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010023",
+    "dni": "44149403",
+    "nombre": "JAIME FRANCISCO AGUINAGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35199",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010022",
+    "dni": "47444867",
+    "nombre": "KATHERINE LUCIA GODOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35198",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010021",
+    "dni": "70468818",
+    "nombre": "ANIFER ROSSABEL GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35197",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010020",
+    "dni": "73124143",
+    "nombre": "SERGIO EDUARDO CUZCANO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35196",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010019",
+    "dni": "41424291",
+    "nombre": "NIKO CRUZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35195",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010018",
+    "dni": "40914092",
+    "nombre": "MARIA ANGELICA DEL PILAR ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35194",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020030",
+    "dni": "40905231",
+    "nombre": "MARISOL PEDRAZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35190",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26023352010007",
+    "dni": "40647601",
+    "nombre": "MARCOS GÁLVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35175",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011102020098",
+    "dni": "07763428",
+    "nombre": "ALDO JESUS GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35169",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011201010046",
+    "dni": "60828731",
+    "nombre": "AYLIN FLORENCIA CASTRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35160",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011201010010",
+    "dni": "71368824",
+    "nombre": "FREDY JHON GARCÍA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35155",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011201010088",
+    "dni": "70738711",
+    "nombre": "FLOR DE MARIA CRISTOBAL",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35153",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021212020020",
+    "dni": "77485997",
+    "nombre": "MARIBIT JOIS BORRERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35145",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021112020021",
+    "dni": "70734215",
+    "nombre": "YANELA FABIANA MEJIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35141",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021113020043",
+    "dni": "71676032",
+    "nombre": "MILAGROS CIELO TORRES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35135",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020059",
+    "dni": "45058072",
+    "nombre": "JUAN MIGUEL VALLES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35117",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020050",
+    "dni": "44448916",
+    "nombre": "ERICK MELO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35089",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020037",
+    "dni": "45010082",
+    "nombre": "YHONY CARDENAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35088",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020031",
+    "dni": "48053546",
+    "nombre": "DENNIS ROCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35087",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021223020018",
+    "dni": "01334154",
+    "nombre": "ERIK ORLANDO ORTEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35086",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010133",
+    "dni": "73423464",
+    "nombre": "JHONATAN ALEXANDER LOPEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35085",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304010003",
+    "dni": "70498181",
+    "nombre": "GIACCOMO JEAM PIERRE ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35037",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020022",
+    "dni": "45743166",
+    "nombre": "KEILA KENNEDY SANTIAGO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35020",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021212020016",
+    "dni": "71994166",
+    "nombre": "IRIS CAMILA GALÁN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35003",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021212020010",
+    "dni": "43301148",
+    "nombre": "JANEHT LISSEHT SILVA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35002",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021212020008",
+    "dni": "74444023",
+    "nombre": "MARIA ALEJANDRA ALARCÓN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "35001",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020199",
+    "dni": "70902498",
+    "nombre": "CLEDYS NELLA PÉREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34989",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021214020017",
+    "dni": "77126489",
+    "nombre": "SANDER KEN MAMANI OTAZU MAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34973",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021111020029",
+    "dni": "47181879",
+    "nombre": "DIEGO ANDREE ESCOBAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34967",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020067",
+    "dni": "73982630",
+    "nombre": "YELITZA ALEXANDRA GISBEL CARRILLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34961",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021305020013",
+    "dni": "72204870",
+    "nombre": "EDUARDO JOAQUIN JESUS RUIZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34950",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021214020016",
+    "dni": "76147825",
+    "nombre": "LUZ CLARITA ROSALIA DE LA CRUZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34943",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021222020019",
+    "dni": "46314760",
+    "nombre": "WALTER JUNIOR GALVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34937",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021321020039",
+    "dni": "45717937",
+    "nombre": "DIANA LOURDES ALLASI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34932",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020053",
+    "dni": "40968502",
+    "nombre": "JUCABED EGOAVIL",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34925",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020052",
+    "dni": "42102921",
+    "nombre": "RICHARD ERASMO GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34919",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021211020028",
+    "dni": "76310220",
+    "nombre": "LEYDI YULIZA DYANIRA MOSQUERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34913",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021302020051",
+    "dni": "44610917",
+    "nombre": "SILVIA LEONOR QUIROZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34895",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021301020066",
+    "dni": "41436715",
+    "nombre": "CARLOS ANDRES GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34889",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021304020090",
+    "dni": "16630958",
+    "nombre": "SARA PATRICIA MONTENEGRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34875",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26021222020018",
+    "dni": "43128405",
+    "nombre": "DENISSE YANELI NEYRA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34869",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010157",
+    "dni": "71907157",
+    "nombre": "CRESIA YUDITH SURCO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34863",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010156",
+    "dni": "40090135",
+    "nombre": "PEDRO CARLOS OLAZÁBAL",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34855",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020316",
+    "dni": "46662859",
+    "nombre": "ANA MARIA VILA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34849",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010081",
+    "dni": "43425098",
+    "nombre": "JORGE LUIS SALINAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34843",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010080",
+    "dni": "47082599",
+    "nombre": "ERIKSON ESTEBAN PALOMINO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34837",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010204",
+    "dni": "70403073",
+    "nombre": "WENDY MILAGROS ROMERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34825",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020315",
+    "dni": "42793115",
+    "nombre": "NAOBI GUZMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34819",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020188",
+    "dni": "70550383",
+    "nombre": "DENNIS JESUS AYME",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34815",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010203",
+    "dni": "47700854",
+    "nombre": "WILSON MANUEL PUMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34807",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010191",
+    "dni": "70992328",
+    "nombre": "JASON ALDAIR GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34803",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011104020314",
+    "dni": "70682415",
+    "nombre": "AURELIO ANDERSON SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34795",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010190",
+    "dni": "40951705",
+    "nombre": "RAQUEL GOMEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34790",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020313",
+    "dni": "48299798",
+    "nombre": "NATALY NORMA GOMEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34785",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010189",
+    "dni": "75605707",
+    "nombre": "MARIA ESTHER LARA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34779",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020312",
+    "dni": "07296469",
+    "nombre": "WILLIAM ORLANDO VASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34771",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010188",
+    "dni": "44609239",
+    "nombre": "MARILYN HUAMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34767",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010202",
+    "dni": "45201288",
+    "nombre": "GLINGER BRICEÑO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34759",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010050",
+    "dni": "42464284",
+    "nombre": "ANABEL CECILIA DEZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34753",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011305020039",
+    "dni": "70126589",
+    "nombre": "ALFREDO ALEJANDRO FRANCO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34749",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020311",
+    "dni": "73347072",
+    "nombre": "PAUL JONATH TAYPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34741",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011325010014",
+    "dni": "44322456",
+    "nombre": "JHEN MICHAEL CABRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34735",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010155",
+    "dni": "73397764",
+    "nombre": "JAZHEL ARELY CABRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34731",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010050",
+    "dni": "72717383",
+    "nombre": "KEVIN MICHAEL RIVAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34723",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020310",
+    "dni": "47175283",
+    "nombre": "ROY OMAR RIMAYHUAMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34717",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010075",
+    "dni": "40001635",
+    "nombre": "DELIA NICOLAZA PARIONA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34713",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020309",
+    "dni": "48051367",
+    "nombre": "ELIBET ANDIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34705",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020128",
+    "dni": "73744040",
+    "nombre": "LUZ MERY ILLACUTIPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34699",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010079",
+    "dni": "72677374",
+    "nombre": "OMAR NICOLAS ALEXANDER FERNANDEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34695",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020308",
+    "dni": "46492327",
+    "nombre": "DAVID HUGO MANAYAY",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34687",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020306",
+    "dni": "71289932",
+    "nombre": "ROGER HUARAC TORRES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34675",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020127",
+    "dni": "30413513",
+    "nombre": "ESMILA MARI MONTANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34669",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010154",
+    "dni": "43059250",
+    "nombre": "YANET ESMERALDA CHERO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34664",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010153",
+    "dni": "74040710",
+    "nombre": "VICTORIA CONZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34657",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010049",
+    "dni": "43048932",
+    "nombre": "SILVIA YAURI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34651",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020126",
+    "dni": "43568107",
+    "nombre": "MARICARMEN RAQUEL RAMIREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34639",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020305",
+    "dni": "02650613",
+    "nombre": "LORENZO CABRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34633",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010201",
+    "dni": "09727534",
+    "nombre": "JAIME MARIO CALLAÑAUPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34629",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010152",
+    "dni": "45886730",
+    "nombre": "JEANCARLO HILDEBRANDO MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34623",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020187",
+    "dni": "75167137",
+    "nombre": "WILDER DANIEL GALLOSO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34617",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020125",
+    "dni": "28313968",
+    "nombre": "SONILDA GALINDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34611",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020304",
+    "dni": "45334096",
+    "nombre": "RODRIGO AUGUSTO ALCAZAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34605",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020186",
+    "dni": "48140833",
+    "nombre": "DIANA ALEJANDRA ALMANZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34599",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010186",
+    "dni": "41219923",
+    "nombre": "LESLIE MIRELLA PEREA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34591",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011305020038",
+    "dni": "72126452",
+    "nombre": "RAQUEL AURADA FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34585",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020303",
+    "dni": "71153946",
+    "nombre": "MIA MARITZA VOURAKIS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34579",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020124",
+    "dni": "76753894",
+    "nombre": "YANET GALVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34573",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020185",
+    "dni": "62019285",
+    "nombre": "JUAN ANDRE ARONE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34567",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011204020302",
+    "dni": "43559315",
+    "nombre": "PIERO LEONARDO PEREA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34563",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020184",
+    "dni": "47565725",
+    "nombre": "EIMER JHONATAN GUEVARA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34557",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020183",
+    "dni": "71939989",
+    "nombre": "KATIUSKA VICENTA DEL JESUS CASTRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34549",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010185",
+    "dni": "72687724",
+    "nombre": "RUBI JAZMÍN JANAMPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34543",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010073",
+    "dni": "74488906",
+    "nombre": "JOHNNY GONZALO SARAVIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34537",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010200",
+    "dni": "74074844",
+    "nombre": "GILMER JUNIOR BRUNO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34531",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010184",
+    "dni": "76247304",
+    "nombre": "PAULO JOSETH ALVA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34525",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010151",
+    "dni": "45268608",
+    "nombre": "INES MARILYN GUTIERREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34519",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010150",
+    "dni": "71683142",
+    "nombre": "DENISSE MILAGROS BURGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34516",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020300",
+    "dni": "43445089",
+    "nombre": "PEDRO FRANCO MUGRUZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34507",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010183",
+    "dni": "46194598",
+    "nombre": "ALAN IVAN MAMANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34501",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010072",
+    "dni": "45137824",
+    "nombre": "MARJORIE DYANN ALCALA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34497",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010149",
+    "dni": "45607813",
+    "nombre": "DIEGO ARMANDO JULCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34483",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010182",
+    "dni": "70174160",
+    "nombre": "STEVENSON ABIMAEL BEJARANO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34477",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010181",
+    "dni": "004798082",
+    "nombre": "LUISNEILY CLAIRETH SUÁREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34474",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010071",
+    "dni": "76419003",
+    "nombre": "FREDY QUINTANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34465",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010180",
+    "dni": "46790814",
+    "nombre": "XIMENA JANET CUBA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34461",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011214010050",
+    "dni": "44097806",
+    "nombre": "ELIZABETH JULIA CCOPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34453",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020299",
+    "dni": "43174422",
+    "nombre": "CARLOS ENRIQUE SARMIENTO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34447",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010049",
+    "dni": "46580902",
+    "nombre": "HELLEN CANELO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34443",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010199",
+    "dni": "04437745",
+    "nombre": "MICHELL DWINGT SALAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34435",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010179",
+    "dni": "45470763",
+    "nombre": "ROSA IDELSA HILARIO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34431",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020298",
+    "dni": "42777122",
+    "nombre": "MIGUEL ANGEL TOLEDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34423",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020182",
+    "dni": "73358965",
+    "nombre": "RENZO ELADIO ARIAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34417",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010077",
+    "dni": "47691957",
+    "nombre": "FRANKS RODRIGO FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34411",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010178",
+    "dni": "43715003",
+    "nombre": "TESSALLA KATERINE CAZORLA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34405",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020181",
+    "dni": "48202070",
+    "nombre": "DANY YONATHAN GUTIÉRREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34399",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020180",
+    "dni": "41705063",
+    "nombre": "GRACIELA LIZETH GALLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34393",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010048",
+    "dni": "04748581",
+    "nombre": "ORLANDO JESUS OPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34387",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010076",
+    "dni": "42480489",
+    "nombre": "OSCAR ALBERTO PACHECO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34381",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010070",
+    "dni": "46795749",
+    "nombre": "ISABEL CRISTINA GARCIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34375",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020122",
+    "dni": "73755918",
+    "nombre": "KAREN ELIZABETH VEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34371",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010075",
+    "dni": "72065910",
+    "nombre": "MARIANA CONSUELO URBIOLA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34365",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010198",
+    "dni": "23015414",
+    "nombre": "PERCY UVER CARDENAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34359",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011214010049",
+    "dni": "09428842",
+    "nombre": "ROSA MELVA GÓMEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34351",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020179",
+    "dni": "43007624",
+    "nombre": "ANTHONY JAIME RODRIGUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34345",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020121",
+    "dni": "47448516",
+    "nombre": "MARYURI ESTEFANI QUESADA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34339",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010147",
+    "dni": "47229634",
+    "nombre": "EDEWIN FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34335",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010047",
+    "dni": "41291745",
+    "nombre": "JUAN CARLOS HUALLPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34327",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010197",
+    "dni": "47389571",
+    "nombre": "CARLOS ALONSO TEJADA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34321",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011105020037",
+    "dni": "72598450",
+    "nombre": "ANGEL NICOLAS MARIÑOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34315",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010146",
+    "dni": "44986486",
+    "nombre": "FIDEL CHRISTIAN LAMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34311",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020178",
+    "dni": "76580012",
+    "nombre": "JHOMER IVAN JAICO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34305",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010047",
+    "dni": "40962147",
+    "nombre": "OMAR YVAN CHAMORRO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34297",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010145",
+    "dni": "75401756",
+    "nombre": "NEY RUTH CAYLLAHUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34287",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011104020296",
+    "dni": "60767554",
+    "nombre": "MARIA CAMILA HERRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34281",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020120",
+    "dni": "72101744",
+    "nombre": "ESTEFANI PAMELA INGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34273",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020119",
+    "dni": "40913578",
+    "nombre": "GINA PAOLA GUILLEN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34269",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011105020036",
+    "dni": "62019529",
+    "nombre": "JOAQUIN AMERICO SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34263",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010144",
+    "dni": "70026923",
+    "nombre": "DIANA KATHERIN GONZALEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34257",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020177",
+    "dni": "46176052",
+    "nombre": "LUIS FELIPE DULANTO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34249",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020295",
+    "dni": "42828470",
+    "nombre": "JHON ARNALDO SUCAPUCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34243",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010143",
+    "dni": "75719690",
+    "nombre": "STEFANY ROCIO ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34231",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020293",
+    "dni": "15738191",
+    "nombre": "RUBEN PILADE CALLEGARI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34219",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011204020292",
+    "dni": "44787213",
+    "nombre": "MARCO RICARDO ALDANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34213",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010195",
+    "dni": "46917017",
+    "nombre": "SAMIHER SADAN JEHIELI CAYO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34209",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020176",
+    "dni": "61511459",
+    "nombre": "RUTH ELENA FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34203",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011104020291",
+    "dni": "60690634",
+    "nombre": "ANDRE ZINEDINE ORTIZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34195",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020290",
+    "dni": "41564262",
+    "nombre": "RUSBELL FELIX MALLQUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34191",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010141",
+    "dni": "46671489",
+    "nombre": "JUAN ARMANDO PALOMINO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34183",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020175",
+    "dni": "74869931",
+    "nombre": "MARIA FERNANDA HUATUCO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34177",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010140",
+    "dni": "42870590",
+    "nombre": "FRANKLIN JORGE MANCHAY",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34173",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020289",
+    "dni": "72720848",
+    "nombre": "ALEXANDRA YAMILET VARGAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34166",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011113010176",
+    "dni": "61462088",
+    "nombre": "LAYSI DANNA COCHACHIN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34161",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020118",
+    "dni": "45320693",
+    "nombre": "MARIO JAVIER FLORES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34155",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011104020288",
+    "dni": "72336457",
+    "nombre": "MIA JAMILETH MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34147",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020287",
+    "dni": "41348384",
+    "nombre": "GLADYS ESCOBEDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34141",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020117",
+    "dni": "75441088",
+    "nombre": "VICTOR FERNANDO CHONLON",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34129",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020286",
+    "dni": "10797350",
+    "nombre": "JACKSON ERNESTO RIVEROS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34125",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020285",
+    "dni": "74705093",
+    "nombre": "NEMER QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34119",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020284",
+    "dni": "43898230",
+    "nombre": "JUAN VIDAL SUCASACA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34111",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020283",
+    "dni": "75522637",
+    "nombre": "VANESA ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34107",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011305020035",
+    "dni": "73137095",
+    "nombre": "CRISTIAN CESAR BROWN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34099",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010193",
+    "dni": "70206279",
+    "nombre": "JUAN JOSE POMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34087",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011303020010",
+    "dni": "45482721",
+    "nombre": "JOEL MIQUIAS ORELLANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34081",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010192",
+    "dni": "47523917",
+    "nombre": "CRISTHIAN RODOLFO CHAHUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34077",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010175",
+    "dni": "16710868",
+    "nombre": "AGUEDA REGALADO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34072",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020174",
+    "dni": "48126849",
+    "nombre": "DEYSI FLORA RODRÍGUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34063",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010139",
+    "dni": "61772292",
+    "nombre": "ELENA EVELYN VILLAFANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34059",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010073",
+    "dni": "72656035",
+    "nombre": "NOELIA GWENDOLYNE AMESQUITA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34053",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010174",
+    "dni": "70135140",
+    "nombre": "NELLY CELIA ZAPATA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34045",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020173",
+    "dni": "60812906",
+    "nombre": "ZULLY ESMERALDA JIMENEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34039",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010072",
+    "dni": "46224384",
+    "nombre": "HELMUT FABRICIO PRADO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34035",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020116",
+    "dni": "42565586",
+    "nombre": "YULIANA SILVA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34027",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020172",
+    "dni": "47690018",
+    "nombre": "NAYDERT AYZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34023",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011214010048",
+    "dni": "43520245",
+    "nombre": "ANALI FIORELLA HERRERA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34017",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020281",
+    "dni": "44814080",
+    "nombre": "EDWIN MIRANDA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34011",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010191",
+    "dni": "47546173",
+    "nombre": "RONALD FERNANDO RAMOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "34003",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020280",
+    "dni": "43999348",
+    "nombre": "YOVANET QUISPE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33999",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020279",
+    "dni": "45638820",
+    "nombre": "ROCIO MILAGROS ROSAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33993",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011105020034",
+    "dni": "61434267",
+    "nombre": "MIQUEAS OBED MORALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33987",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011114010047",
+    "dni": "73251390",
+    "nombre": "DAVID ALEJANDRO RICALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33981",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011305020033",
+    "dni": "74438773",
+    "nombre": "ARNOLD WINKLER AHUMADA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33973",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020115",
+    "dni": "61040404",
+    "nombre": "KAROL MILAGROS AROSTEGUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33969",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010069",
+    "dni": "07625044",
+    "nombre": "LUCIA CALLE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33961",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020278",
+    "dni": "47363236",
+    "nombre": "GLICERIA BEATRIZ CALANI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33955",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020277",
+    "dni": "70231841",
+    "nombre": "LISBETH MARGOTH GUILLEN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33949",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010190",
+    "dni": "43013640",
+    "nombre": "HENRY EDWIN CHOQUE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33937",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020276",
+    "dni": "47608490",
+    "nombre": "ROCIO DEL PILAR SALAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33931",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020171",
+    "dni": "47930952",
+    "nombre": "JUAN DARIO VALLE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33925",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020275",
+    "dni": "45489067",
+    "nombre": "DANIEL LINGAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33921",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010189",
+    "dni": "47352344",
+    "nombre": "SARA RAQUEL RODRIGUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33913",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010046",
+    "dni": "25568564",
+    "nombre": "ENRIQUE MANUEL SALINAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33907",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010188",
+    "dni": "70834043",
+    "nombre": "WILSON PACOMPIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33901",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010187",
+    "dni": "77292248",
+    "nombre": "ROSSMERY SOLEDAD YUPANQUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33895",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010186",
+    "dni": "47175158",
+    "nombre": "MIGUEL ANTHONY NÚÑEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33891",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010173",
+    "dni": "23974863",
+    "nombre": "NICOLASA PAREDES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33883",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010172",
+    "dni": "48297904",
+    "nombre": "MADDY VIRGINIA ORTIZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33877",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010136",
+    "dni": "74587270",
+    "nombre": "YANERY LISBETH YUCRA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33873",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010171",
+    "dni": "70434439",
+    "nombre": "SABY VERUSHKA HURTADO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33865",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011204020274",
+    "dni": "40825796",
+    "nombre": "WILFREDO ROBERTO SANTIAGO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33859",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010170",
+    "dni": "19868887",
+    "nombre": "DOLORES MERCEDES POMA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33855",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020170",
+    "dni": "61493536",
+    "nombre": "MAYTE ALESANDRA CARLOS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33847",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010135",
+    "dni": "47809196",
+    "nombre": "PEDRO MANUEL ETCHEBARNE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33841",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010045",
+    "dni": "45418816",
+    "nombre": "MARCO ANTONIO CANDIOTTI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33836",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010185",
+    "dni": "42131923",
+    "nombre": "MIGUEL ENRIQUE RUA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33831",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020169",
+    "dni": "45646141",
+    "nombre": "ROGER JHOEL ECHEVARRIA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33825",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010070",
+    "dni": "10712463",
+    "nombre": "THANY CHAVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33817",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010069",
+    "dni": "41426983",
+    "nombre": "GUILLERMO VELASCO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33813",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010134",
+    "dni": "42074843",
+    "nombre": "TERESA HUALPARUCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33805",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020273",
+    "dni": "46739952",
+    "nombre": "MARYCARMEN LIZBETH ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33801",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020168",
+    "dni": "71192721",
+    "nombre": "ALESSANDRA FIORELLA GOMEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33795",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020166",
+    "dni": "76176288",
+    "nombre": "SANY LINETTE VILLAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33787",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011111010133",
+    "dni": "70644906",
+    "nombre": "KAREN MORELIA DEXTRE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33781",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020272",
+    "dni": "41946826",
+    "nombre": "MIGUEL ANGEL MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33777",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020271",
+    "dni": "72343325",
+    "nombre": "ADRIANA ALEXANDRA CHAHUARES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33771",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011112010068",
+    "dni": "60938714",
+    "nombre": "YENNY MARICIELO BRONCANO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33763",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010184",
+    "dni": "43984069",
+    "nombre": "MOISES CLEMENTE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33757",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011101020165",
+    "dni": "72818290",
+    "nombre": "ARANTZA FERNANDA LANDEO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33753",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010132",
+    "dni": "41358390",
+    "nombre": "SILVIA VERONICA TANTA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33747",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010183",
+    "dni": "71983146",
+    "nombre": "BRAYAN MANUEL CHAVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33741",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010181",
+    "dni": "71288319",
+    "nombre": "GUIDO CHICCHE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33727",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010067",
+    "dni": "70479343",
+    "nombre": "ABIGAIL ANTUANET YPARRAGUIRRE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33723",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011112010066",
+    "dni": "71292314",
+    "nombre": "ANGHELI MISHELLE HERNANDEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33715",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010169",
+    "dni": "41884768",
+    "nombre": "EVELYN NATALIA DIETZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33711",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020164",
+    "dni": "44210678",
+    "nombre": "LORENA INMACULADA ANDRADE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33703",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020163",
+    "dni": "70752502",
+    "nombre": "GIORDAN JOSE CHERRES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33699",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010046",
+    "dni": "42480692",
+    "nombre": "MAC ALEXANDRA CARRILLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33691",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020270",
+    "dni": "40425914",
+    "nombre": "KATIA CAROL ZUNIGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33686",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010180",
+    "dni": "46816510",
+    "nombre": "OSWALDO IVAN PAUCAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33679",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010065",
+    "dni": "47694556",
+    "nombre": "JANET EVELYN HUARCAYA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33669",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011305020032",
+    "dni": "43235700",
+    "nombre": "GLORIA MARCELA GONZALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33655",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010179",
+    "dni": "46007590",
+    "nombre": "ABIGAEL ERNESTO CORRALES",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33651",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020161",
+    "dni": "72368006",
+    "nombre": "EDGARD LUIS ORTEGA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33643",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010044",
+    "dni": "72181870",
+    "nombre": "ERIK JIMENEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33639",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011124010045",
+    "dni": "72985165",
+    "nombre": "THIAGGO SEBASTIAN GUTIERREZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33631",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020269",
+    "dni": "41957329",
+    "nombre": "RICHARD REYNALDO APAZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33625",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011222010043",
+    "dni": "73473116",
+    "nombre": "JERSON ALEXIS VELASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33619",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010131",
+    "dni": "48618962",
+    "nombre": "VICTORIA KAROLINA MACEDO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33613",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010064",
+    "dni": "72548692",
+    "nombre": "DIANIRA LUCILA GARAY",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33609",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020160",
+    "dni": "48375636",
+    "nombre": "ALEXANDER ISRRAEL HUATANGARE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33603",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020268",
+    "dni": "48012247",
+    "nombre": "MIGUEL ANGEL SALAZAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33589",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020159",
+    "dni": "47828829",
+    "nombre": "ASTRIT MARIELA MEDINA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33585",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020158",
+    "dni": "71351075",
+    "nombre": "KAREN ROSMERIE CHICO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33577",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011113010168",
+    "dni": "06104750",
+    "nombre": "WILMER SILVANO JULCA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33571",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020157",
+    "dni": "44179082",
+    "nombre": "JONATHAN ALEXIS LARICO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33565",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020156",
+    "dni": "75993827",
+    "nombre": "JUAN JEFERSON AMBROSIO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33559",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011114010046",
+    "dni": "09561895",
+    "nombre": "VICTOR RAUL PADILLA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33553",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010177",
+    "dni": "72003285",
+    "nombre": "ISRAEL MOQUILLAZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33549",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020267",
+    "dni": "71871174",
+    "nombre": "GABRIELA GIOVANA CHÁVEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33541",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010167",
+    "dni": "46090762",
+    "nombre": "LISBETH ASTRID CARPIO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33537",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020155",
+    "dni": "42582461",
+    "nombre": "BENITO CIRILO SAAVEDRA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33529",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010166",
+    "dni": "48298778",
+    "nombre": "MARY GRISEL AMANQUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33523",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010130",
+    "dni": "43064702",
+    "nombre": "LISSETH JACQUELINE ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33519",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020266",
+    "dni": "44500266",
+    "nombre": "ELOY GREGORIO LOPEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33511",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020265",
+    "dni": "09953128",
+    "nombre": "EDITH CARMEN ROJAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33505",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011302020113",
+    "dni": "40651130",
+    "nombre": "ZELMIRA IVONNE ARIAS",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33499",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020264",
+    "dni": "44113742",
+    "nombre": "NIDIA ALINE CRUZALEGUI",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33493",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020263",
+    "dni": "70422860",
+    "nombre": "TERRY VALLEJO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33487",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010165",
+    "dni": "71045372",
+    "nombre": "DANIELA FEYRUZ INCACCOÑA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33481",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020154",
+    "dni": "47606167",
+    "nombre": "JORGE ENRIQUE VALDIVIEZO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33475",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010176",
+    "dni": "73598454",
+    "nombre": "EVERTH ALEJANDRO SOSA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33469",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010175",
+    "dni": "42421887",
+    "nombre": "JUVEN'S ALA ESPINOZA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33465",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010174",
+    "dni": "72320869",
+    "nombre": "DIORCAED CINAIN NIETO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33459",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011214010045",
+    "dni": "42837520",
+    "nombre": "EDWIN LUIS GUEVARA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33451",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010067",
+    "dni": "42809640",
+    "nombre": "LUIS ANGEL PACHECO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33448",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011121010066",
+    "dni": "06156893",
+    "nombre": "JOSE ANTONIO PAZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33441",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011304020262",
+    "dni": "77679258",
+    "nombre": "KEVIN SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33435",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011224010044",
+    "dni": "74378579",
+    "nombre": "NELLY MILAGROS VASQUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33429",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020153",
+    "dni": "71323680",
+    "nombre": "JORGE JESUS PONCE",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33415",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010065",
+    "dni": "00242866",
+    "nombre": "WALTER GERMAN SANCHEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33412",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011211010129",
+    "dni": "46433955",
+    "nombre": "UZIEL ARBUES AV CANTORAL MZ:D LOTE:",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33403",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011321010064",
+    "dni": "45173265",
+    "nombre": "CARLOS ALBERTO VALENZUELA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33397",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010173",
+    "dni": "75352938",
+    "nombre": "JOEL PERCY HUALLPA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33393",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011212010063",
+    "dni": "40475513",
+    "nombre": "FERNANDO MANUEL HUAMAN",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33385",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011301020152",
+    "dni": "70327512",
+    "nombre": "ANTHONY JOSYMAR AYBAR",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33379",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010164",
+    "dni": "70235244",
+    "nombre": "KEVIN LEONIDAS POLO",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33373",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011124010043",
+    "dni": "60642806",
+    "nombre": "SUNMY SORAYHA DURAND",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33370",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010172",
+    "dni": "41163120",
+    "nombre": "JOSE LUIS RODRIGUEZ",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33361",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011313010163",
+    "dni": "28604338",
+    "nombre": "EMILIANO BAUTISTA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33355",
+    "importeDefault": 500
+  },
+  {
+    "codigoAlumno": "26011223010171",
+    "dni": "44719033",
+    "nombre": "CARLOS VLADIMIR LUCANA",
+    "tipo": "REAL_BDACADEMICO6",
+    "numDocumentoDefault": "33351",
+    "importeDefault": 500
+  }
+]

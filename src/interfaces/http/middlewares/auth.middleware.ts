@@ -23,15 +23,12 @@ export async function asbancAuthMiddleware(request: FastifyRequest, reply: Fasti
     });
   }
 
-  // Soporta "Basic <token>" y "Bearer <token>"
   const token = authHeader.replace(/^(Basic|Bearer)\s+/i, '').trim();
 
-  // 1. Validar contra el secreto estático pactado en homologación (comparación en tiempo constante)
   if (timingSafeStringEqual(token, env.ASBANC_AUTH_SECRET)) {
     return;
   }
 
-  // 2. Validar firma criptográfica y vigencia del JWT emitido por el endpoint /api/Auth/token
   const jwtCheck = verifyJwt(token, env.JWT_SECRET);
   if (jwtCheck.valid && jwtCheck.payload) {
     request.jwtPayload = jwtCheck.payload;

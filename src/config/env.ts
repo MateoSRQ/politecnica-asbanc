@@ -10,23 +10,21 @@ const envSchema = z
     HOST: z.string().default('0.0.0.0'),
     LOG_LEVEL: z.string().default('info'),
 
-    // Seguridad ASBANC y OAuth2 / JWT
     ASBANC_AUTH_ENABLED: z
       .string()
       .transform((v) => v === 'true')
       .default('true'),
-    ASBANC_AUTH_SECRET: z.string().default('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgxMjEyMDMsImlzcyI6Imlz'),
+    ASBANC_AUTH_SECRET: z.string().min(1, 'ASBANC_AUTH_SECRET es requerido'),
     ASBANC_DEFAULT_COMPANY_CODE: z.string().default('998'),
-    JWT_SECRET: z.string().default('politecnica_asbanc_jwt_secret_key_2026_ftr'),
-    JWT_EXPIRATION_SECONDS: z.coerce.number().default(86400), // 24 horas por defecto (Pág. 8)
+    JWT_SECRET: z.string().min(1, 'JWT_SECRET es requerido'),
+    JWT_EXPIRATION_SECONDS: z.coerce.number().default(86400),
     ASBANC_CLIENT_ID: z.string().default('asbanc_ftr'),
-    ASBANC_CLIENT_SECRET: z.string().default('asbanc_ftr_secret_2026'),
+    ASBANC_CLIENT_SECRET: z.string().min(1, 'ASBANC_CLIENT_SECRET es requerido'),
 
-    // Base de Datos MSSQL
     DB_SERVER: z.string().default('127.0.0.1'),
     DB_PORT: z.coerce.number().default(1433),
     DB_USER: z.string().default('sa'),
-    DB_PASSWORD: z.string().default('Politecnica2026!Asbanc#'),
+    DB_PASSWORD: z.string().min(1, 'DB_PASSWORD es requerida'),
     DB_NAME: z.string().default('politecnica_asbanc'),
     DB_ENCRYPT: z
       .string()
@@ -41,7 +39,6 @@ const envSchema = z
     DB_POOL_MIN: z.coerce.number().default(5),
     DB_POOL_MAX: z.coerce.number().default(30),
 
-    // Métricas y Límites
     METRICS_ENABLED: z
       .string()
       .transform((v) => v === 'true')
@@ -49,17 +46,19 @@ const envSchema = z
     METRICS_ROUTE: z.string().default('/metrics'),
     SLA_WARNING_THRESHOLD_MS: z.coerce.number().default(2500),
 
-    // Rate Limiting (Prevención de DDoS y Fuerza Bruta)
     RATE_LIMIT_ENABLED: z
       .string()
       .transform((v) => v === 'true')
       .default('true'),
-    RATE_LIMIT_MAX: z.coerce.number().default(10000), // Límite por minuto
+    RATE_LIMIT_MAX: z.coerce.number().default(10000),
 
-    // Control de Orígenes CORS
     CORS_ORIGIN: z.string().default('*'),
 
-    // Webhooks de Notificación Transaccional
+    TEST_MODE: z
+      .string()
+      .transform((v) => v === 'true')
+      .default('false'),
+
     PAYMENT_WEBHOOK_URL: z.string().optional().default(''),
   })
   .superRefine((data, ctx) => {

@@ -1,4 +1,5 @@
 import { env } from '../src/config/env.js';
+import { generateJwt } from '../src/infrastructure/security/jwt.util.js';
 
 async function viewMetrics(): Promise<void> {
   const url = `http://127.0.0.1:${env.PORT}`;
@@ -17,12 +18,16 @@ async function viewMetrics(): Promise<void> {
   }
 
   try {
-    const metricsRes = await fetch(`${url}/metrics`);
+    const token = generateJwt({ sub: 'admin', role: 'admin' }, env.JWT_SECRET, '1h');
+    const metricsRes = await fetch(`${url}/metrics`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const rawMetrics = await metricsRes.text();
 
     console.log('\n📡 TELEMETRÍA PROMETHEUS (/metrics) - RESUMEN TRANSACCIONAL:');
 
-    // Parsear asbanc_txn_total
     const txnLines = rawMetrics.split('\n').filter((l) => l.startsWith('asbanc_txn_total{'));
 
     const breakdown: any[] = [];
@@ -46,7 +51,6 @@ async function viewMetrics(): Promise<void> {
       }
     }
 
-    // Alertas SLA
     const slaLine = rawMetrics.split('\n').find((l) => l.startsWith('asbanc_sla_violations_total'));
     console.log(`\n🎯 Alertas de SLA Violations (>3s) : ${slaLine ? slaLine : '0 (Sin violaciones)'}`);
     console.log(`🔗 Endpoint completo para Prometheus / Grafana: http://localhost:${env.PORT}/metrics\n`);

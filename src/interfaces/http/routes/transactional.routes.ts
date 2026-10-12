@@ -3,7 +3,6 @@ import { transactionalController } from '../controllers/transactional.controller
 import { asbancAuthMiddleware } from '../middlewares/auth.middleware.js';
 
 export async function transactionalRoutes(fastify: FastifyInstance): Promise<void> {
-  // Rutas transaccionales de ASBANC FTR
   fastify.post(
     '/api/Transactional/ValidateCustomer',
     { preHandler: [asbancAuthMiddleware] },

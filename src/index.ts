@@ -9,7 +9,6 @@ async function main(): Promise<void> {
   logger.info(`Entorno: ${env.NODE_ENV} | Puerto: ${env.PORT} | Host: ${env.HOST}`);
   logger.info('==================================================');
 
-  // Inicializar conexiones a infraestructura
   try {
     await getMssqlPool();
   } catch (error) {
@@ -28,7 +27,6 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // Cierre limpio (Graceful Shutdown)
   const shutdown = async (signal: string) => {
     logger.info({ signal }, 'Señal de terminación recibida. Cerrando recursos...');
     await server.close();

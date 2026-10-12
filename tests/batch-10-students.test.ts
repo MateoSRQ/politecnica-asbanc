@@ -9,7 +9,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
   let app: FastifyInstance;
   let authToken: string;
 
-  // Lista de 10 estudiantes reales en BDACADEMICO6 con cuotas pendientes
   const students = [
     { codigoAlumno: '26023353010012', dni: '74202604', nombre: 'MARTHA ORTEGA' },
     { codigoAlumno: '26023355010008', dni: '29612370', nombre: 'ZULLY AURORA VELARDE' },
@@ -28,7 +27,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
     app = buildServer();
     await app.ready();
 
-    // 0. Autenticación: Obtener token JWT válido
     const tokenRes = await app.inject({
       method: 'POST',
       url: '/api/Auth/token',
@@ -49,7 +47,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
     await closeMssqlPool();
   });
 
-  // Ejecutar el ciclo completo para cada uno de los 10 alumnos
   students.forEach((student, index) => {
     describe(`Alumno #${index + 1}: ${student.codigoAlumno} (${student.nombre})`, () => {
       let originalDebtId: string;
@@ -62,7 +59,7 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
           url: '/api/Transactional/ListDebts',
           headers: { authorization: authToken },
           payload: {
-            tipoConsulta: '0', // Consulta por código de alumno
+            tipoConsulta: '0',
             idConsulta: student.codigoAlumno,
             codigoEmpresa: '998',
             codigoProducto: '001',
@@ -120,7 +117,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
         expect(payBody.numOperacionERP).toBeDefined();
         expect(payBody.nombreCliente).toBeDefined();
 
-        // 4. Comprobar el éxito: verificar despacho de webhook
         expect(webhookSpy).toHaveBeenCalled();
         const callArg = webhookSpy.mock.calls[0][0];
         expect(callArg.event).toBe('debt.payment.confirmed');
@@ -132,7 +128,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
       });
 
       it(`3. Revisar si ya está pagado: validar idempotencia y exclusión de la deuda en ListDebts`, async () => {
-        // A) Intentar pagar nuevamente con la misma operación bancaria (Idempotencia)
         const dupPayRes = await app.inject({
           method: 'POST',
           url: '/api/Transactional/PayDebt',
@@ -159,7 +154,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
         expect(dupBody.codigoRespuesta).toBe('00');
         expect(dupBody.descripcionResp).toContain('IDEMPOTENTE');
 
-        // B) Consultar deudas pendientes: la cuota pagada ya NO debe ser la deuda más antigua
         const listAfterPayRes = await app.inject({
           method: 'POST',
           url: '/api/Transactional/ListDebts',
@@ -176,10 +170,8 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
 
         const listAfterBody = JSON.parse(listAfterPayRes.body);
         if (listAfterBody.codigoRespuesta === '00') {
-          // Si tiene más deudas pendientes, el id debe ser diferente al que acabamos de pagar
           expect(listAfterBody.deudasPendientes[0].numDocumento).not.toBe(originalDebtId);
         } else {
-          // Si no tiene más deudas pendientes, debe devolver código 22
           expect(listAfterBody.codigoRespuesta).toBe('22');
         }
       });
@@ -204,7 +196,6 @@ describe('Batería de Pruebas HTTP: Ciclo Completo de Pago para 10 Alumnos', () 
         expect(revBody.codigoRespuesta).toBe('00');
         expect(revBody.descripcionResp).toBe('OK');
 
-        // Comprobación final: ListDebts debe retornar nuevamente la deuda original
         const finalListRes = await app.inject({
           method: 'POST',
           url: '/api/Transactional/ListDebts',

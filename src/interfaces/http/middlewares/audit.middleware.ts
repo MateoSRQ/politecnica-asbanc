@@ -14,13 +14,11 @@ declare module 'fastify' {
 }
 
 export function registerAuditHooks(fastify: any): void {
-  // 1. Hook onRequest: Asignar TraceId y timestamp
   fastify.addHook('onRequest', async (request: FastifyRequest) => {
     request.traceId = (request.headers['x-request-id'] as string) || randomUUID();
     request.startTime = performance.now();
   });
 
-  // 2. Hook preSerialization: Inyectar métricas de tiempo de respuesta si el parámetro GET 'metrics' está presente
   fastify.addHook('preSerialization', async (request: FastifyRequest, reply: FastifyReply, payload: any) => {
     const query = (request.query || {}) as Record<string, any>;
     const metricsKey = Object.keys(query).find((k) => k.toLowerCase() === 'metrics');
@@ -60,13 +58,11 @@ export function registerAuditHooks(fastify: any): void {
     return payload;
   });
 
-  // 2. Hook onResponse: Medir tiempo, registrar métricas y logs estructurados
   fastify.addHook('onResponse', async (request: FastifyRequest, reply: FastifyReply) => {
     const durationMs = Math.round(performance.now() - request.startTime);
     const durationSec = durationMs / 1000;
     const body = request.body as any;
 
-    // Normalizar método para métricas con cardinalidad acotada
     const routeUrl = request.routeOptions?.url || request.url.split('?')[0];
     const method = routeUrl.split('/').pop() || routeUrl;
     const rawBank = String(body?.codigoBanco || '').trim();
@@ -76,7 +72,6 @@ export function registerAuditHooks(fastify: any): void {
     const responsePayload = (reply as any).payloadData || {};
     const statusCode = responsePayload.codigoRespuesta || reply.statusCode.toString();
 
-    // Registrar métricas Prometheus
     txnDurationHistogram.observe({ method, bank_code: bankCode, channel, status_code: statusCode }, durationSec);
 
     txnCounter.inc({
@@ -86,7 +81,6 @@ export function registerAuditHooks(fastify: any): void {
       status_code: statusCode,
     });
 
-    // Alerta de SLA (> 2.5s)
     if (durationMs > env.SLA_WARNING_THRESHOLD_MS) {
       slaViolationsCounter.inc({ method, bank_code: bankCode });
       logger.warn(
@@ -101,7 +95,6 @@ export function registerAuditHooks(fastify: any): void {
       );
     }
 
-    // Log estructurado JSON con Pino
     logger.info(
       {
         traceId: request.traceId,
@@ -120,7 +113,6 @@ export function registerAuditHooks(fastify: any): void {
       `Transacción ASBANC procesada en ${durationMs}ms`,
     );
 
-    // Inserción asíncrona no bloqueante en dbo.AuditoriaLogs de MSSQL
     if (request.url.toLowerCase().startsWith('/api/transactional')) {
       saveAuditLogAsync(request, reply, durationMs, statusCode, responsePayload).catch((err) => {
         logger.error({ err: err.message }, 'Fallo al guardar log de auditoría en MSSQL');
